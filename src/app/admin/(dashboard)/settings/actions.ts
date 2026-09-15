@@ -1,0 +1,94 @@
+"use server";
+
+import { revalidatePath } from "next/cache";
+import { createClient } from "@/lib/supabase/server";
+import type { ServiceItem } from "@/lib/types";
+
+async function upsertSetting(key: string, value: unknown) {
+  const supabase = await createClient();
+  await supabase
+    .from("site_settings")
+    .upsert({ key, value, updated_at: new Date().toISOString() });
+  revalidatePath("/");
+  revalidatePath("/about");
+  revalidatePath("/contact");
+  revalidatePath("/admin/settings");
+}
+
+export async function updateHero(formData: FormData) {
+  await upsertSetting("hero", {
+    headline: String(formData.get("headline") ?? ""),
+    subhead: String(formData.get("subhead") ?? ""),
+    cta_primary_label: String(formData.get("cta_primary_label") ?? ""),
+    cta_primary_href: String(formData.get("cta_primary_href") ?? ""),
+    cta_secondary_label: String(formData.get("cta_secondary_label") ?? ""),
+    cta_secondary_href: String(formData.get("cta_secondary_href") ?? ""),
+    image_url: String(formData.get("image_url") ?? ""),
+    location_label: String(formData.get("location_label") ?? ""),
+    dateline: String(formData.get("dateline") ?? ""),
+  });
+}
+
+function parseNumberList(raw: string) {
+  return raw
+    .split(",")
+    .map((s) => Number(s.trim()))
+    .filter((n) => !Number.isNaN(n));
+}
+
+export async function updateMarketChart(formData: FormData) {
+  await upsertSetting("market_chart", {
+    years: parseNumberList(String(formData.get("years") ?? "")),
+    households: parseNumberList(String(formData.get("households") ?? "")),
+    housing_units: parseNumberList(
+      String(formData.get("housing_units") ?? "")
+    ),
+    source_note: String(formData.get("source_note") ?? ""),
+  });
+}
+
+export async function updateServices(formData: FormData) {
+  const services: ServiceItem[] = [];
+  for (let i = 0; i < 6; i++) {
+    const title = String(formData.get(`service_${i}_title`) ?? "").trim();
+    if (!title) continue;
+    services.push({
+      title,
+      description: String(
+        formData.get(`service_${i}_description`) ?? ""
+      ).trim(),
+      href: String(formData.get(`service_${i}_href`) ?? "").trim() || "/",
+      icon: String(formData.get(`service_${i}_icon`) ?? "").trim(),
+    });
+  }
+  await upsertSetting("services", services);
+}
+
+export async function updateAbout(formData: FormData) {
+  await upsertSetting("about", {
+    quote: String(formData.get("quote") ?? ""),
+    name: String(formData.get("name") ?? ""),
+    headshot_url: String(formData.get("headshot_url") ?? ""),
+  });
+}
+
+export async function updateNewsletter(formData: FormData) {
+  await upsertSetting("newsletter", {
+    image_url: String(formData.get("image_url") ?? ""),
+    tagline_line1: String(formData.get("tagline_line1") ?? ""),
+    tagline_line2: String(formData.get("tagline_line2") ?? ""),
+    heading: String(formData.get("heading") ?? ""),
+    subhead: String(formData.get("subhead") ?? ""),
+  });
+}
+
+export async function updateContact(formData: FormData) {
+  await upsertSetting("contact", {
+    city_state: String(formData.get("city_state") ?? ""),
+    dre_number: String(formData.get("dre_number") ?? ""),
+    instagram_url: String(formData.get("instagram_url") ?? ""),
+    linkedin_url: String(formData.get("linkedin_url") ?? ""),
+    email: String(formData.get("email") ?? ""),
+    phone: String(formData.get("phone") ?? ""),
+  });
+}

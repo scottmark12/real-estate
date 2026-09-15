@@ -1,0 +1,97 @@
+import { createClient } from "@/lib/supabase/server";
+import type {
+  AboutSettings,
+  ContactSettings,
+  HeroSettings,
+  MarketChartSettings,
+  NewsletterSettings,
+  ServiceItem,
+} from "@/lib/types";
+
+export const DEFAULT_HERO: HeroSettings = {
+  headline: "What Is San Diego Actually Worth?",
+  subhead:
+    "Straight answers on buying, selling, and investing across San Diego's coastal and inland neighborhoods, from someone who tracks the numbers block by block.",
+  cta_primary_label: "See Featured Listings",
+  cta_primary_href: "/listings",
+  cta_secondary_label: "Get a Home Valuation",
+  cta_secondary_href: "/contact",
+  image_url:
+    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2400&auto=format&fit=crop",
+  location_label: "San Diego, California",
+  dateline: "Market Insights",
+};
+
+export const DEFAULT_MARKET_CHART: MarketChartSettings = {
+  years: [2019, 2020, 2021, 2022, 2023, 2024],
+  households: [1120, 1132, 1140, 1151, 1163, 1176],
+  housing_units: [1180, 1186, 1190, 1196, 1201, 1206],
+  source_note:
+    "Source: San Diego Association of Governments (SANDAG), households and housing units in thousands.",
+};
+
+export const DEFAULT_SERVICES: ServiceItem[] = [
+  {
+    title: "Residential",
+    description:
+      "Buying or selling a home in San Diego, from first offer to closing day.",
+    href: "/buy",
+    icon: "home",
+  },
+  {
+    title: "Commercial",
+    description:
+      "Multifamily and development opportunities backed by real underwriting.",
+    href: "/invest",
+    icon: "building",
+  },
+  {
+    title: "Market Insights",
+    description:
+      "Data-driven reporting on what's actually happening in the market, not what sells headlines.",
+    href: "/insights",
+    icon: "chart",
+  },
+];
+
+export const DEFAULT_ABOUT: AboutSettings = {
+  quote:
+    "I built my business on the belief that clients deserve the truth about the market, not just what they want to hear.",
+  name: "Mark Scott",
+  headshot_url:
+    "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop",
+};
+
+export const DEFAULT_NEWSLETTER: NewsletterSettings = {
+  image_url:
+    "https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=2400&auto=format&fit=crop",
+  tagline_line1: "Ride the market,",
+  tagline_line2: "don't just react to it.",
+  heading: "Join the Newsletter",
+  subhead:
+    "Monthly data on San Diego real estate, delivered straight to your inbox. No spam, just the numbers.",
+};
+
+export const DEFAULT_CONTACT: ContactSettings = {
+  city_state: "San Diego, CA",
+  dre_number: "DRE# 01234567",
+  instagram_url: "https://instagram.com",
+  linkedin_url: "https://linkedin.com",
+  email: "hello@markscottre.com",
+  phone: "(619) 555-0100",
+};
+
+export async function getSetting<T>(
+  key: string,
+  fallback: T
+): Promise<T> {
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", key)
+    .maybeSingle();
+
+  if (!data?.value) return fallback;
+  return { ...fallback, ...(data.value as object) } as T;
+}

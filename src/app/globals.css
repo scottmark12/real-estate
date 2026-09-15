@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+:root {
+  --background: #faf6ee;
+  --foreground: #1a2b4a;
+  --navy: #1a2b4a;
+  --navy-dark: #101c30;
+  --cream: #faf6ee;
+  --cream-deep: #f2ead9;
+  --sand: #e8dfc9;
+  --gold: #b98c4a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-navy: var(--navy);
+  --color-navy-dark: var(--navy-dark);
+  --color-cream: var(--cream);
+  --color-cream-deep: var(--cream-deep);
+  --color-sand: var(--sand);
+  --color-gold: var(--gold);
+  --font-display: Georgia, "Times New Roman", serif;
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+.eyebrow {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.article-body {
+  color: color-mix(in srgb, var(--navy) 82%, transparent);
+  line-height: 1.75;
+}
+.article-body h1,
+.article-body h2,
+.article-body h3 {
+  font-family: var(--font-display);
+  color: var(--navy);
+  font-weight: 600;
+  margin-top: 1.75em;
+  margin-bottom: 0.5em;
+}
+.article-body h2 {
+  font-size: 1.5rem;
+}
+.article-body h3 {
+  font-size: 1.25rem;
+}
+.article-body p {
+  margin-bottom: 1.25em;
+}
+.article-body ul,
+.article-body ol {
+  margin: 1.25em 0;
+  padding-left: 1.5em;
+}
+.article-body li {
+  margin-bottom: 0.4em;
+}
+.article-body a {
+  color: var(--navy);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
+}
+.article-body blockquote {
+  border-left: 3px solid var(--gold);
+  padding-left: 1em;
+  font-style: italic;
+  margin: 1.5em 0;
+}
