@@ -210,7 +210,7 @@ export default async function HomePage() {
       </section>
 
       {/* Market, Right Now */}
-      <section className="bg-cream-deep py-16">
+      <section className="bg-[#f7f3ea] py-16">
         <div className="px-[4vw]">
           <p className="eyebrow text-gold">The Market, Right Now</p>
           <div className="mt-6 grid lg:grid-cols-[35fr_30fr_35fr]">
@@ -242,7 +242,7 @@ export default async function HomePage() {
             </div>
 
             {/* Supporting stories */}
-            <div className="mt-10 flex flex-col justify-between border-l border-navy/15 pl-8 lg:mt-24">
+            <div className="mt-10 border-l border-navy/15 pl-8 lg:mt-3">
               {sideArticles[0] && (
                 <div className="flex gap-5">
                   {sideArticles[0].image_url && (
@@ -271,7 +271,7 @@ export default async function HomePage() {
                     )}
                     <Link
                       href={`/insights/${sideArticles[0].slug}`}
-                      className="mt-auto pt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                      className="mt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
                     >
                       Read More &rarr;
                     </Link>
@@ -281,7 +281,7 @@ export default async function HomePage() {
 
               {sideArticles[1] && (
                 <>
-                  <div className="my-8 border-t border-navy/15" />
+                  <div className="my-5 border-t border-navy/15" />
                   <div className="flex flex-row-reverse gap-5">
                     {sideArticles[1].image_url && (
                       <div className="relative aspect-4/5 w-[38%] shrink-0 overflow-hidden">
@@ -309,7 +309,7 @@ export default async function HomePage() {
                       )}
                       <Link
                         href={`/insights/${sideArticles[1].slug}`}
-                        className="mt-auto pt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                        className="mt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
                       >
                         Read More &rarr;
                       </Link>
