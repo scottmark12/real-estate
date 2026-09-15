@@ -178,9 +178,12 @@ export default async function SellPage() {
       <section id="valuation" className="scroll-mt-24 border-t border-sand">
         <div className="grid lg:grid-cols-[45fr_55fr]">
           <div className="relative aspect-4/3 w-full overflow-hidden lg:aspect-auto lg:h-full lg:min-h-[420px]">
-            <ImagePlaceholder
-              label="Neighborhood — San Diego"
-              className="absolute inset-0"
+            <Image
+              src="/images/home-worth.jpeg"
+              alt="A home at dusk"
+              fill
+              sizes="(min-width: 1024px) 45vw, 100vw"
+              className="object-cover"
             />
           </div>
           <div className="flex flex-col justify-center bg-[#f7f3ea] px-[8%] py-12 lg:py-0">
