@@ -236,58 +236,6 @@ function MoreResearchItem({ article }: { article: Article }) {
   );
 }
 
-function ArchiveLead({ article }: { article: Article }) {
-  return (
-    <Link href={`/insights/${article.slug}`} className="group block">
-      <div className="relative aspect-16/9 w-full overflow-hidden">
-        <ArticleImage
-          article={article}
-          imgClassName="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      </div>
-      <p className="eyebrow mt-4 text-gold">
-        {article.eyebrow || CATEGORY_LABELS[article.category]}
-      </p>
-      <h3 className="mt-2 font-display text-3xl font-normal leading-tight text-navy sm:text-4xl">
-        {article.title}
-      </h3>
-      {article.excerpt && (
-        <p className="mt-3 max-w-xl text-navy/70">{article.excerpt}</p>
-      )}
-      {article.metadata && (
-        <p className="eyebrow mt-3 text-navy/40">{article.metadata}</p>
-      )}
-      <span className="mt-3 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
-        {article.cta_label || "Read More →"}
-      </span>
-    </Link>
-  );
-}
-
-function ArchiveItem({ article }: { article: Article }) {
-  return (
-    <Link href={`/insights/${article.slug}`} className="group block">
-      <div className="relative aspect-4/3 w-full overflow-hidden">
-        <ArticleImage
-          article={article}
-          imgClassName="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
-      </div>
-      <p className="eyebrow mt-3 text-gold">
-        {article.eyebrow || CATEGORY_LABELS[article.category]}
-      </p>
-      <h4 className="mt-1 font-display text-lg font-semibold leading-snug text-navy">
-        {article.title}
-      </h4>
-      {article.excerpt && (
-        <p className="mt-1 line-clamp-2 text-sm text-navy/70">
-          {article.excerpt}
-        </p>
-      )}
-    </Link>
-  );
-}
-
 export default function MarketResearchExplorer({
   articles,
 }: {
@@ -307,7 +255,7 @@ export default function MarketResearchExplorer({
 
   const pool = isAll
     ? articles.filter((a) => a.id !== featured?.id && a.id !== architectural?.id)
-    : articles.filter((a) => a.category === active);
+    : articles.filter((a) => a.category === active && a.id !== featured?.id);
 
   const primaryStories = isAll ? pool.slice(0, 3) : [];
   const moreResearch = isAll ? pool.slice(3, 7) : [];
@@ -316,7 +264,7 @@ export default function MarketResearchExplorer({
   return (
     <div>
       <section className="px-[4vw] pb-10 pt-10 lg:pt-14">
-        {isAll && featured ? (
+        {featured ? (
           <FeaturedBlock featured={featured} />
         ) : (
           <div>
@@ -408,15 +356,10 @@ export default function MarketResearchExplorer({
               No published articles in this category yet.
             </p>
           ) : (
-            <div className="grid gap-10">
-              <ArchiveLead article={archiveList[0]} />
-              {archiveList.length > 1 && (
-                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                  {archiveList.slice(1).map((article) => (
-                    <ArchiveItem key={article.id} article={article} />
-                  ))}
-                </div>
-              )}
+            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+              {archiveList.map((article) => (
+                <PrimaryStory key={article.id} article={article} />
+              ))}
             </div>
           )}
         </section>
