@@ -242,11 +242,11 @@ export default async function HomePage() {
             </div>
 
             {/* Supporting stories */}
-            <div className="mt-10 border-l border-navy/15 pl-8 lg:mt-24">
+            <div className="mt-10 flex flex-col justify-between border-l border-navy/15 pl-8 lg:mt-24">
               {sideArticles[0] && (
                 <div className="flex gap-5">
                   {sideArticles[0].image_url && (
-                    <div className="relative aspect-4/3 w-[38%] shrink-0 overflow-hidden">
+                    <div className="relative aspect-4/5 w-[38%] shrink-0 overflow-hidden">
                       <Image
                         src={sideArticles[0].image_url}
                         alt=""
@@ -256,22 +256,22 @@ export default async function HomePage() {
                       />
                     </div>
                   )}
-                  <div>
+                  <div className="flex flex-1 flex-col">
                     <p className="eyebrow text-gold">
                       {CATEGORY_LABELS[sideArticles[0].category] ??
                         sideArticles[0].category}
                     </p>
-                    <h4 className="mt-1 font-display text-xl font-semibold leading-snug text-navy">
+                    <h4 className="mt-1 line-clamp-3 font-display text-xl font-semibold leading-snug text-navy">
                       {sideArticles[0].title}
                     </h4>
                     {sideArticles[0].excerpt && (
-                      <p className="mt-2 line-clamp-2 text-sm text-navy/70">
+                      <p className="mt-2 line-clamp-3 text-sm text-navy/70">
                         {sideArticles[0].excerpt}
                       </p>
                     )}
                     <Link
                       href={`/insights/${sideArticles[0].slug}`}
-                      className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                      className="mt-auto pt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
                     >
                       Read More &rarr;
                     </Link>
@@ -282,36 +282,38 @@ export default async function HomePage() {
               {sideArticles[1] && (
                 <>
                   <div className="my-8 border-t border-navy/15" />
-                  <div>
+                  <div className="flex flex-row-reverse gap-5">
                     {sideArticles[1].image_url && (
-                      <div className="relative mb-4 aspect-3/2 w-[62%] overflow-hidden">
+                      <div className="relative aspect-4/5 w-[38%] shrink-0 overflow-hidden">
                         <Image
                           src={sideArticles[1].image_url}
                           alt=""
                           fill
-                          sizes="280px"
+                          sizes="180px"
                           className="object-cover"
                         />
                       </div>
                     )}
-                    <p className="eyebrow text-gold">
-                      {CATEGORY_LABELS[sideArticles[1].category] ??
-                        sideArticles[1].category}
-                    </p>
-                    <h4 className="mt-1 font-display text-xl font-semibold leading-snug text-navy">
-                      {sideArticles[1].title}
-                    </h4>
-                    {sideArticles[1].excerpt && (
-                      <p className="mt-2 line-clamp-2 text-sm text-navy/70">
-                        {sideArticles[1].excerpt}
+                    <div className="flex flex-1 flex-col">
+                      <p className="eyebrow text-gold">
+                        {CATEGORY_LABELS[sideArticles[1].category] ??
+                          sideArticles[1].category}
                       </p>
-                    )}
-                    <Link
-                      href={`/insights/${sideArticles[1].slug}`}
-                      className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
-                    >
-                      Read More &rarr;
-                    </Link>
+                      <h4 className="mt-1 line-clamp-3 font-display text-xl font-semibold leading-snug text-navy">
+                        {sideArticles[1].title}
+                      </h4>
+                      {sideArticles[1].excerpt && (
+                        <p className="mt-2 line-clamp-3 text-sm text-navy/70">
+                          {sideArticles[1].excerpt}
+                        </p>
+                      )}
+                      <Link
+                        href={`/insights/${sideArticles[1].slug}`}
+                        className="mt-auto pt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                      >
+                        Read More &rarr;
+                      </Link>
+                    </div>
                   </div>
                 </>
               )}
