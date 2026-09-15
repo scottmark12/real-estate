@@ -33,8 +33,10 @@ function EditorialPhoto({
   sizes?: string;
 }) {
   return (
-    <div>
-      <div className={`relative overflow-hidden ${boxClassName}`}>
+    <div className="flex h-full flex-col">
+      <div
+        className={`relative min-h-0 flex-1 overflow-hidden ${boxClassName}`}
+      >
         {src ? (
           <Image
             src={src}
@@ -51,7 +53,9 @@ function EditorialPhoto({
           />
         )}
       </div>
-      {caption && <p className="eyebrow mt-2 text-navy/40">{caption}</p>}
+      {caption && (
+        <p className="eyebrow mt-2 shrink-0 text-navy/40">{caption}</p>
+      )}
     </div>
   );
 }
@@ -164,7 +168,7 @@ export default async function AboutPage() {
 
       {/* Community composition */}
       <section className="mt-16 border-t border-sand pt-16">
-        <div className="grid gap-12 lg:grid-cols-[43fr_57fr] lg:items-start">
+        <div className="grid gap-12 lg:grid-cols-[43fr_57fr] lg:items-stretch">
           <div className="lg:order-2 lg:pt-2">
             <div className="h-px w-10 bg-gold" />
             <h2 className="mt-4 font-display text-[34px] font-normal leading-[1.1] text-navy sm:text-[40px]">
@@ -176,14 +180,14 @@ export default async function AboutPage() {
               ))}
             </div>
           </div>
-          <div className="lg:order-1">
+          <div className="lg:order-1 lg:h-full">
             <EditorialPhoto
               src={about.community_photo_url}
               alt={about.community_photo_caption || "A San Diego neighborhood"}
               caption={about.community_photo_caption}
               focal={about.community_photo_focal}
               placeholderLabel="Community — Neighborhood"
-              boxClassName="aspect-[4/5] w-full sm:aspect-[6/5] lg:aspect-auto lg:h-[480px]"
+              boxClassName="aspect-[4/5] w-full sm:aspect-[6/5] lg:aspect-auto lg:h-full lg:min-h-[420px]"
               sizes="(min-width: 1024px) 43vw, 100vw"
             />
           </div>
