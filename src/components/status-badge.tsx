@@ -11,7 +11,7 @@ const STATUS_STYLES: Record<ListingStatus, string> = {
 export default function StatusBadge({ status }: { status: ListingStatus }) {
   return (
     <span
-      className={`eyebrow inline-block rounded-full px-3 py-1 ${STATUS_STYLES[status]}`}
+      className={`eyebrow inline-block px-2.5 py-1 ${STATUS_STYLES[status]}`}
     >
       {STATUS_LABELS[status]}
     </span>

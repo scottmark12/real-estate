@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ListingCard from "@/components/listing-card";
-import ArticleCard from "@/components/article-card";
+import ArticleCard, { CATEGORY_LABELS } from "@/components/article-card";
 import ImagePlaceholder from "@/components/image-placeholder";
 import MarketChart from "@/components/market-chart";
 import NewsletterForm from "@/components/newsletter-form";
@@ -121,16 +121,16 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="mx-auto max-w-6xl px-6 pb-16 pt-14 sm:px-10 sm:pt-20">
-        <p className="eyebrow text-gold">
-          {hero.dateline} &middot; {hero.location_label}
-        </p>
-        <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-stretch">
-          <div className="flex flex-col justify-center">
-            <h1 className="font-display text-4xl font-semibold leading-[1.05] text-navy sm:text-5xl lg:text-6xl">
+      <section className="pt-6 sm:pt-8">
+        <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr] lg:items-stretch">
+          <div className="flex flex-col justify-center px-6 pb-8 sm:px-10 lg:py-10">
+            <p className="eyebrow text-gold">
+              {hero.dateline} &middot; {hero.location_label}
+            </p>
+            <h1 className="mt-3 font-display text-6xl font-semibold leading-[0.95] text-navy sm:text-7xl lg:text-[5.5rem]">
               {hero.headline}
             </h1>
-            <p className="mt-5 max-w-lg text-base text-navy/70 sm:text-lg">
+            <p className="mt-6 max-w-sm text-base text-navy/70 sm:text-lg">
               {hero.subhead}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -148,16 +148,21 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="relative min-h-[320px] lg:min-h-[480px]">
+          <div className="relative min-h-[420px] lg:min-h-[640px]">
             {hero.image_url ? (
-              <Image
-                src={hero.image_url}
-                alt=""
-                fill
-                priority
-                sizes="(min-width: 1024px) 45vw, 100vw"
-                className="object-cover"
-              />
+              <>
+                <Image
+                  src={hero.image_url}
+                  alt=""
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  className="object-cover"
+                />
+                <p className="eyebrow absolute bottom-4 right-4 bg-cream/90 px-2 py-1 text-navy">
+                  {hero.location_label}
+                </p>
+              </>
             ) : (
               <ImagePlaceholder
                 label="Hero — San Diego Architecture"
@@ -169,22 +174,17 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Listings */}
-      <section className="mx-auto max-w-6xl px-6 py-20 sm:px-10">
-        <div className="flex items-end justify-between gap-4">
-          <div>
-            <p className="eyebrow text-gold">Featured</p>
-            <h2 className="mt-2 font-display text-3xl font-semibold text-navy">
-              Featured Listings
-            </h2>
-          </div>
+      <section className="mx-auto max-w-6xl px-6 py-12 sm:px-10">
+        <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
+          <p className="eyebrow text-gold">Featured Listings</p>
           <Link
             href="/listings"
-            className="hidden text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 sm:block"
+            className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
           >
-            View All Listings
+            View All Listings &rarr;
           </Link>
         </div>
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featuredListings.map((listing) => (
             <ListingCard key={listing.id} listing={listing} />
           ))}
@@ -197,22 +197,24 @@ export default async function HomePage() {
       </section>
 
       {/* Market, Right Now */}
-      <section className="bg-cream-deep py-20">
+      <section className="bg-cream-deep py-16">
         <div className="mx-auto max-w-6xl px-6 sm:px-10">
           <p className="eyebrow text-gold">The Market, Right Now</p>
-          <div className="mt-8 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
-            <div className="border border-sand bg-white/70 p-6 sm:p-8">
+          <div className="mt-6 grid gap-12 lg:grid-cols-[1.3fr_1fr]">
+            <div>
               {marketReport && (
                 <>
-                  <h3 className="font-display text-2xl font-semibold text-navy sm:text-3xl">
+                  <h3 className="max-w-xl font-display text-4xl font-semibold leading-[1.05] text-navy sm:text-5xl">
                     {marketReport.title}
                   </h3>
                   {marketReport.excerpt && (
-                    <p className="mt-3 text-navy/70">{marketReport.excerpt}</p>
+                    <p className="mt-4 max-w-md text-navy/70">
+                      {marketReport.excerpt}
+                    </p>
                   )}
                 </>
               )}
-              <div className="mt-6">
+              <div className="mt-8 border-t border-navy/10 pt-6">
                 <MarketChart data={marketChart} />
               </div>
               {marketReport && (
@@ -220,11 +222,11 @@ export default async function HomePage() {
                   href={`/insights/${marketReport.slug}`}
                   className="mt-6 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
                 >
-                  Read the Full Report
+                  Read the Full Report &rarr;
                 </Link>
               )}
             </div>
-            <div className="grid gap-6">
+            <div className="grid gap-6 lg:mt-1">
               {sideArticles.map((article) => (
                 <ArticleCard key={article.id} article={article} />
               ))}
@@ -241,17 +243,23 @@ export default async function HomePage() {
 
       {/* Feature Story */}
       {featureStory && (
-        <section className="bg-navy py-20 text-cream">
-          <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-2 lg:items-center">
-            <div className="relative aspect-4/3 w-full overflow-hidden">
+        <section className="bg-navy py-16 text-cream">
+          <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
+            <div className="relative aspect-4/3 w-full overflow-hidden lg:aspect-square">
               {featureStory.image_url ? (
-                <Image
-                  src={featureStory.image_url}
-                  alt={featureStory.title}
-                  fill
-                  sizes="(min-width: 1024px) 50vw, 100vw"
-                  className="object-cover"
-                />
+                <>
+                  <Image
+                    src={featureStory.image_url}
+                    alt={featureStory.title}
+                    fill
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className="object-cover"
+                  />
+                  <p className="eyebrow absolute bottom-4 left-4 bg-navy/90 px-2 py-1 text-cream/90">
+                    {(CATEGORY_LABELS[featureStory.category] ??
+                      featureStory.category)}
+                  </p>
+                </>
               ) : (
                 <ImagePlaceholder
                   label="Editorial — Architecture Feature"
@@ -295,9 +303,9 @@ export default async function HomePage() {
       )}
 
       {/* How I Can Help */}
-      <section className="mx-auto max-w-6xl px-6 py-20 sm:px-10">
+      <section className="mx-auto max-w-6xl px-6 py-14 sm:px-10">
         <p className="eyebrow text-gold">How I Can Help</p>
-        <div className="mt-8 grid gap-10 sm:grid-cols-3">
+        <div className="mt-6 grid gap-10 sm:grid-cols-3">
           {services.map((service) => (
             <div key={service.title}>
               <h3 className="font-display text-xl font-semibold text-navy">
@@ -318,7 +326,7 @@ export default async function HomePage() {
       </section>
 
       {/* A Broader Perspective */}
-      <section className="border-y border-sand bg-cream-deep py-20">
+      <section className="border-y border-sand bg-cream-deep py-16">
         <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-2 lg:items-center">
           <div className="relative aspect-square w-full max-w-sm overflow-hidden bg-cream-deep">
             {about.headshot_url ? (
@@ -352,7 +360,7 @@ export default async function HomePage() {
       </section>
 
       {/* Newsletter */}
-      <section className="bg-navy py-20 text-cream">
+      <section className="bg-navy py-16 text-cream">
         <div className="mx-auto max-w-2xl px-6 text-center sm:px-10">
           <p className="eyebrow text-gold">{newsletter.tagline_line1}</p>
           <h2 className="mt-4 font-display text-3xl font-semibold sm:text-4xl">

@@ -43,7 +43,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
           <span className="eyebrow text-navy/60">{contact.city_state}</span>
           <Link
             href="/contact"
-            className="rounded-full bg-navy px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-navy-dark"
+            className="border border-navy bg-navy px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-navy-dark"
           >
             Join the Newsletter
           </Link>

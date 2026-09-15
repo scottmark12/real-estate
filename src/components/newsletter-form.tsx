@@ -45,12 +45,12 @@ export default function NewsletterForm() {
         name="email"
         required
         placeholder="Your email address"
-        className="w-full flex-1 rounded-full border border-cream/30 bg-cream/10 px-5 py-3 text-sm text-cream placeholder:text-cream/50 focus:border-cream focus:outline-none"
+        className="w-full flex-1 border border-cream/30 bg-cream/10 px-5 py-3 text-sm text-cream placeholder:text-cream/50 focus:border-cream focus:outline-none"
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="rounded-full bg-gold px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-gold/90 disabled:opacity-60"
+        className="border border-gold bg-gold px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-gold/90 disabled:opacity-60"
       >
         {status === "loading" ? "Subscribing…" : "Subscribe"}
       </button>

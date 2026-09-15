@@ -3,7 +3,7 @@ import Link from "next/link";
 import ImagePlaceholder from "@/components/image-placeholder";
 import type { Article } from "@/lib/types";
 
-const CATEGORY_LABELS: Record<string, string> = {
+export const CATEGORY_LABELS: Record<string, string> = {
   residential: "Residential",
   national: "National",
   "market-insights": "Market Insights",
