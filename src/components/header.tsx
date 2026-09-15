@@ -23,10 +23,10 @@ export default function Header({ contact }: { contact: ContactSettings }) {
           <Image
             src="/images/logo.png"
             alt="Mark Scott Real Estate"
-            width={775}
-            height={228}
+            width={954}
+            height={370}
             priority
-            className="mt-1.5 h-6 w-auto sm:h-7"
+            className="mt-1.5 h-9 w-auto sm:h-10"
           />
         </Link>
 
