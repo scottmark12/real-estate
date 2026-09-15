@@ -100,6 +100,28 @@ export interface AboutSettings {
   location_label: string;
   handwritten_note: string;
   bio: string;
+  // About page — real headshot (small byline photo, distinct from the
+  // illustrated headshot_url used elsewhere on the site)
+  headshot_photo_url: string;
+  // About page — editorial photo slots. Each is admin-supplied; the site
+  // never sources or generates imagery for these. focal is a CSS
+  // object-position value (e.g. "50% 40%") so a supplied photo can be
+  // recropped without re-exporting the file.
+  opening_photo_url: string;
+  opening_photo_caption: string;
+  opening_photo_focal: string;
+  community_photo_url: string;
+  community_photo_caption: string;
+  community_photo_focal: string;
+  travel_photo_1_url: string;
+  travel_photo_1_caption: string;
+  travel_photo_1_focal: string;
+  travel_photo_2_url: string;
+  travel_photo_2_caption: string;
+  travel_photo_2_focal: string;
+  travel_photo_3_url: string;
+  travel_photo_3_caption: string;
+  travel_photo_3_focal: string;
 }
 
 export interface NewsletterSettings {

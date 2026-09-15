@@ -59,12 +59,40 @@ export const DEFAULT_ABOUT: AboutSettings = {
   headshot_url: "/images/mark-illustration-v2.png",
   portrait_url: "/images/about-photo.jpg",
   location_label: "San Diego, CA",
-  handwritten_note: "Curious people build better places.",
-  bio: `Where you live shapes a lot more than your address. It shapes the people you know, the places you frequent, and the way you spend your days. Deciding where to live is a big deal. I would know—I moved across the country to Encinitas because it had so much of what I was looking for: beautiful beaches, a strong sense of community, good food, and easy access to mountains and desert.
+  handwritten_note: "Still paying attention.",
+  bio: `Before real estate, I studied interior design, entrepreneurship, and marketing at Florida State University. I graduated early, packed a bag, and spent a good amount of time seeing the world.
 
-I studied interior design, entrepreneurship, and marketing at Florida State University, graduating early to spend time traveling. Circling the world, I found a sense of home and community in cities where housing, neighborhoods, and daily life looked nothing like they do in the U.S. It made me curious about why some places work so well—and why others don't.
+What stuck with me wasn't that other places looked different. Of course they did. It was how differently they worked.
 
-When I came back, real estate felt like the natural place to put that curiosity to work. Today, I work across residential and commercial real estate, with an interest not just in properties themselves, but in the neighborhoods, buildings, economics, and people that give them value.`,
+I've felt completely at home in places where the houses were smaller, streets were tighter, cars were less important, and public space did more of the work. I've also seen incredible buildings that didn't make particularly good places around them.
+
+Travel made me pay attention to the relationship between buildings and the lives happening around them.
+
+That curiosity followed me home.
+
+Eventually, curiosity became work.
+
+My first real education in property wasn't theoretical. I renovated and managed a six-bedroom property near Florida State and got to see firsthand how design decisions, construction costs, rents, and the surrounding neighborhood all interact.
+
+Today, I work in commercial acquisitions, sourcing opportunities, talking directly with owners, evaluating deals, and working through the numbers behind whether a property actually makes sense. Alongside that work, I help people buy and sell residential real estate in San Diego.
+
+The scale changes. The questions aren't actually that different.`,
+  headshot_photo_url: "",
+  opening_photo_url: "",
+  opening_photo_caption: "",
+  opening_photo_focal: "50% 50%",
+  community_photo_url: "",
+  community_photo_caption: "",
+  community_photo_focal: "50% 50%",
+  travel_photo_1_url: "",
+  travel_photo_1_caption: "",
+  travel_photo_1_focal: "50% 50%",
+  travel_photo_2_url: "",
+  travel_photo_2_caption: "",
+  travel_photo_2_focal: "50% 50%",
+  travel_photo_3_url: "",
+  travel_photo_3_caption: "",
+  travel_photo_3_focal: "50% 50%",
 };
 
 export const DEFAULT_NEWSLETTER: NewsletterSettings = {

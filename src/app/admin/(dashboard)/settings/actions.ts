@@ -65,14 +65,31 @@ export async function updateServices(formData: FormData) {
 }
 
 export async function updateAbout(formData: FormData) {
+  const field = (name: string) => String(formData.get(name) ?? "");
   await upsertSetting("about", {
-    quote: String(formData.get("quote") ?? ""),
-    name: String(formData.get("name") ?? ""),
-    headshot_url: String(formData.get("headshot_url") ?? ""),
-    portrait_url: String(formData.get("portrait_url") ?? ""),
-    location_label: String(formData.get("location_label") ?? ""),
-    handwritten_note: String(formData.get("handwritten_note") ?? ""),
-    bio: String(formData.get("bio") ?? ""),
+    quote: field("quote"),
+    name: field("name"),
+    headshot_url: field("headshot_url"),
+    portrait_url: field("portrait_url"),
+    location_label: field("location_label"),
+    handwritten_note: field("handwritten_note"),
+    bio: field("bio"),
+    headshot_photo_url: field("headshot_photo_url"),
+    opening_photo_url: field("opening_photo_url"),
+    opening_photo_caption: field("opening_photo_caption"),
+    opening_photo_focal: field("opening_photo_focal") || "50% 50%",
+    community_photo_url: field("community_photo_url"),
+    community_photo_caption: field("community_photo_caption"),
+    community_photo_focal: field("community_photo_focal") || "50% 50%",
+    travel_photo_1_url: field("travel_photo_1_url"),
+    travel_photo_1_caption: field("travel_photo_1_caption"),
+    travel_photo_1_focal: field("travel_photo_1_focal") || "50% 50%",
+    travel_photo_2_url: field("travel_photo_2_url"),
+    travel_photo_2_caption: field("travel_photo_2_caption"),
+    travel_photo_2_focal: field("travel_photo_2_focal") || "50% 50%",
+    travel_photo_3_url: field("travel_photo_3_url"),
+    travel_photo_3_caption: field("travel_photo_3_caption"),
+    travel_photo_3_focal: field("travel_photo_3_focal") || "50% 50%",
   });
 }
 

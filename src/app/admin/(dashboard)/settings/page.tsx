@@ -234,25 +234,25 @@ export default async function AdminSettingsPage() {
               />
             </div>
             <Field
-              label="Quote (short — used on the homepage teaser)"
+              label="Quote (short — homepage teaser + About page 'community' headline)"
               name="quote"
               defaultValue={about.quote}
               textarea
             />
             <Field
-              label="Bio (full — used on the About page, blank lines start new paragraphs)"
+              label="Bio (full — About page 'community' body copy, blank lines start new paragraphs)"
               name="bio"
               defaultValue={about.bio}
               textarea
             />
             <Field
-              label="Handwritten Note"
+              label="Handwritten Note (About page, over the opening photograph)"
               name="handwritten_note"
               defaultValue={about.handwritten_note}
             />
             <SingleImageUploader
               name="headshot_url"
-              label="Headshot (small illustration)"
+              label="Headshot (small illustration — used elsewhere on the site)"
               initialUrl={about.headshot_url}
             />
             <SingleImageUploader
@@ -260,6 +260,151 @@ export default async function AdminSettingsPage() {
               label="Portrait (homepage 'Broader Perspective' photo)"
               initialUrl={about.portrait_url}
             />
+
+            <div className="mt-2 border-t border-sand pt-4">
+              <p className="text-sm font-semibold text-navy">
+                About Page — Editorial Photography
+              </p>
+              <p className="mt-1 text-xs text-navy/60">
+                These are all empty by default — nothing is sourced or
+                generated on your behalf. Focal position is a CSS
+                object-position value (e.g. &quot;50% 40%&quot;) so a photo
+                can be recropped without re-exporting the file.
+              </p>
+            </div>
+
+            <SingleImageUploader
+              name="headshot_photo_url"
+              label="Real Headshot (small byline photo, not the illustration)"
+              initialUrl={about.headshot_photo_url}
+            />
+
+            <div className="rounded-lg border border-sand p-4">
+              <p className="eyebrow text-navy/50">Opening Photograph</p>
+              <div className="mt-3 flex flex-col gap-3">
+                <SingleImageUploader
+                  name="opening_photo_url"
+                  label="Image"
+                  initialUrl={about.opening_photo_url}
+                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Field
+                    label="Caption (e.g. Encinitas, CA · 2024)"
+                    name="opening_photo_caption"
+                    defaultValue={about.opening_photo_caption}
+                  />
+                  <Field
+                    label="Focal Position"
+                    name="opening_photo_focal"
+                    defaultValue={about.opening_photo_focal}
+                    placeholder="50% 50%"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-sand p-4">
+              <p className="eyebrow text-navy/50">Community Photograph</p>
+              <div className="mt-3 flex flex-col gap-3">
+                <SingleImageUploader
+                  name="community_photo_url"
+                  label="Image"
+                  initialUrl={about.community_photo_url}
+                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Field
+                    label="Caption"
+                    name="community_photo_caption"
+                    defaultValue={about.community_photo_caption}
+                  />
+                  <Field
+                    label="Focal Position"
+                    name="community_photo_focal"
+                    defaultValue={about.community_photo_focal}
+                    placeholder="50% 50%"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-sand p-4">
+              <p className="eyebrow text-navy/50">
+                Travel Photograph — Large (left)
+              </p>
+              <div className="mt-3 flex flex-col gap-3">
+                <SingleImageUploader
+                  name="travel_photo_1_url"
+                  label="Image"
+                  initialUrl={about.travel_photo_1_url}
+                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Field
+                    label="Caption (e.g. Lisbon, Portugal · 2019)"
+                    name="travel_photo_1_caption"
+                    defaultValue={about.travel_photo_1_caption}
+                  />
+                  <Field
+                    label="Focal Position"
+                    name="travel_photo_1_focal"
+                    defaultValue={about.travel_photo_1_focal}
+                    placeholder="50% 50%"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-sand p-4">
+              <p className="eyebrow text-navy/50">
+                Travel Photograph — Small (top)
+              </p>
+              <div className="mt-3 flex flex-col gap-3">
+                <SingleImageUploader
+                  name="travel_photo_2_url"
+                  label="Image"
+                  initialUrl={about.travel_photo_2_url}
+                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Field
+                    label="Caption"
+                    name="travel_photo_2_caption"
+                    defaultValue={about.travel_photo_2_caption}
+                  />
+                  <Field
+                    label="Focal Position"
+                    name="travel_photo_2_focal"
+                    defaultValue={about.travel_photo_2_focal}
+                    placeholder="50% 50%"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-sand p-4">
+              <p className="eyebrow text-navy/50">
+                Travel Photograph — Small (bottom)
+              </p>
+              <div className="mt-3 flex flex-col gap-3">
+                <SingleImageUploader
+                  name="travel_photo_3_url"
+                  label="Image"
+                  initialUrl={about.travel_photo_3_url}
+                />
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <Field
+                    label="Caption"
+                    name="travel_photo_3_caption"
+                    defaultValue={about.travel_photo_3_caption}
+                  />
+                  <Field
+                    label="Focal Position"
+                    name="travel_photo_3_focal"
+                    defaultValue={about.travel_photo_3_focal}
+                    placeholder="50% 50%"
+                  />
+                </div>
+              </div>
+            </div>
+
             <SaveButton />
           </form>
         </Section>
