@@ -133,10 +133,10 @@ export default async function HomePage() {
           </div>
 
           <div className="lg:col-start-1 lg:row-start-2 lg:self-end">
-            <p className="font-[family-name:var(--font-hand)] text-xl leading-snug text-navy/70">
-              Same questions.
+            <p className="font-[family-name:var(--font-hand)] -rotate-3 text-xl leading-snug text-navy/70">
+              Curiosity is good
               <br />
-              Different places.
+              due diligence!
               <br />
               &mdash;MS
             </p>
