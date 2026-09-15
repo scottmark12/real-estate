@@ -109,13 +109,13 @@ export default async function HomePage() {
     <div className="mx-auto max-w-[1500px] px-12">
       {/* Hero / cover */}
       <section className="pt-10">
-        <div className="relative flex flex-col gap-10 lg:grid lg:grid-cols-[45fr_55fr] lg:gap-x-12 lg:gap-y-0">
+        <div className="relative flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)] lg:gap-x-4 lg:gap-y-0">
           <div className="lg:col-start-1 lg:row-start-1 lg:self-start">
-            <h1 className="font-display text-[38px] font-normal leading-[0.95] text-navy sm:text-[64px] lg:text-[88px]">
+            <h1 className="font-display text-[38px] font-normal leading-[0.95] text-navy sm:text-[64px] lg:text-[100px]">
               <span className="block whitespace-nowrap">Real Estate,</span>
               <span className="block whitespace-nowrap">Real Different.</span>
             </h1>
-            <p className="mt-5 max-w-sm text-navy/70">
+            <p className="mt-5 max-w-sm text-navy/70 lg:text-[19px]">
               Homes, buildings, and opportunities in San Diego and beyond.
             </p>
           </div>
