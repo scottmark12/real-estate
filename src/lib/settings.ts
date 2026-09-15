@@ -76,8 +76,8 @@ That's the lens I bring now, helping people buy and sell homes in San Diego. Whe
 
 A house is a big decision. I want it to feel like a good one.`,
   headshot_photo_url: "/images/mark-headshot.jpeg",
-  opening_photo_url: "",
-  opening_photo_caption: "",
+  opening_photo_url: "/images/about-opening.jpeg",
+  opening_photo_caption: "Encinitas, CA",
   opening_photo_focal: "50% 50%",
   community_photo_url: "/images/about-community.webp",
   community_photo_caption: "",
