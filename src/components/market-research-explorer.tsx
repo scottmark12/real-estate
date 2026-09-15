@@ -29,14 +29,19 @@ function formatDate(iso: string) {
 function ArticleImage({
   article,
   imgClassName = "object-cover",
+  placeholderLabel,
 }: {
   article: Article;
   imgClassName?: string;
+  placeholderLabel?: string;
 }) {
   if (!article.image_url) {
     return (
       <ImagePlaceholder
-        label={CATEGORY_LABELS[article.category] ?? article.category}
+        label={
+          placeholderLabel ||
+          `${CATEGORY_LABELS[article.category] ?? article.category} — Article Image`
+        }
         className="absolute inset-0"
       />
     );
@@ -59,71 +64,72 @@ function ArticleImage({
 
 function FeaturedBlock({ featured }: { featured: Article }) {
   return (
-    <div>
-      <div className="grid gap-10 lg:grid-cols-[35fr_65fr] lg:items-stretch">
-        <div className="flex flex-col justify-center">
-          <p className="eyebrow text-gold">Market Research</p>
-          <h1 className="mt-2 font-display text-4xl font-normal leading-[1.05] text-navy sm:text-5xl">
-            Research
-            <br />
-            worth reading.
-          </h1>
-          <p className="mt-4 max-w-xs text-navy/70">
-            Real estate, development, architecture and the forces shaping
-            Southern California and beyond.
-          </p>
-          <p className="font-[family-name:var(--font-hand)] mt-8 text-xl leading-snug text-navy/70">
-            Better places happen by design.
-            <br />
-            &mdash;MS
-          </p>
-        </div>
-        <div className="relative aspect-4/3 w-full overflow-hidden lg:aspect-auto lg:min-h-[420px]">
-          <ArticleImage article={featured} />
-          {featured.annotation && (
-            <p className="font-[family-name:var(--font-hand)] absolute left-4 top-4 max-w-[220px] text-xl leading-snug text-navy">
-              {featured.annotation}
-            </p>
-          )}
+    <div className="grid gap-8 lg:grid-cols-[32fr_68fr] lg:items-start">
+      <div className="flex flex-col pt-1">
+        <p className="eyebrow text-gold">Market Research</p>
+        <h1 className="mt-2 font-display text-4xl font-normal leading-[1.05] text-navy">
+          Research
+          <br />
+          worth reading.
+        </h1>
+        <p className="mt-3 max-w-[22rem] text-sm text-navy/70">
+          Real estate, development, architecture and the forces shaping
+          Southern California and beyond.
+        </p>
+        <p className="font-[family-name:var(--font-hand)] mt-6 text-lg leading-snug text-navy/70">
+          Better places happen by design.
+          <br />
+          &mdash;MS
+        </p>
+      </div>
+
+      <div>
+        <div className="relative h-[240px] w-full overflow-hidden sm:h-[300px] lg:h-[360px]">
+          <ArticleImage article={featured} placeholderLabel="Featured Article Image" />
           {(featured.stat || featured.secondary_stat) && (
-            <div className="absolute bottom-0 right-0 bg-navy/90 px-6 py-5 text-cream">
+            <div className="absolute bottom-0 right-0 bg-navy/90 px-5 py-4 text-cream">
               {featured.stat && (
-                <p className="font-display text-2xl font-semibold">
+                <p className="font-display text-xl font-semibold leading-tight">
                   {featured.stat}
                 </p>
               )}
+              {featured.stat && featured.secondary_stat && (
+                <div className="my-2 h-px w-full bg-cream/20" />
+              )}
               {featured.secondary_stat && (
-                <p className="mt-1 font-display text-xl font-semibold">
+                <p className="font-display text-xl font-semibold leading-tight">
                   {featured.secondary_stat}
                 </p>
               )}
             </div>
           )}
         </div>
-      </div>
 
-      <div className="mt-8 flex flex-col gap-4 border-t border-navy/10 pt-6 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="eyebrow text-gold">
-            {featured.eyebrow || CATEGORY_LABELS[featured.category]}
-          </p>
-          <h2 className="mt-2 max-w-2xl font-display text-3xl font-normal leading-tight text-navy sm:text-4xl">
-            {featured.title}
-          </h2>
-          {featured.excerpt && (
-            <p className="mt-3 max-w-xl text-navy/70">{featured.excerpt}</p>
-          )}
-          <p className="eyebrow mt-3 text-navy/40">
-            {formatDate(featured.published_at)}
-            {featured.read_time ? ` · ${featured.read_time}` : ""}
-          </p>
+        <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <p className="eyebrow text-gold">
+              {featured.eyebrow || CATEGORY_LABELS[featured.category]}
+            </p>
+            <h2 className="mt-1 font-display text-2xl font-semibold leading-tight text-navy sm:text-3xl">
+              {featured.title}
+            </h2>
+            {featured.excerpt && (
+              <p className="mt-2 line-clamp-2 max-w-xl text-sm text-navy/70">
+                {featured.excerpt}
+              </p>
+            )}
+            <p className="eyebrow mt-2 text-navy/40">
+              {formatDate(featured.published_at)}
+              {featured.read_time ? ` · ${featured.read_time}` : ""}
+            </p>
+          </div>
+          <Link
+            href={`/insights/${featured.slug}`}
+            className="eyebrow shrink-0 text-navy underline decoration-gold decoration-2 underline-offset-4"
+          >
+            {featured.cta_label || "Read the Full Report →"}
+          </Link>
         </div>
-        <Link
-          href={`/insights/${featured.slug}`}
-          className="eyebrow shrink-0 text-navy underline decoration-gold decoration-2 underline-offset-4"
-        >
-          {featured.cta_label || "Read the Full Report →"}
-        </Link>
       </div>
     </div>
   );
@@ -157,14 +163,14 @@ function PrimaryStory({ article }: { article: Article }) {
           </p>
         )}
       </div>
-      <p className="eyebrow mt-4 text-gold">
+      <p className="eyebrow mt-3 text-gold">
         {article.eyebrow || CATEGORY_LABELS[article.category]}
       </p>
-      <h3 className="mt-2 font-display text-xl font-semibold leading-snug text-navy">
+      <h3 className="mt-1 font-display text-xl font-semibold leading-snug text-navy">
         {article.title}
       </h3>
       {article.excerpt && (
-        <p className="mt-2 line-clamp-2 text-sm text-navy/70">
+        <p className="mt-1 line-clamp-2 text-sm text-navy/70">
           {article.excerpt}
         </p>
       )}
@@ -199,10 +205,11 @@ function ArchitecturalBanner({ article }: { article: Article }) {
           {article.cta_label || "Take a Look →"}
         </span>
       </div>
-      <div className="relative aspect-4/3 w-full overflow-hidden lg:aspect-auto lg:min-h-[380px]">
+      <div className="relative h-[300px] w-full overflow-hidden lg:h-auto lg:min-h-[340px]">
         <ArticleImage
           article={article}
           imgClassName="object-cover transition-transform duration-700 group-hover:scale-105"
+          placeholderLabel="Architectural Spotlight — Article Image"
         />
         {article.annotation && (
           <p className="font-[family-name:var(--font-hand)] absolute right-4 top-4 max-w-[200px] text-xl leading-snug text-navy">
@@ -262,8 +269,8 @@ export default function MarketResearchExplorer({
   const archiveList = isAll ? [] : pool;
 
   return (
-    <div>
-      <section className="px-[4vw] pb-10 pt-10 lg:pt-14">
+    <div className="mx-auto max-w-[1500px] px-12">
+      <section className="pt-8 lg:pt-10">
         {featured ? (
           <FeaturedBlock featured={featured} />
         ) : (
@@ -282,8 +289,8 @@ export default function MarketResearchExplorer({
         )}
       </section>
 
-      <nav className="border-y border-sand px-[4vw]">
-        <div className="flex gap-6 overflow-x-auto py-4 text-sm">
+      <nav className="mt-6 border-t border-sand">
+        <div className="flex gap-6 overflow-x-auto py-3 text-sm">
           <button
             type="button"
             onClick={() => setActive("all")}
@@ -315,8 +322,8 @@ export default function MarketResearchExplorer({
       {isAll ? (
         <>
           {primaryStories.length > 0 && (
-            <section className="px-[4vw] py-12">
-              <div className="grid gap-10 lg:grid-cols-3">
+            <section className="border-t border-sand py-8">
+              <div className="grid gap-8 lg:grid-cols-3">
                 {primaryStories.map((article) => (
                   <PrimaryStory key={article.id} article={article} />
                 ))}
@@ -325,13 +332,13 @@ export default function MarketResearchExplorer({
           )}
 
           {architectural && (
-            <section className="px-[4vw] pb-12">
+            <section className="pb-10">
               <ArchitecturalBanner article={architectural} />
             </section>
           )}
 
           {moreResearch.length > 0 && (
-            <section className="border-t border-sand px-[4vw] py-12">
+            <section className="border-t border-sand py-10">
               <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
                 <p className="eyebrow text-gold">More Research</p>
                 <Link
@@ -350,7 +357,7 @@ export default function MarketResearchExplorer({
           )}
         </>
       ) : (
-        <section className="px-[4vw] py-12">
+        <section className="border-t border-sand py-8">
           {archiveList.length === 0 ? (
             <p className="text-navy/60">
               No published articles in this category yet.
