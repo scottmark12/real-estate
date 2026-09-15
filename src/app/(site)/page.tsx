@@ -111,9 +111,7 @@ export default async function HomePage() {
       <section className="pt-10 lg:pt-14">
         <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[45fr_55fr] lg:gap-x-12 lg:gap-y-0">
           <div className="lg:col-start-1 lg:row-start-1 lg:self-start">
-            <p className="eyebrow text-gold">Real Estate</p>
-            <div className="mt-3 h-px w-10 bg-gold" />
-            <h1 className="mt-5 font-display text-[38px] font-normal leading-[0.95] text-navy sm:text-[64px] lg:text-[88px]">
+            <h1 className="font-display text-[38px] font-normal leading-[0.95] text-navy sm:text-[64px] lg:text-[88px]">
               <span className="block whitespace-nowrap">Real Estate,</span>
               <span className="block whitespace-nowrap">Real Different.</span>
             </h1>
