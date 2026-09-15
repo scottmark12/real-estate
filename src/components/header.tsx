@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import MobileNav from "@/components/mobile-nav";
 import type { ContactSettings } from "@/lib/types";
@@ -18,13 +19,15 @@ export default function Header({ contact }: { contact: ContactSettings }) {
         className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-10"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <Link href="/" className="leading-none">
-          <span className="block font-display text-lg font-semibold tracking-tight text-navy sm:text-xl">
-            Mark Scott
-          </span>
-          <span className="eyebrow mt-0.5 block text-navy/60">
-            Real Estate
-          </span>
+        <Link href="/" className="shrink-0">
+          <Image
+            src="/images/logo.png"
+            alt="Mark Scott Real Estate"
+            width={775}
+            height={228}
+            priority
+            className="h-9 w-auto sm:h-10"
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
