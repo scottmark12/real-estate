@@ -379,41 +379,38 @@ export default async function HomePage() {
           Real Estate, Broader Perspective.
         </h2>
 
-        <div className="mt-8 border-t border-navy/10 pt-6 lg:flex lg:items-start lg:gap-10">
-          {/* Services */}
-          <div className="grid gap-8 sm:grid-cols-3 lg:flex lg:gap-10">
-            {services.map((service, i) => (
-              <div
-                key={service.title}
-                className={
-                  (i > 0
-                    ? "border-t border-navy/10 pt-6 sm:border-t-0 sm:border-l sm:border-navy/15 sm:pl-6 sm:pt-0 "
-                    : "") + "lg:w-[190px] lg:shrink-0"
-                }
+        <div className="mt-8 border-t border-navy/10 pt-6 lg:grid lg:h-[210px] lg:grid-cols-[1fr_1fr_1fr_1.45fr] lg:items-stretch lg:gap-8">
+          {services.map((service, i) => (
+            <div
+              key={service.title}
+              className={
+                i > 0
+                  ? "mt-8 border-t border-navy/10 pt-6 lg:mt-0 lg:border-t-0 lg:border-l lg:border-navy/15 lg:pl-8 lg:pt-0"
+                  : ""
+              }
+            >
+              <ServiceIcon
+                icon={service.icon}
+                className="h-6 w-6 text-navy/60"
+              />
+              <h3 className="mt-3 font-display text-lg font-semibold text-navy">
+                {service.title}
+              </h3>
+              <p className="mt-1 line-clamp-2 text-sm text-navy/70">
+                {service.description}
+              </p>
+              <Link
+                href={service.href}
+                className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
               >
-                <ServiceIcon
-                  icon={service.icon}
-                  className="h-6 w-6 text-navy/60"
-                />
-                <h3 className="mt-3 font-display text-lg font-semibold text-navy">
-                  {service.title}
-                </h3>
-                <p className="mt-1 text-sm text-navy/70">
-                  {service.description}
-                </p>
-                <Link
-                  href={service.href}
-                  className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
-                >
-                  Learn More &rarr;
-                </Link>
-              </div>
-            ))}
-          </div>
+                Learn More &rarr;
+              </Link>
+            </div>
+          ))}
 
           {/* Mark Scott */}
-          <div className="mt-8 flex items-end gap-4 border-t border-navy/10 pt-6 lg:mt-0 lg:border-t-0 lg:border-l lg:border-navy/15 lg:pl-8 lg:pt-0">
-            <div className="max-w-[11rem]">
+          <div className="mt-8 flex items-end gap-4 border-t border-navy/10 pt-6 lg:mt-0 lg:h-full lg:items-stretch lg:border-t-0 lg:border-l lg:border-navy/15 lg:pl-8 lg:pt-0">
+            <div className="max-w-[11rem] lg:flex lg:w-[45%] lg:flex-col lg:justify-center">
               <p className="font-[family-name:var(--font-hand)] text-xl leading-snug text-navy sm:text-2xl">
                 Curious people
                 <br />
@@ -421,9 +418,9 @@ export default async function HomePage() {
                 <br />
                 places.
               </p>
-              <p className="eyebrow mt-3 text-navy/50 lg:mt-4">Mark Scott</p>
+              <p className="eyebrow mt-3 text-navy/50">Mark Scott</p>
             </div>
-            <div className="relative h-[130px] w-[110px] shrink-0 sm:h-[150px] sm:w-[125px] lg:h-96 lg:w-44">
+            <div className="relative h-[130px] w-[110px] shrink-0 sm:h-[150px] sm:w-[125px] lg:h-full lg:w-[55%]">
               {about.headshot_url ? (
                 <Image
                   src={about.headshot_url}
