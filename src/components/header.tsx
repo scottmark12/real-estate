@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import MobileNav from "@/components/mobile-nav";
 import type { ContactSettings } from "@/lib/types";
 
@@ -13,6 +16,8 @@ const NAV_LINKS = [
 ];
 
 export default function Header({ contact }: { contact: ContactSettings }) {
+  const pathname = usePathname();
+
   return (
     <header className="sticky top-0 z-50 border-b border-sand/70 bg-cream/90 backdrop-blur">
       <div
@@ -31,15 +36,25 @@ export default function Header({ contact }: { contact: ContactSettings }) {
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium text-navy/80 transition-colors hover:text-navy"
-            >
-              {link.label}
-            </Link>
-          ))}
+          {NAV_LINKS.map((link) => {
+            const active =
+              link.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(link.href);
+            return (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`border-b-2 pb-0.5 text-sm font-medium transition-colors ${
+                  active
+                    ? "border-navy text-navy"
+                    : "border-transparent text-navy/80 hover:text-navy"
+                }`}
+              >
+                {link.label}
+              </Link>
+            );
+          })}
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
