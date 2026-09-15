@@ -9,7 +9,7 @@ export default function ListingCard({ listing }: { listing: Listing }) {
   return (
     <Link
       href={`/listings/${listing.slug}`}
-      className="group flex flex-col overflow-hidden border border-sand/70 bg-white/60 transition-shadow hover:shadow-lg"
+      className="group flex flex-col overflow-hidden border border-sand/70 bg-cream transition-shadow hover:shadow-lg"
     >
       <div className="relative aspect-4/3 w-full overflow-hidden">
         {listing.image_url ? (
