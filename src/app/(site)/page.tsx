@@ -130,7 +130,7 @@ export default async function HomePage() {
             />
           </div>
 
-          <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:-ml-28 lg:w-[120%] lg:self-end lg:-mb-16">
+          <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:-ml-28 lg:w-[120%] lg:self-end">
             <Image
               src="/images/mark-illustration-v2.png"
               alt="Mark Scott"
@@ -153,7 +153,7 @@ export default async function HomePage() {
       </section>
 
       {/* Primary paths */}
-      <section className="mt-12 border-t border-sand py-10 lg:mt-8 lg:py-12">
+      <section className="mt-12 border-t border-sand py-10 lg:mt-20 lg:py-12">
         <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-sand">
           {PRIMARY_PATHS.map((p) => (
             <Link
