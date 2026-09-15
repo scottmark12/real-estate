@@ -26,6 +26,48 @@ import type {
 
 export const revalidate = 0;
 
+function ServiceIcon({
+  icon,
+  className,
+}: {
+  icon: string;
+  className?: string;
+}) {
+  const common = {
+    className,
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.25,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+  };
+  if (icon === "building") {
+    return (
+      <svg {...common}>
+        <rect x="6" y="3" width="12" height="18" />
+        <path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1" />
+      </svg>
+    );
+  }
+  if (icon === "chart") {
+    return (
+      <svg {...common}>
+        <path d="M3 21h18" />
+        <path d="M7 21V13" />
+        <path d="M12 21V7" />
+        <path d="M17 21v-9" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...common}>
+      <path d="M3 11l9-7 9 7" />
+      <path d="M5 10v10h14V10" />
+    </svg>
+  );
+}
+
 function renderHeadline(headline: string) {
   const parts = headline.split(/(Actually)/);
   return parts.map((part, i) =>
@@ -331,25 +373,72 @@ export default async function HomePage() {
 
 
       {/* How I Can Help */}
-      <section className="mx-auto max-w-6xl px-6 py-14 sm:px-10">
-        <p className="eyebrow text-gold">How I Can Help</p>
-        <div className="mt-6 grid gap-10 sm:grid-cols-3">
-          {services.map((service) => (
-            <div key={service.title}>
-              <h3 className="font-display text-xl font-semibold text-navy">
-                {service.title}
-              </h3>
-              <p className="mt-2 text-sm text-navy/70">
-                {service.description}
-              </p>
-              <Link
-                href={service.href}
-                className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
-              >
-                Learn More
-              </Link>
+      <section className="px-[4vw] py-10">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch">
+          {/* Services */}
+          <div className="lg:w-[63%]">
+            <p className="eyebrow text-gold">How I Can Help</p>
+            <h2 className="mt-2 font-display text-3xl font-normal text-navy sm:text-4xl">
+              Real Estate, Broader Perspective.
+            </h2>
+            <div className="mt-8 grid gap-8 border-t border-navy/10 pt-6 sm:grid-cols-3">
+              {services.map((service, i) => (
+                <div
+                  key={service.title}
+                  className={
+                    i > 0 ? "sm:border-l sm:border-navy/15 sm:pl-6" : ""
+                  }
+                >
+                  <ServiceIcon
+                    icon={service.icon}
+                    className="h-6 w-6 text-navy/60"
+                  />
+                  <h3 className="mt-3 font-display text-lg font-semibold text-navy">
+                    {service.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-navy/70">
+                    {service.description}
+                  </p>
+                  <Link
+                    href={service.href}
+                    className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                  >
+                    Learn More &rarr;
+                  </Link>
+                </div>
+              ))}
             </div>
-          ))}
+          </div>
+
+          {/* Mark Scott */}
+          <div className="flex items-end justify-end gap-6 border-navy/15 pt-2 lg:w-[37%] lg:-mt-8 lg:border-l lg:pl-8">
+            <div className="max-w-[11rem] pb-3">
+              <p className="font-[family-name:var(--font-hand)] text-2xl leading-snug text-navy">
+                Curious people
+                <br />
+                build better
+                <br />
+                places.
+              </p>
+              <p className="eyebrow mt-4 text-navy/50">Mark Scott</p>
+            </div>
+            <div className="relative h-64 w-32 shrink-0 sm:h-80">
+              {about.headshot_url ? (
+                <Image
+                  src={about.headshot_url}
+                  alt="Mark Scott"
+                  fill
+                  sizes="140px"
+                  className="object-contain object-bottom"
+                />
+              ) : (
+                <ImagePlaceholder
+                  label="Mark — Illustration"
+                  className="absolute inset-0"
+                />
+              )}
+            </div>
+          </div>
         </div>
       </section>
 
