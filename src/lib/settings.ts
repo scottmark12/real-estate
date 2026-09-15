@@ -80,7 +80,7 @@ export const DEFAULT_CONTACT: ContactSettings = {
   email: "hello@markscottre.com",
   phone: "(619) 555-0100",
   name: "Mark Scott",
-  photo_url: "",
+  photo_url: "/images/mark-illustration-v2.png",
   photo_caption: "",
   handwritten_note: "Coffee works too.",
 };

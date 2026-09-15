@@ -44,13 +44,13 @@ export default async function ContactPage() {
 
           <div className="mt-6">
             {contact.photo_url ? (
-              <div className="relative aspect-[2.2/1] w-full overflow-hidden">
+              <div className="relative h-[280px] w-full sm:h-[320px]">
                 <Image
                   src={contact.photo_url}
                   alt={contact.photo_caption || "Mark Scott"}
                   fill
                   sizes="(min-width: 1024px) 42vw, 100vw"
-                  className="object-cover"
+                  className="object-contain object-bottom"
                 />
               </div>
             ) : (
