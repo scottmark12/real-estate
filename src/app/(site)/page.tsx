@@ -329,66 +329,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Feature Story */}
-      {featureStory && (
-        <section className="bg-navy py-16 text-cream">
-          <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-[1.2fr_1fr] lg:items-center">
-            <div className="relative aspect-4/3 w-full overflow-hidden lg:aspect-square">
-              {featureStory.image_url ? (
-                <>
-                  <Image
-                    src={featureStory.image_url}
-                    alt={featureStory.title}
-                    fill
-                    sizes="(min-width: 1024px) 55vw, 100vw"
-                    className="object-cover"
-                  />
-                  <p className="eyebrow absolute bottom-4 left-4 bg-navy/90 px-2 py-1 text-cream/90">
-                    {(CATEGORY_LABELS[featureStory.category] ??
-                      featureStory.category)}
-                  </p>
-                </>
-              ) : (
-                <ImagePlaceholder
-                  label="Editorial — Architecture Feature"
-                  className="absolute inset-0"
-                />
-              )}
-            </div>
-            <div>
-              <p className="eyebrow text-gold">Architecture &amp; Neighborhoods</p>
-              <h3 className="mt-3 font-display text-3xl font-semibold leading-tight sm:text-4xl">
-                {featureStory.title}
-              </h3>
-              {featureStory.excerpt && (
-                <p className="mt-4 text-cream/80">{featureStory.excerpt}</p>
-              )}
-
-              <ol className="mt-8 space-y-4 border-t border-cream/15 pt-6">
-                {[
-                  "The Building",
-                  "The Economics",
-                  "The Opportunity",
-                ].map((label, i) => (
-                  <li key={label} className="flex items-baseline gap-4">
-                    <span className="font-display text-2xl text-gold">
-                      0{i + 1}
-                    </span>
-                    <span className="text-cream/90">{label}</span>
-                  </li>
-                ))}
-              </ol>
-
-              <Link
-                href={`/insights/${featureStory.slug}`}
-                className="mt-8 inline-block border border-cream bg-cream px-6 py-3 text-sm font-semibold text-navy hover:bg-white"
-              >
-                Read the Story
-              </Link>
-            </div>
-          </div>
-        </section>
-      )}
 
       {/* How I Can Help */}
       <section className="mx-auto max-w-6xl px-6 py-14 sm:px-10">
