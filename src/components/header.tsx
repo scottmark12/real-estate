@@ -26,7 +26,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
             width={775}
             height={228}
             priority
-            className="h-9 w-auto sm:h-10"
+            className="mt-1.5 h-6 w-auto sm:h-7"
           />
         </Link>
 
