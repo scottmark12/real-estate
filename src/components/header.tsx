@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import MobileNav from "@/components/mobile-nav";
+import NewsletterModal from "@/components/newsletter-modal";
 import type { ContactSettings } from "@/lib/types";
 
 const NAV_LINKS = [
@@ -17,6 +19,7 @@ const NAV_LINKS = [
 
 export default function Header({ contact }: { contact: ContactSettings }) {
   const pathname = usePathname();
+  const [newsletterOpen, setNewsletterOpen] = useState(false);
 
   return (
     <header className="sticky top-0 z-50 border-b border-sand/70 bg-cream/90 backdrop-blur">
@@ -56,16 +59,25 @@ export default function Header({ contact }: { contact: ContactSettings }) {
 
         <div className="hidden items-center gap-4 lg:flex">
           <span className="eyebrow text-navy/60">{contact.city_state}</span>
-          <Link
-            href="/contact"
+          <button
+            type="button"
+            onClick={() => setNewsletterOpen(true)}
             className="border border-blue bg-blue px-5 py-2.5 text-sm font-medium text-cream transition-colors hover:bg-blue-dark"
           >
             Join the Newsletter
-          </Link>
+          </button>
         </div>
 
-        <MobileNav links={NAV_LINKS} />
+        <MobileNav
+          links={NAV_LINKS}
+          onOpenNewsletter={() => setNewsletterOpen(true)}
+        />
       </div>
+
+      <NewsletterModal
+        open={newsletterOpen}
+        onClose={() => setNewsletterOpen(false)}
+      />
     </header>
   );
 }

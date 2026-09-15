@@ -5,8 +5,10 @@ import { useState } from "react";
 
 export default function MobileNav({
   links,
+  onOpenNewsletter,
 }: {
   links: { href: string; label: string }[];
+  onOpenNewsletter: () => void;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -49,13 +51,16 @@ export default function MobileNav({
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/contact"
-              onClick={() => setOpen(false)}
+            <button
+              type="button"
+              onClick={() => {
+                setOpen(false);
+                onOpenNewsletter();
+              }}
               className="mt-2 rounded-full bg-navy px-5 py-2.5 text-center text-sm font-medium text-cream"
             >
               Join the Newsletter
-            </Link>
+            </button>
           </nav>
         </div>
       )}
