@@ -113,9 +113,9 @@ export default async function HomePage() {
           <div className="lg:col-start-1 lg:row-start-1 lg:self-start">
             <p className="eyebrow text-gold">Real Estate</p>
             <div className="mt-3 h-px w-10 bg-gold" />
-            <h1 className="mt-5 font-display text-[56px] font-normal leading-[0.95] text-navy sm:text-[72px] lg:text-[88px]">
-              Real Estate,
-              <br />Real Different.
+            <h1 className="mt-5 font-display text-[38px] font-normal leading-[0.95] text-navy sm:text-[64px] lg:text-[88px]">
+              <span className="block whitespace-nowrap">Real Estate,</span>
+              <span className="block whitespace-nowrap">Real Different.</span>
             </h1>
             <p className="mt-5 max-w-sm text-navy/70">
               Homes, buildings, and opportunities in San Diego and beyond.
