@@ -7,7 +7,7 @@ import MobileNav from "@/components/mobile-nav";
 import type { ContactSettings } from "@/lib/types";
 
 const NAV_LINKS = [
-  { href: "/", label: "Discover" },
+  { href: "/discover", label: "Discover" },
   { href: "/buy", label: "Buy" },
   { href: "/sell", label: "Sell" },
   { href: "/insights", label: "Market Research" },
@@ -37,10 +37,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
 
         <nav className="hidden items-center gap-7 lg:flex">
           {NAV_LINKS.map((link) => {
-            const active =
-              link.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(link.href);
+            const active = pathname.startsWith(link.href);
             return (
               <Link
                 key={link.href}

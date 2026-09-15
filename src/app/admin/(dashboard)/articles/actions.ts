@@ -54,6 +54,7 @@ export async function upsertArticle(formData: FormData) {
   }
 
   revalidatePath("/");
+  revalidatePath("/discover");
   revalidatePath("/insights");
   revalidatePath("/admin/articles");
   redirect("/admin/articles");
@@ -66,6 +67,7 @@ export async function deleteArticle(formData: FormData) {
   await supabase.from("articles").delete().eq("id", id);
 
   revalidatePath("/");
+  revalidatePath("/discover");
   revalidatePath("/insights");
   revalidatePath("/admin/articles");
 }
@@ -89,6 +91,7 @@ export async function toggleArticleField(formData: FormData) {
     .eq("id", id);
 
   revalidatePath("/");
+  revalidatePath("/discover");
   revalidatePath("/insights");
   revalidatePath("/admin/articles");
 }

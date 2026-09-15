@@ -53,6 +53,7 @@ export async function upsertListing(formData: FormData) {
   }
 
   revalidatePath("/");
+  revalidatePath("/discover");
   revalidatePath("/listings");
   revalidatePath("/buy");
   revalidatePath("/invest");
@@ -67,6 +68,7 @@ export async function deleteListing(formData: FormData) {
   await supabase.from("listings").delete().eq("id", id);
 
   revalidatePath("/");
+  revalidatePath("/discover");
   revalidatePath("/listings");
   revalidatePath("/admin/listings");
 }
@@ -84,6 +86,7 @@ export async function toggleListingField(formData: FormData) {
     .eq("id", id);
 
   revalidatePath("/");
+  revalidatePath("/discover");
   revalidatePath("/listings");
   revalidatePath("/admin/listings");
 }

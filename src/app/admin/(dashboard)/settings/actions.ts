@@ -10,6 +10,7 @@ async function upsertSetting(key: string, value: unknown) {
     .from("site_settings")
     .upsert({ key, value, updated_at: new Date().toISOString() });
   revalidatePath("/");
+  revalidatePath("/discover");
   revalidatePath("/about");
   revalidatePath("/contact");
   revalidatePath("/admin/settings");
