@@ -1,7 +1,7 @@
 import type { MarketChartSettings } from "@/lib/types";
 
 const WIDTH = 480;
-const HEIGHT = 240;
+const HEIGHT = 340;
 const PAD = 32;
 
 function buildPath(values: number[], min: number, max: number) {
@@ -24,7 +24,19 @@ export default function MarketChart({ data }: { data: MarketChartSettings }) {
 
   return (
     <div>
-      <svg
+      <p className="eyebrow text-navy/50">
+        Households vs. Housing Units
+        <br />
+        San Diego County
+      </p>
+      <div className="relative mt-4">
+        <span
+          className="font-[family-name:var(--font-hand)] absolute right-[8%] top-[18%] rotate-[-4deg] text-xl text-blue"
+          aria-hidden
+        >
+          The gap keeps growing.
+        </span>
+        <svg
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
         className="w-full"
         role="img"
@@ -74,7 +86,8 @@ export default function MarketChart({ data }: { data: MarketChartSettings }) {
             </text>
           );
         })}
-      </svg>
+        </svg>
+      </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-5 text-sm">
         <span className="flex items-center gap-2">

@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
+import { Caveat } from "next/font/google";
 import "./globals.css";
 
-// Note: this build environment cannot reach fonts.googleapis.com (network
-// policy blocks it), so next/font/google is not used here. The CSS below
-// falls back to Georgia/system-ui stacks per the brief's fallback guidance.
-// On a network-unrestricted host, swap these for next/font/google Playfair
-// Display + Inter and add the returned className variables here.
+const caveat = Caveat({
+  subsets: ["latin"],
+  weight: ["600"],
+  variable: "--font-hand",
+});
 
 export const metadata: Metadata = {
   title: "Mark Scott Real Estate | San Diego",
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html lang="en" className={`h-full antialiased ${caveat.variable}`}>
       <body className="min-h-full flex flex-col bg-cream font-sans text-navy">
         {children}
       </body>

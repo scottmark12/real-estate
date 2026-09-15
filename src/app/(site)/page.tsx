@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ListingCard from "@/components/listing-card";
-import ArticleCard, { CATEGORY_LABELS } from "@/components/article-card";
+import { CATEGORY_LABELS } from "@/components/article-card";
 import ImagePlaceholder from "@/components/image-placeholder";
 import MarketChart from "@/components/market-chart";
 import NewsletterForm from "@/components/newsletter-form";
@@ -211,38 +211,111 @@ export default async function HomePage() {
 
       {/* Market, Right Now */}
       <section className="bg-cream-deep py-16">
-        <div className="mx-auto max-w-6xl px-6 sm:px-10">
+        <div className="px-[4vw]">
           <p className="eyebrow text-gold">The Market, Right Now</p>
-          <div className="mt-6 grid gap-12 lg:grid-cols-[1.3fr_1fr]">
-            <div>
+          <div className="mt-6 grid lg:grid-cols-[35fr_30fr_35fr]">
+            {/* Lead story */}
+            <div className="lg:pr-10">
               {marketReport && (
                 <>
-                  <h3 className="max-w-xl font-display text-4xl font-semibold leading-[1.05] text-navy sm:text-5xl">
+                  <h3 className="font-display text-4xl font-normal leading-[1.05] text-navy sm:text-5xl">
                     {marketReport.title}
                   </h3>
                   {marketReport.excerpt && (
-                    <p className="mt-4 max-w-md text-navy/70">
+                    <p className="mt-4 max-w-sm text-navy/70">
                       {marketReport.excerpt}
                     </p>
                   )}
+                  <Link
+                    href={`/insights/${marketReport.slug}`}
+                    className="mt-5 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                  >
+                    Read the Full Report &rarr;
+                  </Link>
                 </>
               )}
-              <div className="mt-8 border-t border-navy/10 pt-6">
-                <MarketChart data={marketChart} />
-              </div>
-              {marketReport && (
-                <Link
-                  href={`/insights/${marketReport.slug}`}
-                  className="mt-6 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
-                >
-                  Read the Full Report &rarr;
-                </Link>
-              )}
             </div>
-            <div className="grid gap-6 lg:mt-1">
-              {sideArticles.map((article) => (
-                <ArticleCard key={article.id} article={article} />
-              ))}
+
+            {/* Chart */}
+            <div className="mt-8 border-l border-navy/15 px-8 lg:mt-3">
+              <MarketChart data={marketChart} />
+            </div>
+
+            {/* Supporting stories */}
+            <div className="mt-10 border-l border-navy/15 pl-8 lg:mt-24">
+              {sideArticles[0] && (
+                <div className="flex gap-4">
+                  {sideArticles[0].image_url && (
+                    <div className="relative h-28 w-20 shrink-0 overflow-hidden">
+                      <Image
+                        src={sideArticles[0].image_url}
+                        alt=""
+                        fill
+                        sizes="80px"
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <p className="eyebrow text-gold">
+                      {CATEGORY_LABELS[sideArticles[0].category] ??
+                        sideArticles[0].category}
+                    </p>
+                    <h4 className="mt-1 font-display text-xl font-semibold leading-snug text-navy">
+                      {sideArticles[0].title}
+                    </h4>
+                    {sideArticles[0].excerpt && (
+                      <p className="mt-2 line-clamp-2 text-sm text-navy/70">
+                        {sideArticles[0].excerpt}
+                      </p>
+                    )}
+                    <Link
+                      href={`/insights/${sideArticles[0].slug}`}
+                      className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                    >
+                      Read More &rarr;
+                    </Link>
+                  </div>
+                </div>
+              )}
+
+              {sideArticles[1] && (
+                <>
+                  <div className="my-8 border-t border-navy/15" />
+                  <div>
+                    {sideArticles[1].image_url && (
+                      <div className="relative mb-3 h-24 w-full max-w-[220px] overflow-hidden">
+                        <Image
+                          src={sideArticles[1].image_url}
+                          alt=""
+                          fill
+                          sizes="220px"
+                          className="object-cover"
+                        />
+                      </div>
+                    )}
+                    <p className="eyebrow text-gold">
+                      {CATEGORY_LABELS[sideArticles[1].category] ??
+                        sideArticles[1].category}
+                    </p>
+                    <h4 className="mt-1 font-display text-xl font-semibold leading-snug text-navy">
+                      {sideArticles[1].title}
+                    </h4>
+                    {sideArticles[1].excerpt && (
+                      <p className="mt-2 line-clamp-2 text-sm text-navy/70">
+                        {sideArticles[1].excerpt}
+                      </p>
+                    )}
+                    <Link
+                      href={`/insights/${sideArticles[1].slug}`}
+                      className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                    >
+                      Read More &rarr;
+                    </Link>
+                  </div>
+                </>
+              )}
+
               {sideArticles.length === 0 && (
                 <p className="text-navy/60">
                   Articles will appear here once published in the admin
