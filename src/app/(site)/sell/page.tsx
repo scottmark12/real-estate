@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import ImagePlaceholder from "@/components/image-placeholder";
 import ValuationForm from "@/components/valuation-form";
 import { DEFAULT_CONTACT, getSetting } from "@/lib/settings";
 import type { ContactSettings } from "@/lib/types";
@@ -120,9 +119,13 @@ export default async function SellPage() {
           </div>
           <div>
             <div className="relative aspect-4/3 w-full overflow-hidden lg:aspect-auto lg:h-full lg:min-h-[380px]">
-              <ImagePlaceholder
-                label="Residential — San Diego"
-                className="absolute inset-0"
+              <Image
+                src="/images/sell-hero.jpg"
+                alt="A modern home with a pool"
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+                priority
               />
             </div>
             <p className="eyebrow mt-3 text-right text-navy/50">
