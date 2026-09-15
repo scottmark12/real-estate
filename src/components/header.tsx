@@ -21,7 +21,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
       >
         <Link href="/" className="shrink-0">
           <Image
-            src="/images/logo.png"
+            src="/images/logo-v2.png"
             alt="Mark Scott Real Estate"
             width={954}
             height={370}
