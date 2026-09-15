@@ -16,7 +16,7 @@ export const DEFAULT_HERO: HeroSettings = {
   cta_primary_href: "/insights",
   cta_secondary_label: "View Properties",
   cta_secondary_href: "/listings",
-  image_url: "",
+  image_url: "/images/hero-san-diego.jpeg",
   location_label: "San Diego",
   dateline: "The Market Report",
 };

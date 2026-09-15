@@ -317,29 +317,35 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* A Note From Mark */}
+      {/* A Broader Perspective */}
       <section className="border-y border-sand bg-cream-deep py-20">
-        <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-[auto_1fr] lg:items-center">
-          {about.headshot_url ? (
-            <div className="relative h-20 w-20 overflow-hidden rounded-full">
+        <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-2 lg:items-center">
+          <div className="relative aspect-4/3 w-full overflow-hidden">
+            {about.headshot_url ? (
               <Image
                 src={about.headshot_url}
                 alt={about.name}
                 fill
-                sizes="80px"
+                sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover"
               />
-            </div>
-          ) : (
-            <div className="h-20 w-20 rounded-full border border-navy/20 bg-sand/40" />
-          )}
+            ) : (
+              <ImagePlaceholder
+                label="Mark Headshot"
+                className="absolute inset-0"
+              />
+            )}
+          </div>
           <div>
-            <p className="eyebrow text-gold">A Note From Mark</p>
-            <blockquote className="mt-3 max-w-2xl font-display text-2xl leading-snug text-navy sm:text-3xl">
-              &ldquo;{about.quote}&rdquo;
-            </blockquote>
-            <p className="mt-4 text-sm font-semibold text-navy">
-              {about.name} &middot; Real Estate Is a People Business
+            <p className="eyebrow text-gold">A Broader Perspective</p>
+            <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-navy sm:text-4xl">
+              Real Estate Is a People Business.
+            </h2>
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-navy/70">
+              {about.quote}
+            </p>
+            <p className="mt-5 text-sm font-semibold text-navy">
+              {about.name}
             </p>
           </div>
         </div>
