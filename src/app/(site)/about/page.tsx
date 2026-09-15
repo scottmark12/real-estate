@@ -33,13 +33,15 @@ export default async function AboutPage() {
           <blockquote className="font-display text-2xl leading-snug text-navy">
             &ldquo;{about.quote}&rdquo;
           </blockquote>
-          <p className="mt-6 text-navy/75">
-            {about.name} is a real estate professional based in{" "}
-            {contact.city_state}, working with buyers, sellers, and
-            investors across residential and commercial property. {about.name}{" "}
-            combines deep local market data with hands-on experience to help
-            clients make confident, well-informed decisions.
-          </p>
+          <div className="mt-6 flex flex-col gap-4 text-navy/75">
+            {about.bio
+              .split(/\n\s*\n/)
+              .map((paragraph) => paragraph.trim())
+              .filter(Boolean)
+              .map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+          </div>
           <p className="mt-4 text-sm text-navy/50">{contact.dre_number}</p>
         </div>
       </div>

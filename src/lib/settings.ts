@@ -54,13 +54,17 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
 ];
 
 export const DEFAULT_ABOUT: AboutSettings = {
-  quote:
-    "I'm Mark Scott, a San Diego-based real estate professional working across residential and commercial opportunities. I believe good decisions start with clear information, honest advice, and a long-term perspective.",
+  quote: "Homes are where community starts.",
   name: "Mark Scott",
   headshot_url: "/images/mark-illustration-v2.png",
   portrait_url: "/images/about-photo.jpg",
   location_label: "San Diego, CA",
   handwritten_note: "Curious people build better places.",
+  bio: `Where you live shapes a lot more than your address. It shapes the people you know, the places you frequent, and the way you spend your days. Deciding where to live is a big deal. I would know—I moved across the country to Encinitas because it had so much of what I was looking for: beautiful beaches, a strong sense of community, good food, and easy access to mountains and desert.
+
+I studied interior design, entrepreneurship, and marketing at Florida State University, graduating early to spend time traveling. Circling the world, I found a sense of home and community in cities where housing, neighborhoods, and daily life looked nothing like they do in the U.S. It made me curious about why some places work so well—and why others don't.
+
+When I came back, real estate felt like the natural place to put that curiosity to work. Today, I work across residential and commercial real estate, with an interest not just in properties themselves, but in the neighborhoods, buildings, economics, and people that give them value.`,
 };
 
 export const DEFAULT_NEWSLETTER: NewsletterSettings = {

@@ -225,17 +225,40 @@ export default async function AdminSettingsPage() {
 
         <Section title="About / Pull Quote">
           <form action={updateAbout} className="flex flex-col gap-4">
-            <Field label="Name" name="name" defaultValue={about.name} />
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Name" name="name" defaultValue={about.name} />
+              <Field
+                label="Location Label"
+                name="location_label"
+                defaultValue={about.location_label}
+              />
+            </div>
             <Field
-              label="Quote"
+              label="Quote (short — used on the homepage teaser)"
               name="quote"
               defaultValue={about.quote}
               textarea
             />
+            <Field
+              label="Bio (full — used on the About page, blank lines start new paragraphs)"
+              name="bio"
+              defaultValue={about.bio}
+              textarea
+            />
+            <Field
+              label="Handwritten Note"
+              name="handwritten_note"
+              defaultValue={about.handwritten_note}
+            />
             <SingleImageUploader
               name="headshot_url"
-              label="Headshot"
+              label="Headshot (small illustration)"
               initialUrl={about.headshot_url}
+            />
+            <SingleImageUploader
+              name="portrait_url"
+              label="Portrait (homepage 'Broader Perspective' photo)"
+              initialUrl={about.portrait_url}
             />
             <SaveButton />
           </form>

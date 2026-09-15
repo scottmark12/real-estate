@@ -69,6 +69,10 @@ export async function updateAbout(formData: FormData) {
     quote: String(formData.get("quote") ?? ""),
     name: String(formData.get("name") ?? ""),
     headshot_url: String(formData.get("headshot_url") ?? ""),
+    portrait_url: String(formData.get("portrait_url") ?? ""),
+    location_label: String(formData.get("location_label") ?? ""),
+    handwritten_note: String(formData.get("handwritten_note") ?? ""),
+    bio: String(formData.get("bio") ?? ""),
   });
 }
 

@@ -99,6 +99,7 @@ export interface AboutSettings {
   portrait_url: string;
   location_label: string;
   handwritten_note: string;
+  bio: string;
 }
 
 export interface NewsletterSettings {
