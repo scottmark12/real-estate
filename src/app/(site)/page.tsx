@@ -108,8 +108,8 @@ export default async function HomePage() {
   return (
     <div className="mx-auto max-w-[1500px] px-12">
       {/* Hero / cover */}
-      <section className="pt-10 lg:pt-14">
-        <div className="flex flex-col gap-10 lg:grid lg:grid-cols-[45fr_55fr] lg:gap-x-12 lg:gap-y-0">
+      <section className="pt-10">
+        <div className="relative flex flex-col gap-10 lg:grid lg:grid-cols-[45fr_55fr] lg:gap-x-12 lg:gap-y-0">
           <div className="lg:col-start-1 lg:row-start-1 lg:self-start">
             <h1 className="font-display text-[38px] font-normal leading-[0.95] text-navy sm:text-[64px] lg:text-[88px]">
               <span className="block whitespace-nowrap">Real Estate,</span>
@@ -118,6 +118,16 @@ export default async function HomePage() {
             <p className="mt-5 max-w-sm text-navy/70">
               Homes, buildings, and opportunities in San Diego and beyond.
             </p>
+          </div>
+
+          <div className="relative w-full max-w-[240px] lg:absolute lg:left-[410px] lg:top-[335px] lg:z-10 lg:w-[320px] lg:max-w-none lg:rotate-[-4deg]">
+            <Image
+              src="/images/handwriting-curiosity.png"
+              alt="Curiosity is good due diligence! —MS"
+              width={816}
+              height={211}
+              className="h-auto w-full"
+            />
           </div>
 
           <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-end lg:-mb-16">
@@ -133,14 +143,7 @@ export default async function HomePage() {
           </div>
 
           <div className="lg:col-start-1 lg:row-start-2 lg:self-end">
-            <p className="font-[family-name:var(--font-hand)] -rotate-3 text-xl leading-snug text-navy/70">
-              Curiosity is good
-              <br />
-              due diligence!
-              <br />
-              &mdash;MS
-            </p>
-            <p className="eyebrow mt-6 text-navy/40">
+            <p className="eyebrow mt-6 text-navy/40 lg:mt-0">
               Residential &middot; Commercial &middot; Research
               <br />
               San Diego, California
