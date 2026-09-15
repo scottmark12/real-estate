@@ -244,14 +244,14 @@ export default async function HomePage() {
             {/* Supporting stories */}
             <div className="mt-10 border-l border-navy/15 pl-8 lg:mt-24">
               {sideArticles[0] && (
-                <div className="flex gap-4">
+                <div className="flex gap-5">
                   {sideArticles[0].image_url && (
-                    <div className="relative h-28 w-20 shrink-0 overflow-hidden">
+                    <div className="relative aspect-4/3 w-[38%] shrink-0 overflow-hidden">
                       <Image
                         src={sideArticles[0].image_url}
                         alt=""
                         fill
-                        sizes="80px"
+                        sizes="180px"
                         className="object-cover"
                       />
                     </div>
@@ -284,12 +284,12 @@ export default async function HomePage() {
                   <div className="my-8 border-t border-navy/15" />
                   <div>
                     {sideArticles[1].image_url && (
-                      <div className="relative mb-3 h-24 w-full max-w-[220px] overflow-hidden">
+                      <div className="relative mb-4 aspect-3/2 w-[62%] overflow-hidden">
                         <Image
                           src={sideArticles[1].image_url}
                           alt=""
                           fill
-                          sizes="220px"
+                          sizes="280px"
                           className="object-cover"
                         />
                       </div>
