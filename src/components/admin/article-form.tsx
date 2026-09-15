@@ -251,6 +251,44 @@ export default function ArticleForm({ article }: { article?: Article }) {
         </label>
       </div>
 
+      <div className="rounded-lg border border-sand bg-cream-deep/50 p-4">
+        <p className="text-sm font-semibold text-navy">
+          Homepage (/) — Curation
+        </p>
+        <p className="mt-1 text-xs text-navy/60">
+          Only one article should be marked &quot;On My Radar&quot; at a
+          time — if more than one is checked, the homepage shows whichever
+          comes back first.
+        </p>
+        <div className="mt-4 flex flex-wrap items-center gap-6">
+          <label className="flex items-center gap-2 text-sm text-navy">
+            <input
+              type="checkbox"
+              name="on_my_radar"
+              defaultChecked={article?.on_my_radar}
+            />
+            On My Radar (homepage feature)
+          </label>
+          <label className="flex items-center gap-2 text-sm text-navy">
+            <input
+              type="checkbox"
+              name="homepage_elsewhere"
+              defaultChecked={article?.homepage_elsewhere}
+            />
+            Elsewhere (homepage cover line)
+          </label>
+          <label className="flex items-center gap-2 text-sm text-navy">
+            Order
+            <input
+              type="number"
+              name="homepage_elsewhere_order"
+              defaultValue={article?.homepage_elsewhere_order ?? 0}
+              className="w-16 rounded-lg border border-navy/15 bg-white px-2 py-1 text-sm"
+            />
+          </label>
+        </div>
+      </div>
+
       <button
         type="submit"
         className="self-start rounded-full bg-navy px-6 py-3 text-sm font-semibold text-cream hover:bg-navy-dark"

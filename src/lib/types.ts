@@ -28,6 +28,8 @@ export interface Listing {
   featured: boolean;
   sort_order: number;
   published: boolean;
+  homepage_elsewhere: boolean;
+  homepage_elsewhere_order: number;
   created_at: string;
   updated_at: string;
 }
@@ -55,6 +57,9 @@ export interface Article {
   metadata: string | null;
   cta_label: string | null;
   published: boolean;
+  on_my_radar: boolean;
+  homepage_elsewhere: boolean;
+  homepage_elsewhere_order: number;
   published_at: string;
   created_at: string;
   updated_at: string;

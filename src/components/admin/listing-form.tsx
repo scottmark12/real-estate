@@ -204,6 +204,31 @@ export default function ListingForm({ listing }: { listing?: Listing }) {
         </label>
       </div>
 
+      <div className="rounded-lg border border-sand bg-cream-deep/50 p-4">
+        <p className="text-sm font-semibold text-navy">
+          Homepage (/) — Elsewhere
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-6">
+          <label className="flex items-center gap-2 text-sm text-navy">
+            <input
+              type="checkbox"
+              name="homepage_elsewhere"
+              defaultChecked={listing?.homepage_elsewhere}
+            />
+            Show as a homepage cover line
+          </label>
+          <label className="flex items-center gap-2 text-sm text-navy">
+            Order
+            <input
+              type="number"
+              name="homepage_elsewhere_order"
+              defaultValue={listing?.homepage_elsewhere_order ?? 0}
+              className="w-16 rounded-lg border border-navy/15 bg-white px-2 py-1 text-sm"
+            />
+          </label>
+        </div>
+      </div>
+
       <button
         type="submit"
         className="self-start rounded-full bg-navy px-6 py-3 text-sm font-semibold text-cream hover:bg-navy-dark"

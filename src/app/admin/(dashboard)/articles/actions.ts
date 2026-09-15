@@ -40,6 +40,9 @@ export async function upsertArticle(formData: FormData) {
     is_market_report: formData.get("is_market_report") === "on",
     featured: formData.get("featured") === "on",
     architectural_feature: formData.get("architectural_feature") === "on",
+    on_my_radar: formData.get("on_my_radar") === "on",
+    homepage_elsewhere: formData.get("homepage_elsewhere") === "on",
+    homepage_elsewhere_order: Number(formData.get("homepage_elsewhere_order")) || 0,
     published: formData.get("published") === "on",
     published_at: publishedAt
       ? new Date(publishedAt).toISOString()
@@ -81,6 +84,8 @@ export async function toggleArticleField(formData: FormData) {
     "featured",
     "is_feature_story",
     "is_market_report",
+    "on_my_radar",
+    "homepage_elsewhere",
   ];
   if (!id || !allowed.includes(field)) return;
 

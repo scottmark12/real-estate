@@ -43,6 +43,8 @@ export async function upsertListing(formData: FormData) {
     featured: formData.get("featured") === "on",
     published: formData.get("published") === "on",
     sort_order: num(formData, "sort_order") ?? 0,
+    homepage_elsewhere: formData.get("homepage_elsewhere") === "on",
+    homepage_elsewhere_order: num(formData, "homepage_elsewhere_order") ?? 0,
     updated_at: new Date().toISOString(),
   };
 
