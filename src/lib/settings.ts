@@ -57,7 +57,7 @@ export const DEFAULT_ABOUT: AboutSettings = {
   quote:
     "I built my business on the belief that clients deserve the truth about the market, not just what they want to hear.",
   name: "Mark Scott",
-  headshot_url: "",
+  headshot_url: "/images/mark-illustration.png",
 };
 
 export const DEFAULT_NEWSLETTER: NewsletterSettings = {

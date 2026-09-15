@@ -320,13 +320,13 @@ export default async function HomePage() {
       {/* A Broader Perspective */}
       <section className="border-y border-sand bg-cream-deep py-20">
         <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-2 lg:items-center">
-          <div className="relative aspect-4/3 w-full overflow-hidden">
+          <div className="relative aspect-square w-full max-w-sm overflow-hidden bg-cream-deep">
             {about.headshot_url ? (
               <Image
                 src={about.headshot_url}
                 alt={about.name}
                 fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
+                sizes="(min-width: 1024px) 25vw, 60vw"
                 className="object-cover"
               />
             ) : (
