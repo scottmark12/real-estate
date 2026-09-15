@@ -77,7 +77,7 @@ My first real education in property wasn't theoretical. I renovated and managed 
 Today, I work in commercial acquisitions, sourcing opportunities, talking directly with owners, evaluating deals, and working through the numbers behind whether a property actually makes sense. Alongside that work, I help people buy and sell residential real estate in San Diego.
 
 The scale changes. The questions aren't actually that different.`,
-  headshot_photo_url: "",
+  headshot_photo_url: "/images/mark-headshot.jpeg",
   opening_photo_url: "",
   opening_photo_caption: "",
   opening_photo_focal: "50% 50%",
