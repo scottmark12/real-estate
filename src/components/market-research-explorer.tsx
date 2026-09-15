@@ -64,53 +64,60 @@ function ArticleImage({
 
 function FeaturedBlock({ featured }: { featured: Article }) {
   return (
-    <div className="grid gap-8 lg:grid-cols-[32fr_68fr] lg:items-start">
-      <div className="flex flex-col pt-1">
-        <p className="eyebrow text-gold">Market Research</p>
-        <h1 className="mt-2 font-display text-4xl font-normal leading-[1.05] text-navy">
-          Research
-          <br />
-          worth reading.
-        </h1>
-        <p className="mt-3 max-w-[22rem] text-sm text-navy/70">
-          Real estate, development, architecture and the forces shaping
-          Southern California and beyond.
-        </p>
-        <p className="font-[family-name:var(--font-hand)] mt-6 text-lg leading-snug text-navy/70">
+    <div className="grid gap-8 lg:grid-cols-[32fr_68fr] lg:items-stretch">
+      <div className="flex flex-col pt-1 lg:h-full">
+        <div>
+          <p className="eyebrow text-gold">Market Research</p>
+          <h1 className="mt-3 font-display text-[54px] font-normal leading-[0.97] text-navy [font-size:clamp(54px,4.5vw,78px)]">
+            Research
+            <br />
+            worth reading.
+          </h1>
+          <p className="mt-4 max-w-[22rem] text-sm text-navy/70">
+            Real estate, development, architecture and the forces shaping
+            Southern California and beyond.
+          </p>
+        </div>
+        <p className="font-[family-name:var(--font-hand)] mt-10 text-lg leading-snug text-navy/70 lg:mt-auto lg:mb-14">
           Better places happen by design.
           <br />
           &mdash;MS
         </p>
       </div>
 
-      <div>
-        <div className="relative h-[240px] w-full overflow-hidden sm:h-[300px] lg:h-[360px]">
+      <div className="relative">
+        <div className="relative h-[260px] w-full overflow-hidden sm:h-[340px] lg:h-[400px] lg:w-[90%]">
           <ArticleImage article={featured} placeholderLabel="Featured Article Image" />
           {(featured.stat || featured.secondary_stat) && (
-            <div className="absolute bottom-0 right-0 bg-navy/90 px-5 py-4 text-cream">
+            <div className="absolute bottom-0 right-0 flex h-[48%] w-[42%] min-w-[130px] flex-col justify-center gap-2 bg-navy/95 px-4 py-3 text-cream sm:w-[30%] lg:w-[20%]">
               {featured.stat && (
-                <p className="font-display text-xl font-semibold leading-tight">
+                <p className="font-display text-lg font-semibold leading-tight">
                   {featured.stat}
                 </p>
               )}
               {featured.stat && featured.secondary_stat && (
-                <div className="my-2 h-px w-full bg-cream/20" />
+                <div className="h-px w-full bg-cream/20" />
               )}
               {featured.secondary_stat && (
-                <p className="font-display text-xl font-semibold leading-tight">
+                <p className="font-display text-lg font-semibold leading-tight">
                   {featured.secondary_stat}
+                </p>
+              )}
+              {featured.annotation && (
+                <p className="font-[family-name:var(--font-hand)] mt-1 text-sm italic leading-snug text-cream/80">
+                  {featured.annotation}
                 </p>
               )}
             </div>
           )}
         </div>
 
-        <div className="mt-4 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-          <div>
+        <div className="relative mt-4 lg:pr-[6%]">
+          <div className="lg:max-w-[74%]">
             <p className="eyebrow text-gold">
               {featured.eyebrow || CATEGORY_LABELS[featured.category]}
             </p>
-            <h2 className="mt-1 font-display text-2xl font-semibold leading-tight text-navy sm:text-3xl">
+            <h2 className="mt-1 font-display text-[34px] font-semibold leading-[1.05] text-navy lg:text-[40px]">
               {featured.title}
             </h2>
             {featured.excerpt && (
@@ -125,7 +132,7 @@ function FeaturedBlock({ featured }: { featured: Article }) {
           </div>
           <Link
             href={`/insights/${featured.slug}`}
-            className="eyebrow shrink-0 text-navy underline decoration-gold decoration-2 underline-offset-4"
+            className="eyebrow mt-3 inline-block shrink-0 text-navy underline decoration-gold decoration-2 underline-offset-4 lg:absolute lg:right-0 lg:bottom-1 lg:mt-0"
           >
             {featured.cta_label || "Read the Full Report →"}
           </Link>
@@ -289,8 +296,8 @@ export default function MarketResearchExplorer({
         )}
       </section>
 
-      <nav className="mt-6 border-t border-sand">
-        <div className="flex gap-6 overflow-x-auto py-3 text-sm">
+      <nav className="mt-5 border-t border-sand">
+        <div className="flex gap-6 overflow-x-auto py-2.5 text-sm">
           <button
             type="button"
             onClick={() => setActive("all")}
