@@ -90,9 +90,9 @@ The scale changes. The questions aren't actually that different.`,
   travel_photo_2_url: "/images/travel-thatched-roof.jpeg",
   travel_photo_2_caption: "",
   travel_photo_2_focal: "50% 50%",
-  travel_photo_3_url: "",
-  travel_photo_3_caption: "",
-  travel_photo_3_focal: "50% 50%",
+  travel_photo_3_url: "/images/travel-minaret.jpeg",
+  travel_photo_3_caption: "Casablanca, Morocco",
+  travel_photo_3_focal: "50% 30%",
 };
 
 export const DEFAULT_NEWSLETTER: NewsletterSettings = {
