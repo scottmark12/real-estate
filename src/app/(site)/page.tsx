@@ -483,7 +483,7 @@ export default async function HomePage() {
           width={2172}
           height={724}
           aria-hidden
-          className="pointer-events-none absolute left-0 top-1/2 hidden h-auto w-[520px] -translate-y-1/2 opacity-[0.16] xl:block"
+          className="pointer-events-none absolute left-0 top-1/2 hidden h-auto w-[620px] -translate-y-1/2 opacity-45 lg:block"
         />
         <div className="relative mx-auto max-w-2xl text-center">
           <p className="eyebrow text-blue">{newsletter.tagline_line1}</p>
