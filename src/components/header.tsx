@@ -18,11 +18,13 @@ export default function Header({ contact }: { contact: ContactSettings }) {
         className="flex items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-10"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <Link
-          href="/"
-          className="font-display text-lg font-semibold tracking-tight text-navy sm:text-xl"
-        >
-          Mark Scott <span className="text-gold">Real Estate</span>
+        <Link href="/" className="leading-none">
+          <span className="block font-display text-lg font-semibold tracking-tight text-navy sm:text-xl">
+            Mark Scott
+          </span>
+          <span className="eyebrow mt-0.5 block text-navy/60">
+            Real Estate
+          </span>
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex">

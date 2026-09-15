@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ListingCard from "@/components/listing-card";
 import ArticleCard from "@/components/article-card";
+import ImagePlaceholder from "@/components/image-placeholder";
 import MarketChart from "@/components/market-chart";
 import NewsletterForm from "@/components/newsletter-form";
 import { createClient } from "@/lib/supabase/server";
@@ -120,39 +121,49 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative flex min-h-[85vh] items-end overflow-hidden">
-        <Image
-          src={hero.image_url}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-dark/80 via-navy-dark/30 to-navy-dark/10" />
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-6 pb-16 pt-32 sm:px-10">
-          <p className="eyebrow text-cream/80">
-            {hero.location_label} &middot; {hero.dateline}
-          </p>
-          <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-tight text-cream sm:text-5xl lg:text-6xl">
-            {hero.headline}
-          </h1>
-          <p className="mt-5 max-w-xl text-base text-cream/85 sm:text-lg">
-            {hero.subhead}
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href={hero.cta_primary_href}
-              className="rounded-full bg-cream px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-white"
-            >
-              {hero.cta_primary_label}
-            </Link>
-            <Link
-              href={hero.cta_secondary_href}
-              className="rounded-full border border-cream/60 px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-cream/10"
-            >
-              {hero.cta_secondary_label}
-            </Link>
+      <section className="mx-auto max-w-6xl px-6 pb-16 pt-14 sm:px-10 sm:pt-20">
+        <p className="eyebrow text-gold">
+          {hero.dateline} &middot; {hero.location_label}
+        </p>
+        <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-stretch">
+          <div className="flex flex-col justify-center">
+            <h1 className="font-display text-4xl font-semibold leading-[1.05] text-navy sm:text-5xl lg:text-6xl">
+              {hero.headline}
+            </h1>
+            <p className="mt-5 max-w-lg text-base text-navy/70 sm:text-lg">
+              {hero.subhead}
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link
+                href={hero.cta_primary_href}
+                className="border border-navy bg-navy px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-navy-dark"
+              >
+                {hero.cta_primary_label} &rarr;
+              </Link>
+              <Link
+                href={hero.cta_secondary_href}
+                className="border border-navy px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
+              >
+                {hero.cta_secondary_label} &rarr;
+              </Link>
+            </div>
+          </div>
+          <div className="relative min-h-[320px] lg:min-h-[480px]">
+            {hero.image_url ? (
+              <Image
+                src={hero.image_url}
+                alt=""
+                fill
+                priority
+                sizes="(min-width: 1024px) 45vw, 100vw"
+                className="object-cover"
+              />
+            ) : (
+              <ImagePlaceholder
+                label="Hero — San Diego Architecture"
+                className="absolute inset-0"
+              />
+            )}
           </div>
         </div>
       </section>
@@ -190,7 +201,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-6xl px-6 sm:px-10">
           <p className="eyebrow text-gold">The Market, Right Now</p>
           <div className="mt-8 grid gap-10 lg:grid-cols-[1.1fr_1fr]">
-            <div className="rounded-2xl border border-sand bg-white/70 p-6 sm:p-8">
+            <div className="border border-sand bg-white/70 p-6 sm:p-8">
               {marketReport && (
                 <>
                   <h3 className="font-display text-2xl font-semibold text-navy sm:text-3xl">
@@ -232,8 +243,8 @@ export default async function HomePage() {
       {featureStory && (
         <section className="bg-navy py-20 text-cream">
           <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-2 lg:items-center">
-            {featureStory.image_url && (
-              <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl">
+            <div className="relative aspect-4/3 w-full overflow-hidden">
+              {featureStory.image_url ? (
                 <Image
                   src={featureStory.image_url}
                   alt={featureStory.title}
@@ -241,10 +252,15 @@ export default async function HomePage() {
                   sizes="(min-width: 1024px) 50vw, 100vw"
                   className="object-cover"
                 />
-              </div>
-            )}
+              ) : (
+                <ImagePlaceholder
+                  label="Editorial — Architecture Feature"
+                  className="absolute inset-0"
+                />
+              )}
+            </div>
             <div>
-              <p className="eyebrow text-gold">Feature Story</p>
+              <p className="eyebrow text-gold">Architecture &amp; Neighborhoods</p>
               <h3 className="mt-3 font-display text-3xl font-semibold leading-tight sm:text-4xl">
                 {featureStory.title}
               </h3>
@@ -269,7 +285,7 @@ export default async function HomePage() {
 
               <Link
                 href={`/insights/${featureStory.slug}`}
-                className="mt-8 inline-block rounded-full bg-cream px-6 py-3 text-sm font-semibold text-navy hover:bg-white"
+                className="mt-8 inline-block border border-cream bg-cream px-6 py-3 text-sm font-semibold text-navy hover:bg-white"
               >
                 Read the Story
               </Link>
@@ -281,65 +297,58 @@ export default async function HomePage() {
       {/* How I Can Help */}
       <section className="mx-auto max-w-6xl px-6 py-20 sm:px-10">
         <p className="eyebrow text-gold">How I Can Help</p>
-        <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-center">
-          <div className="grid gap-8 sm:grid-cols-3 lg:grid-cols-1">
-            {services.map((service) => (
-              <div key={service.title}>
-                <h3 className="font-display text-xl font-semibold text-navy">
-                  {service.title}
-                </h3>
-                <p className="mt-2 text-sm text-navy/70">
-                  {service.description}
-                </p>
-                <Link
-                  href={service.href}
-                  className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
-                >
-                  Learn More
-                </Link>
-              </div>
-            ))}
-          </div>
-          <div className="rounded-2xl border border-sand bg-cream-deep p-8 sm:p-10">
-            <div className="flex items-center gap-4">
-              {about.headshot_url && (
-                <div className="relative h-16 w-16 overflow-hidden rounded-full">
-                  <Image
-                    src={about.headshot_url}
-                    alt={about.name}
-                    fill
-                    sizes="64px"
-                    className="object-cover"
-                  />
-                </div>
-              )}
-              <p className="font-display text-lg font-semibold text-navy">
-                {about.name}
+        <div className="mt-8 grid gap-10 sm:grid-cols-3">
+          {services.map((service) => (
+            <div key={service.title}>
+              <h3 className="font-display text-xl font-semibold text-navy">
+                {service.title}
+              </h3>
+              <p className="mt-2 text-sm text-navy/70">
+                {service.description}
               </p>
+              <Link
+                href={service.href}
+                className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+              >
+                Learn More
+              </Link>
             </div>
-            <blockquote className="mt-6 font-display text-2xl leading-snug text-navy">
+          ))}
+        </div>
+      </section>
+
+      {/* A Note From Mark */}
+      <section className="border-y border-sand bg-cream-deep py-20">
+        <div className="mx-auto grid max-w-6xl gap-10 px-6 sm:px-10 lg:grid-cols-[auto_1fr] lg:items-center">
+          {about.headshot_url ? (
+            <div className="relative h-20 w-20 overflow-hidden rounded-full">
+              <Image
+                src={about.headshot_url}
+                alt={about.name}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </div>
+          ) : (
+            <div className="h-20 w-20 rounded-full border border-navy/20 bg-sand/40" />
+          )}
+          <div>
+            <p className="eyebrow text-gold">A Note From Mark</p>
+            <blockquote className="mt-3 max-w-2xl font-display text-2xl leading-snug text-navy sm:text-3xl">
               &ldquo;{about.quote}&rdquo;
             </blockquote>
+            <p className="mt-4 text-sm font-semibold text-navy">
+              {about.name} &middot; Real Estate Is a People Business
+            </p>
           </div>
         </div>
       </section>
 
       {/* Newsletter */}
-      <section className="relative overflow-hidden py-24">
-        <Image
-          src={newsletter.image_url}
-          alt=""
-          fill
-          sizes="100vw"
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-navy-dark/70" />
-        <div className="relative z-10 mx-auto max-w-3xl px-6 text-center text-cream sm:px-10">
-          <p className="eyebrow text-cream/70">
-            {newsletter.tagline_line1}
-            <br />
-            {newsletter.tagline_line2}
-          </p>
+      <section className="bg-navy py-20 text-cream">
+        <div className="mx-auto max-w-2xl px-6 text-center sm:px-10">
+          <p className="eyebrow text-gold">{newsletter.tagline_line1}</p>
           <h2 className="mt-4 font-display text-3xl font-semibold sm:text-4xl">
             {newsletter.heading}
           </h2>

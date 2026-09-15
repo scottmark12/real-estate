@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import ImagePlaceholder from "@/components/image-placeholder";
 import type { Article } from "@/lib/types";
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -11,9 +12,9 @@ const CATEGORY_LABELS: Record<string, string> = {
 
 export default function ArticleCard({ article }: { article: Article }) {
   return (
-    <article className="flex flex-col overflow-hidden rounded-2xl border border-sand/70 bg-white/60">
-      {article.image_url && (
-        <div className="relative aspect-16/9 w-full overflow-hidden bg-sand">
+    <article className="flex flex-col overflow-hidden border border-sand/70 bg-white/60">
+      <div className="relative aspect-16/9 w-full overflow-hidden">
+        {article.image_url ? (
           <Image
             src={article.image_url}
             alt={article.title}
@@ -21,8 +22,10 @@ export default function ArticleCard({ article }: { article: Article }) {
             sizes="(min-width: 1024px) 33vw, 100vw"
             className="object-cover"
           />
-        </div>
-      )}
+        ) : (
+          <ImagePlaceholder label="Editorial Image" className="h-full" />
+        )}
+      </div>
       <div className="flex flex-1 flex-col gap-2 p-5">
         <p className="eyebrow text-gold">
           {CATEGORY_LABELS[article.category] ?? article.category}

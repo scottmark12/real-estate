@@ -11,15 +11,14 @@ import type {
 export const DEFAULT_HERO: HeroSettings = {
   headline: "What Is San Diego Actually Worth?",
   subhead:
-    "Straight answers on buying, selling, and investing across San Diego's coastal and inland neighborhoods, from someone who tracks the numbers block by block.",
-  cta_primary_label: "See Featured Listings",
-  cta_primary_href: "/listings",
-  cta_secondary_label: "Get a Home Valuation",
-  cta_secondary_href: "/contact",
-  image_url:
-    "https://images.unsplash.com/photo-1544551763-46a013bb70d5?q=80&w=2400&auto=format&fit=crop",
-  location_label: "San Diego, California",
-  dateline: "Market Insights",
+    "A closer look at inventory, affordability, and development — and where the market is actually heading, block by block.",
+  cta_primary_label: "Read the Report",
+  cta_primary_href: "/insights",
+  cta_secondary_label: "View Properties",
+  cta_secondary_href: "/listings",
+  image_url: "",
+  location_label: "San Diego",
+  dateline: "The Market Report",
 };
 
 export const DEFAULT_MARKET_CHART: MarketChartSettings = {
@@ -58,18 +57,16 @@ export const DEFAULT_ABOUT: AboutSettings = {
   quote:
     "I built my business on the belief that clients deserve the truth about the market, not just what they want to hear.",
   name: "Mark Scott",
-  headshot_url:
-    "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1200&auto=format&fit=crop",
+  headshot_url: "",
 };
 
 export const DEFAULT_NEWSLETTER: NewsletterSettings = {
-  image_url:
-    "https://images.unsplash.com/photo-1502680390469-be75c86b636f?q=80&w=2400&auto=format&fit=crop",
-  tagline_line1: "Ride the market,",
-  tagline_line2: "don't just react to it.",
-  heading: "Join the Newsletter",
+  image_url: "",
+  tagline_line1: "The Weekly Edit",
+  tagline_line2: "",
+  heading: "Worth Your Inbox",
   subhead:
-    "Monthly data on San Diego real estate, delivered straight to your inbox. No spam, just the numbers.",
+    "Market updates, interesting properties, development, and architecture — San Diego and the bigger picture, sent weekly. No spam, just the numbers.",
 };
 
 export const DEFAULT_CONTACT: ContactSettings = {
