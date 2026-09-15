@@ -85,7 +85,7 @@ export default function ContactForm() {
               key={option}
               type="button"
               onClick={() => setIntent(option)}
-              className={`border px-5 py-3 text-sm transition-colors ${
+              className={`border px-5 py-2.5 text-sm transition-colors ${
                 intent === option
                   ? "border-blue text-blue"
                   : "border-navy/20 text-navy/70 hover:border-navy/40"
