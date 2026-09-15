@@ -79,6 +79,10 @@ export const DEFAULT_CONTACT: ContactSettings = {
   linkedin_url: "https://linkedin.com",
   email: "hello@markscottre.com",
   phone: "(619) 555-0100",
+  name: "Mark Scott",
+  photo_url: "",
+  photo_caption: "",
+  handwritten_note: "Coffee works too.",
 };
 
 export async function getSetting<T>(

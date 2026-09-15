@@ -90,5 +90,9 @@ export async function updateContact(formData: FormData) {
     linkedin_url: String(formData.get("linkedin_url") ?? ""),
     email: String(formData.get("email") ?? ""),
     phone: String(formData.get("phone") ?? ""),
+    name: String(formData.get("name") ?? ""),
+    photo_url: String(formData.get("photo_url") ?? ""),
+    photo_caption: String(formData.get("photo_caption") ?? ""),
+    handwritten_note: String(formData.get("handwritten_note") ?? ""),
   });
 }

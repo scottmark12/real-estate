@@ -48,11 +48,13 @@ function Field({
   label,
   name,
   defaultValue,
+  placeholder,
   textarea,
 }: {
   label: string;
   name: string;
   defaultValue?: string;
+  placeholder?: string;
   textarea?: boolean;
 }) {
   return (
@@ -62,6 +64,7 @@ function Field({
         <textarea
           name={name}
           defaultValue={defaultValue}
+          placeholder={placeholder}
           rows={3}
           className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
         />
@@ -69,6 +72,7 @@ function Field({
         <input
           name={name}
           defaultValue={defaultValue}
+          placeholder={placeholder}
           className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
         />
       )}
@@ -270,6 +274,7 @@ export default async function AdminSettingsPage() {
         <Section title="Contact & Footer">
           <form action={updateContact} className="flex flex-col gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Name" name="name" defaultValue={contact.name ?? ""} />
               <Field
                 label="City, State"
                 name="city_state"
@@ -293,6 +298,27 @@ export default async function AdminSettingsPage() {
                 defaultValue={contact.linkedin_url}
               />
             </div>
+            <p className="mt-2 text-xs text-navy/50">
+              City/state, DRE number, email and phone above are still
+              placeholder values — replace them with your real details
+              whenever you have them.
+            </p>
+            <SingleImageUploader
+              name="photo_url"
+              label="Contact Page Photograph"
+              initialUrl={contact.photo_url}
+            />
+            <Field
+              label="Photo Caption"
+              name="photo_caption"
+              placeholder="e.g. Encinitas · 4:37 PM"
+              defaultValue={contact.photo_caption ?? ""}
+            />
+            <Field
+              label="Handwritten Note"
+              name="handwritten_note"
+              defaultValue={contact.handwritten_note ?? ""}
+            />
             <SaveButton />
           </form>
         </Section>

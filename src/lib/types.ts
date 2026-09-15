@@ -116,4 +116,8 @@ export interface ContactSettings {
   linkedin_url: string;
   email: string;
   phone?: string;
+  name?: string;
+  photo_url?: string;
+  photo_caption?: string;
+  handwritten_note?: string;
 }
