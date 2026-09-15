@@ -430,7 +430,7 @@ export default async function HomePage() {
                   alt="Mark Scott"
                   fill
                   sizes="180px"
-                  className="mix-blend-multiply object-contain object-bottom"
+                  className="object-contain object-bottom"
                 />
               ) : (
                 <ImagePlaceholder
