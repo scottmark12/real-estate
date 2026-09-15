@@ -83,6 +83,9 @@ export interface AboutSettings {
   quote: string;
   name: string;
   headshot_url: string;
+  portrait_url: string;
+  location_label: string;
+  handwritten_note: string;
 }
 
 export interface NewsletterSettings {
