@@ -66,17 +66,15 @@ What stuck with me wasn't that other places looked different. Of course they did
 
 I've felt completely at home in places where the houses were smaller, streets were tighter, cars were less important, and public space did more of the work. I've also seen incredible buildings that didn't make particularly good places around them.
 
-Travel made me pay attention to the relationship between buildings and the lives happening around them.
+Travel made me pay attention to the relationship between a home and the life happening around it, not just what it looks like inside.
 
 That curiosity followed me home.
 
-Eventually, curiosity became work.
+Eventually it became my job. My first real education in property wasn't theoretical. I renovated and managed a six bedroom property near Florida State and saw firsthand how design decisions, costs, and the surrounding neighborhood all shape whether a place actually works for the people living in it.
 
-My first real education in property wasn't theoretical. I renovated and managed a six-bedroom property near Florida State and got to see firsthand how design decisions, construction costs, rents, and the surrounding neighborhood all interact.
+That's the lens I bring now, helping people buy and sell homes in San Diego. Whether you're picking a neighborhood, weighing what's worth fixing up, or figuring out what a place is really worth, I'm thinking about how it all fits your life, not just the transaction.
 
-Today, I work in commercial acquisitions, sourcing opportunities, talking directly with owners, evaluating deals, and working through the numbers behind whether a property actually makes sense. Alongside that work, I help people buy and sell residential real estate in San Diego.
-
-The scale changes. The questions aren't actually that different.`,
+A house is a big decision. I want it to feel like a good one.`,
   headshot_photo_url: "/images/mark-headshot.jpeg",
   opening_photo_url: "",
   opening_photo_caption: "",
