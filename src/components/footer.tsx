@@ -13,61 +13,62 @@ const FOOTER_NAV = [
 export default function Footer({ contact }: { contact: ContactSettings }) {
   return (
     <footer
-      className="border-t border-sand/70 bg-navy text-cream"
+      className="border-t border-ink-cream/10 bg-ink text-ink-cream"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
-      <div className="mx-auto grid max-w-6xl gap-10 px-6 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:px-10">
+      <div className="grid gap-x-8 gap-y-10 px-[4vw] py-14 lg:grid-cols-[1.3fr_1fr_1fr_1fr] lg:gap-10">
         <div>
-          <p className="font-display text-xl font-semibold">
-            Mark Scott <span className="text-gold">Real Estate</span>
-          </p>
-          <p className="mt-3 max-w-xs text-sm text-cream/70">
-            Residential, commercial, and investment real estate expertise
-            across {contact.city_state}.
+          <p className="font-display text-2xl font-normal">Mark Scott</p>
+          <p className="eyebrow mt-1 text-blue">Real Estate</p>
+          <p className="mt-4 max-w-xs text-sm text-ink-muted">
+            Residential, commercial, and investment real estate across{" "}
+            {contact.city_state}.
           </p>
         </div>
 
-        <div>
-          <p className="eyebrow text-cream/50">Navigate</p>
-          <ul className="mt-4 space-y-2 text-sm">
-            {FOOTER_NAV.map((link) => (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className="text-cream/80 hover:text-cream"
+        <div className="grid grid-cols-2 gap-8 lg:contents">
+          <div className="lg:border-l lg:border-ink-cream/10 lg:pl-8">
+            <p className="eyebrow text-ink-muted">Navigate</p>
+            <ul className="mt-4 space-y-2 text-sm">
+              {FOOTER_NAV.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-ink-cream/80 hover:text-ink-cream"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="lg:border-l lg:border-ink-cream/10 lg:pl-8">
+            <p className="eyebrow text-ink-muted">Contact</p>
+            <ul className="mt-4 space-y-2 text-sm text-ink-cream/80">
+              <li>{contact.city_state}</li>
+              {contact.phone && <li>{contact.phone}</li>}
+              <li>
+                <a
+                  href={`mailto:${contact.email}`}
+                  className="hover:text-ink-cream"
                 >
-                  {link.label}
-                </Link>
+                  {contact.email}
+                </a>
               </li>
-            ))}
-          </ul>
+            </ul>
+          </div>
         </div>
 
-        <div>
-          <p className="eyebrow text-cream/50">Contact</p>
-          <ul className="mt-4 space-y-2 text-sm text-cream/80">
-            <li>{contact.city_state}</li>
-            {contact.phone && <li>{contact.phone}</li>}
-            <li>
-              <a
-                href={`mailto:${contact.email}`}
-                className="hover:text-cream"
-              >
-                {contact.email}
-              </a>
-            </li>
-          </ul>
-        </div>
-
-        <div>
-          <p className="eyebrow text-cream/50">Follow</p>
-          <ul className="mt-4 space-y-2 text-sm text-cream/80">
+        <div className="lg:border-l lg:border-ink-cream/10 lg:pl-8">
+          <p className="eyebrow text-ink-muted">Follow</p>
+          <ul className="mt-4 space-y-2 text-sm text-ink-cream/80">
             <li>
               <a
                 href={contact.instagram_url}
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-cream"
+                className="hover:text-ink-cream"
               >
                 Instagram
               </a>
@@ -77,7 +78,7 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
                 href={contact.linkedin_url}
                 target="_blank"
                 rel="noreferrer"
-                className="hover:text-cream"
+                className="hover:text-ink-cream"
               >
                 LinkedIn
               </a>
@@ -86,8 +87,19 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
         </div>
       </div>
 
-      <div className="border-t border-cream/10 px-6 py-5 text-center text-xs text-cream/50 lg:px-10">
-        &copy; {new Date().getFullYear()} Mark Scott Real Estate. {contact.dre_number}. All rights reserved.
+      <div className="border-t border-ink-cream/10 px-[4vw] py-5">
+        <div className="flex flex-col items-center justify-between gap-2 text-xs text-ink-muted sm:flex-row">
+          <p className="eyebrow text-ink-muted">
+            San Diego, CA{" "}
+            <span className="hidden sm:inline">
+              &middot; 32.7157&deg; N, 117.1611&deg; W
+            </span>
+          </p>
+          <p>
+            &copy; {new Date().getFullYear()} Mark Scott Real Estate &middot;{" "}
+            {contact.dre_number} &middot; All rights reserved.
+          </p>
+        </div>
       </div>
     </footer>
   );

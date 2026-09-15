@@ -32,27 +32,27 @@ export default function NewsletterForm() {
   }
 
   if (status === "done") {
-    return <p className="text-sm font-medium text-cream">{message}</p>;
+    return <p className="text-sm font-medium text-ink-cream">{message}</p>;
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex w-full max-w-md flex-col gap-3 sm:flex-row"
+      className="flex w-full max-w-lg flex-col gap-3 sm:flex-row"
     >
       <input
         type="email"
         name="email"
         required
         placeholder="Your email address"
-        className="w-full flex-1 border border-cream/30 bg-cream/10 px-5 py-3 text-sm text-cream placeholder:text-cream/50 focus:border-cream focus:outline-none"
+        className="w-full flex-1 border border-ink-cream/25 bg-transparent px-5 py-3 text-sm text-ink-cream placeholder:text-ink-cream/40 focus:border-ink-cream/60 focus:outline-none"
       />
       <button
         type="submit"
         disabled={status === "loading"}
-        className="border border-gold bg-gold px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-gold/90 disabled:opacity-60"
+        className="border border-blue bg-blue px-6 py-3 text-sm font-semibold text-ink-cream transition-colors hover:bg-blue-dark disabled:opacity-60"
       >
-        {status === "loading" ? "Subscribing…" : "Subscribe"}
+        {status === "loading" ? "Subscribing…" : "Subscribe →"}
       </button>
       {status === "error" && (
         <p className="text-xs text-red-300 sm:absolute sm:mt-12">{message}</p>

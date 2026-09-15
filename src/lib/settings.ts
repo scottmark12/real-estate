@@ -65,11 +65,11 @@ export const DEFAULT_ABOUT: AboutSettings = {
 
 export const DEFAULT_NEWSLETTER: NewsletterSettings = {
   image_url: "",
-  tagline_line1: "The Weekly Edit",
+  tagline_line1: "Ride the Market",
   tagline_line2: "",
-  heading: "Worth Your Inbox",
+  heading: "Join the Newsletter.",
   subhead:
-    "Market updates, interesting properties, development, and architecture — San Diego and the bigger picture, sent weekly. No spam, just the numbers.",
+    "Monthly data on San Diego real estate, interesting properties, development, and the bigger picture — delivered straight to your inbox.",
 };
 
 export const DEFAULT_CONTACT: ContactSettings = {

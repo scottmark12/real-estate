@@ -11,6 +11,9 @@
   --cream-deep: #f2ead9;
   --sand: #e8dfc9;
   --gold: #b98c4a;
+  --ink: #1c1c1a;
+  --ink-cream: #f4efe4;
+  --ink-muted: #b9b5ac;
 }
 
 @theme inline {
@@ -24,6 +27,9 @@
   --color-cream-deep: var(--cream-deep);
   --color-sand: var(--sand);
   --color-gold: var(--gold);
+  --color-ink: var(--ink);
+  --color-ink-cream: var(--ink-cream);
+  --color-ink-muted: var(--ink-muted);
   --font-display: Georgia, "Times New Roman", serif;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }

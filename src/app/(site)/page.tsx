@@ -476,13 +476,28 @@ export default async function HomePage() {
       </section>
 
       {/* Newsletter */}
-      <section className="bg-navy py-16 text-cream">
-        <div className="mx-auto max-w-2xl px-6 text-center sm:px-10">
-          <p className="eyebrow text-gold">{newsletter.tagline_line1}</p>
-          <h2 className="mt-4 font-display text-3xl font-semibold sm:text-4xl">
+      <section className="relative overflow-hidden bg-ink px-[4vw] py-14 text-ink-cream lg:py-16">
+        <svg
+          viewBox="0 0 220 200"
+          className="pointer-events-none absolute left-[4vw] top-1/2 hidden w-40 -translate-y-1/2 text-blue/[0.18] xl:block"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          aria-hidden
+        >
+          <path d="M0 145 Q35 128 65 142 T135 132 Q170 120 220 138" />
+          <path d="M55 142 L55 55" />
+          <path d="M55 55 Q38 46 26 60 M55 55 Q44 38 60 32 M55 55 Q72 46 84 60 M55 55 Q66 38 50 32" />
+          <path d="M135 132 L135 70" />
+          <path d="M135 70 Q120 61 110 74 M135 70 Q126 55 140 51 M135 70 Q150 61 160 74" />
+        </svg>
+        <div className="relative mx-auto max-w-2xl text-center">
+          <p className="eyebrow text-blue">{newsletter.tagline_line1}</p>
+          <h2 className="mt-4 font-display text-4xl font-normal sm:text-5xl">
             {newsletter.heading}
           </h2>
-          <p className="mx-auto mt-3 max-w-xl text-cream/80">
+          <p className="mx-auto mt-4 max-w-xl text-ink-muted">
             {newsletter.subhead}
           </p>
           <div className="mt-8 flex justify-center">
