@@ -55,10 +55,10 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
 
 export const DEFAULT_ABOUT: AboutSettings = {
   quote:
-    "I'm Mark Scott. I work across residential and commercial real estate in San Diego, but what interests me most is what makes places work — the buildings, neighborhoods, businesses and people that give them value. I try to bring that curiosity to every property, whether someone's buying a first home or looking at an investment.",
+    "I'm Mark Scott, a San Diego-based real estate professional working across residential and commercial opportunities. I believe good decisions start with clear information, honest advice, and a long-term perspective.",
   name: "Mark Scott",
   headshot_url: "/images/mark-illustration-v2.png",
-  portrait_url: "",
+  portrait_url: "/images/about-photo.jpg",
   location_label: "San Diego, CA",
   handwritten_note: "Curious people build better places.",
 };

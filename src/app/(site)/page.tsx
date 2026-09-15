@@ -372,6 +372,41 @@ export default async function HomePage() {
       </section>
 
 
+      {/* A Broader Perspective */}
+      <section className="lg:h-[420px]">
+        <div className="grid lg:h-full lg:grid-cols-[54fr_46fr]">
+          <div className="relative h-[280px] lg:h-full">
+            {about.portrait_url ? (
+              <Image
+                src={about.portrait_url}
+                alt=""
+                fill
+                sizes="(min-width: 1024px) 54vw, 100vw"
+                className="object-cover"
+              />
+            ) : (
+              <ImagePlaceholder
+                label="Editorial — San Diego"
+                className="absolute inset-0"
+              />
+            )}
+          </div>
+          <div className="flex flex-col justify-center px-[8%] py-10 lg:py-0">
+            <p className="eyebrow text-gold">A Broader Perspective</p>
+            <h2 className="mt-3 font-display text-3xl font-normal leading-tight text-navy lg:text-4xl">
+              Real Estate Is a People Business.
+            </h2>
+            <p className="mt-4 max-w-md text-navy/70">{about.quote}</p>
+            <Link
+              href="/about"
+              className="mt-4 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+            >
+              More About Me &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* How I Can Help */}
       <section className="px-[4vw] py-10">
         <p className="eyebrow text-gold">How I Can Help</p>
@@ -435,73 +470,6 @@ export default async function HomePage() {
                   className="absolute inset-0"
                 />
               )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* A Broader Perspective */}
-      <section className="border-t border-sand py-16">
-        <div className="px-[4vw]">
-          <div className="grid gap-10 lg:grid-cols-[33fr_42fr_25fr]">
-            {/* Portrait */}
-            <div>
-              <div className="relative aspect-4/5 w-full overflow-hidden">
-                {about.portrait_url ? (
-                  <Image
-                    src={about.portrait_url}
-                    alt={about.name}
-                    fill
-                    sizes="(min-width: 1024px) 30vw, 90vw"
-                    className="object-cover"
-                  />
-                ) : (
-                  <ImagePlaceholder
-                    label="Mark — Editorial Portrait"
-                    className="absolute inset-0"
-                  />
-                )}
-              </div>
-              <p className="eyebrow mt-3 text-navy/50">
-                {about.name}
-                <br />
-                {about.location_label}
-              </p>
-            </div>
-
-            {/* Statement */}
-            <div className="border-l border-navy/15 pl-8 lg:pl-10">
-              <p className="eyebrow text-gold">A Broader Perspective</p>
-              <h2 className="mt-3 font-display text-3xl font-normal leading-[1.1] text-navy sm:text-4xl">
-                Real Estate Is a People Business.
-              </h2>
-              <p className="mt-5 max-w-md text-navy/70">{about.quote}</p>
-              <Link
-                href="/about"
-                className="mt-5 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
-              >
-                More About Mark &rarr;
-              </Link>
-            </div>
-
-            {/* Signature */}
-            <div className="border-l border-navy/15 pl-8">
-              <div className="relative aspect-square w-24">
-                {about.headshot_url ? (
-                  <Image
-                    src={about.headshot_url}
-                    alt=""
-                    fill
-                    sizes="96px"
-                    className="object-contain"
-                  />
-                ) : (
-                  <ImagePlaceholder label="Mark" className="absolute inset-0" />
-                )}
-              </div>
-              <p className="font-[family-name:var(--font-hand)] mt-4 max-w-[14rem] text-2xl leading-snug text-navy">
-                &ldquo;{about.handwritten_note}&rdquo;
-              </p>
             </div>
           </div>
         </div>
