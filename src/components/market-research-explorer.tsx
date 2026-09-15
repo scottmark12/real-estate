@@ -62,23 +62,37 @@ function ArticleImage({
   );
 }
 
+function StatFigure({ value }: { value: string }) {
+  const match = value.match(/^([+\-$]?[\d.,]+[%MBK]?)\s+(.+)$/);
+  const number = match ? match[1] : value;
+  const label = match ? match[2] : null;
+  return (
+    <div>
+      <p className="font-display text-2xl font-semibold leading-tight">
+        {number}
+      </p>
+      {label && (
+        <p className="eyebrow mt-0.5 text-cream/70">{label}</p>
+      )}
+    </div>
+  );
+}
+
 function FeaturedBlock({ featured }: { featured: Article }) {
   return (
-    <div className="grid gap-8 lg:grid-cols-[32fr_68fr] lg:items-stretch">
-      <div className="flex flex-col pt-1 lg:h-full">
-        <div>
-          <p className="eyebrow text-gold">Market Research</p>
-          <h1 className="mt-3 font-display text-[54px] font-normal leading-[0.97] text-navy [font-size:clamp(54px,4.5vw,78px)]">
-            Research
-            <br />
-            worth reading.
-          </h1>
-          <p className="mt-4 max-w-[22rem] text-sm text-navy/70">
-            Real estate, development, architecture and the forces shaping
-            Southern California and beyond.
-          </p>
-        </div>
-        <p className="font-[family-name:var(--font-hand)] mt-10 text-lg leading-snug text-navy/70 lg:mt-auto lg:mb-14">
+    <div className="grid gap-8 lg:grid-cols-[32fr_68fr] lg:items-start">
+      <div className="flex flex-col pt-1">
+        <p className="eyebrow text-gold">Market Research</p>
+        <h1 className="mt-3 font-display text-[64px] font-normal leading-[0.95] text-navy [font-size:clamp(64px,5.3vw,92px)]">
+          Research
+          <br />
+          worth reading.
+        </h1>
+        <p className="mt-4 max-w-[22rem] text-sm text-navy/70">
+          Real estate, development, architecture and the forces shaping
+          Southern California and beyond.
+        </p>
+        <p className="font-[family-name:var(--font-hand)] ml-1 mt-24 text-lg leading-snug text-navy/70">
           Better places happen by design.
           <br />
           &mdash;MS
@@ -86,27 +100,24 @@ function FeaturedBlock({ featured }: { featured: Article }) {
       </div>
 
       <div className="relative">
-        <div className="relative h-[260px] w-full overflow-hidden sm:h-[340px] lg:h-[400px] lg:w-[90%]">
+        <div className="relative h-[235px] w-full overflow-hidden sm:h-[310px] lg:h-[365px] lg:w-[90%]">
           <ArticleImage article={featured} placeholderLabel="Featured Article Image" />
           {(featured.stat || featured.secondary_stat) && (
-            <div className="absolute bottom-0 right-0 flex h-[48%] w-[42%] min-w-[130px] flex-col justify-center gap-2 bg-navy/95 px-4 py-3 text-cream sm:w-[30%] lg:w-[20%]">
-              {featured.stat && (
-                <p className="font-display text-lg font-semibold leading-tight">
-                  {featured.stat}
-                </p>
-              )}
+            <div className="absolute bottom-0 right-0 flex h-[52%] w-[52%] min-w-[150px] flex-col justify-center gap-2 bg-navy/95 px-5 py-4 text-cream sm:w-[40%] lg:w-[34%]">
+              {featured.stat && <StatFigure value={featured.stat} />}
               {featured.stat && featured.secondary_stat && (
                 <div className="h-px w-full bg-cream/20" />
               )}
               {featured.secondary_stat && (
-                <p className="font-display text-lg font-semibold leading-tight">
-                  {featured.secondary_stat}
-                </p>
+                <StatFigure value={featured.secondary_stat} />
               )}
               {featured.annotation && (
-                <p className="font-[family-name:var(--font-hand)] mt-1 text-sm italic leading-snug text-cream/80">
-                  {featured.annotation}
-                </p>
+                <>
+                  <div className="h-px w-full bg-cream/20" />
+                  <p className="font-[family-name:var(--font-hand)] text-base italic leading-snug text-cream/80">
+                    {featured.annotation}
+                  </p>
+                </>
               )}
             </div>
           )}
@@ -117,7 +128,7 @@ function FeaturedBlock({ featured }: { featured: Article }) {
             <p className="eyebrow text-gold">
               {featured.eyebrow || CATEGORY_LABELS[featured.category]}
             </p>
-            <h2 className="mt-1 font-display text-[34px] font-semibold leading-[1.05] text-navy lg:text-[40px]">
+            <h2 className="mt-1 font-display text-[29px] font-semibold leading-[1.05] text-navy lg:text-[34px]">
               {featured.title}
             </h2>
             {featured.excerpt && (
@@ -146,7 +157,7 @@ function PrimaryStory({ article }: { article: Article }) {
   const chartLed = article.category === "rates" && article.stat;
   return (
     <Link href={`/insights/${article.slug}`} className="group block">
-      <div className="relative aspect-4/3 w-full overflow-hidden">
+      <div className="relative aspect-[7/4] w-full overflow-hidden">
         {chartLed ? (
           <div className="flex h-full flex-col justify-between bg-cream-deep p-6">
             <p className="font-display text-6xl font-semibold text-navy">
@@ -296,8 +307,8 @@ export default function MarketResearchExplorer({
         )}
       </section>
 
-      <nav className="mt-5 border-t border-sand">
-        <div className="flex gap-6 overflow-x-auto py-2.5 text-sm">
+      <nav className="mt-2 border-t border-sand">
+        <div className="flex gap-6 overflow-x-auto py-2 text-sm">
           <button
             type="button"
             onClick={() => setActive("all")}
