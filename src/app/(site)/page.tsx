@@ -477,21 +477,14 @@ export default async function HomePage() {
 
       {/* Newsletter */}
       <section className="relative overflow-hidden bg-ink px-[4vw] py-14 text-ink-cream lg:py-16">
-        <svg
-          viewBox="0 0 220 200"
-          className="pointer-events-none absolute left-[4vw] top-1/2 hidden w-40 -translate-y-1/2 text-blue/[0.18] xl:block"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
+        <Image
+          src="/images/footer-coast.png"
+          alt=""
+          width={2172}
+          height={724}
           aria-hidden
-        >
-          <path d="M0 145 Q35 128 65 142 T135 132 Q170 120 220 138" />
-          <path d="M55 142 L55 55" />
-          <path d="M55 55 Q38 46 26 60 M55 55 Q44 38 60 32 M55 55 Q72 46 84 60 M55 55 Q66 38 50 32" />
-          <path d="M135 132 L135 70" />
-          <path d="M135 70 Q120 61 110 74 M135 70 Q126 55 140 51 M135 70 Q150 61 160 74" />
-        </svg>
+          className="pointer-events-none absolute left-0 top-1/2 hidden h-auto w-[520px] -translate-y-1/2 opacity-[0.16] xl:block"
+        />
         <div className="relative mx-auto max-w-2xl text-center">
           <p className="eyebrow text-blue">{newsletter.tagline_line1}</p>
           <h2 className="mt-4 font-display text-4xl font-normal sm:text-5xl">
