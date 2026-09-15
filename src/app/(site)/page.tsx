@@ -120,7 +120,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="relative w-full max-w-[240px] lg:absolute lg:left-[410px] lg:top-[335px] lg:z-10 lg:w-[320px] lg:max-w-none lg:rotate-[-4deg]">
+          <div className="relative w-full max-w-[240px] lg:absolute lg:left-[358px] lg:top-[335px] lg:z-10 lg:w-[320px] lg:max-w-none lg:rotate-[-4deg]">
             <Image
               src="/images/handwriting-curiosity.png"
               alt="Curiosity is good due diligence! —MS"
