@@ -109,8 +109,8 @@ export default async function HomePage() {
     <div className="mx-auto max-w-[1500px] px-12">
       {/* Hero / cover */}
       <section className="pt-10">
-        <div className="relative flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)] lg:gap-x-4 lg:gap-y-0">
-          <div className="lg:col-start-1 lg:row-start-1 lg:self-start">
+        <div className="relative flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)] lg:gap-x-0 lg:gap-y-0">
+          <div className="lg:col-start-1 lg:row-start-1 lg:self-start lg:pl-16">
             <h1 className="font-display text-[38px] font-normal leading-[0.95] text-navy sm:text-[64px] lg:text-[100px]">
               <span className="block whitespace-nowrap">Real Estate,</span>
               <span className="block whitespace-nowrap">Real Different.</span>
@@ -130,7 +130,7 @@ export default async function HomePage() {
             />
           </div>
 
-          <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-end lg:-mb-16">
+          <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:-ml-12 lg:self-end lg:-mb-16">
             <Image
               src="/images/mark-illustration-v2.png"
               alt="Mark Scott"
