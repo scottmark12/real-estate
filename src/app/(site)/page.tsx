@@ -115,12 +115,12 @@ export default async function HomePage() {
               <span className="block whitespace-nowrap">Real Estate,</span>
               <span className="block whitespace-nowrap">Real Different.</span>
             </h1>
-            <p className="mt-5 max-w-sm text-navy/70 lg:text-[19px]">
+            <p className="mt-5 max-w-sm text-navy/70 lg:max-w-[560px] lg:text-[22.8px]">
               Homes, buildings, and opportunities in San Diego and beyond.
             </p>
           </div>
 
-          <div className="relative w-full max-w-[240px] lg:absolute lg:left-[358px] lg:top-[335px] lg:z-10 lg:w-[320px] lg:max-w-none lg:rotate-[-4deg]">
+          <div className="relative w-full max-w-[240px] lg:absolute lg:left-[247px] lg:top-[500px] lg:z-10 lg:w-[320px] lg:max-w-none lg:rotate-[-4deg]">
             <Image
               src="/images/handwriting-curiosity.png"
               alt="Curiosity is good due diligence! —MS"
