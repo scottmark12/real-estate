@@ -93,5 +93,13 @@ export async function getSetting<T>(
     .maybeSingle();
 
   if (!data?.value) return fallback;
+
+  // Arrays (e.g. the "services" setting) must not be object-spread-merged —
+  // spreading two arrays with {...a, ...b} produces a plain object with
+  // numeric keys instead of an array, which breaks any .map() call on it.
+  if (Array.isArray(fallback)) {
+    return (Array.isArray(data.value) ? data.value : fallback) as T;
+  }
+
   return { ...fallback, ...(data.value as object) } as T;
 }
