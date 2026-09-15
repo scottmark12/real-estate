@@ -38,13 +38,19 @@ export default function ArticleForm({ article }: { article?: Article }) {
           <label className="text-sm font-medium text-navy">Category</label>
           <select
             name="category"
-            defaultValue={article?.category ?? "residential"}
+            defaultValue={article?.category ?? "southern-california"}
             className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
           >
-            <option value="residential">Residential</option>
+            <option value="southern-california">Southern California</option>
             <option value="national">National</option>
-            <option value="market-insights">Market Insights</option>
-            <option value="feature">Feature</option>
+            <option value="rates">Rates</option>
+            <option value="development">Development</option>
+            <option value="alternative-construction">
+              Alternative Construction
+            </option>
+            <option value="architectural-spotlight">
+              Architectural Spotlight
+            </option>
           </select>
         </div>
         <div>
@@ -55,6 +61,28 @@ export default function ArticleForm({ article }: { article?: Article }) {
             type="date"
             name="published_at"
             defaultValue={publishedAtValue}
+            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+          />
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="text-sm font-medium text-navy">
+            Tags (comma-separated)
+          </label>
+          <input
+            name="tags"
+            defaultValue={article?.tags?.join(", ") ?? ""}
+            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-navy">Read Time</label>
+          <input
+            name="read_time"
+            placeholder="e.g. 4 min read"
+            defaultValue={article?.read_time ?? ""}
             className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
           />
         </div>
@@ -88,14 +116,122 @@ export default function ArticleForm({ article }: { article?: Article }) {
         initialUrl={article?.image_url}
       />
 
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div>
+          <label className="text-sm font-medium text-navy">
+            Image Caption
+          </label>
+          <input
+            name="image_caption"
+            defaultValue={article?.image_caption ?? ""}
+            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+          />
+        </div>
+        <div>
+          <label className="text-sm font-medium text-navy">
+            Image Position (CSS object-position, e.g. &quot;50% 30%&quot;)
+          </label>
+          <input
+            name="image_position"
+            placeholder="50% 50%"
+            defaultValue={article?.image_position ?? ""}
+            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+          />
+        </div>
+      </div>
+
+      <div className="rounded-lg border border-sand bg-cream-deep/50 p-4">
+        <p className="text-sm font-semibold text-navy">
+          Market Research — Editorial Details
+        </p>
+        <p className="mt-1 text-xs text-navy/60">
+          Optional. Only shown on the Market Research page when filled in —
+          leave blank rather than inventing a number or fact.
+        </p>
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          <div>
+            <label className="text-sm font-medium text-navy">
+              Eyebrow (overrides category label)
+            </label>
+            <input
+              name="eyebrow"
+              defaultValue={article?.eyebrow ?? ""}
+              className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-navy">
+              CTA Label
+            </label>
+            <input
+              name="cta_label"
+              placeholder="e.g. See the Numbers →"
+              defaultValue={article?.cta_label ?? ""}
+              className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-navy">
+              Stat (large number)
+            </label>
+            <input
+              name="stat"
+              placeholder="e.g. +24,000"
+              defaultValue={article?.stat ?? ""}
+              className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-navy">
+              Secondary Stat
+            </label>
+            <input
+              name="secondary_stat"
+              defaultValue={article?.secondary_stat ?? ""}
+              className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-navy">
+              Metadata line
+            </label>
+            <input
+              name="metadata"
+              placeholder="e.g. Encinitas · 1974 · 2,140 SF"
+              defaultValue={article?.metadata ?? ""}
+              className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-navy">
+              Handwritten Annotation
+            </label>
+            <input
+              name="annotation"
+              placeholder="e.g. Rotates 18° to face the ocean."
+              defaultValue={article?.annotation ?? ""}
+              className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            />
+          </div>
+        </div>
+      </div>
+
       <div className="grid gap-3 sm:grid-cols-2">
         <label className="flex items-center gap-2 text-sm text-navy">
           <input
             type="checkbox"
-            name="is_feature_story"
-            defaultChecked={article?.is_feature_story}
+            name="featured"
+            defaultChecked={article?.featured}
           />
-          Feature Story (navy homepage block)
+          Featured (Market Research lead story)
+        </label>
+        <label className="flex items-center gap-2 text-sm text-navy">
+          <input
+            type="checkbox"
+            name="architectural_feature"
+            defaultChecked={article?.architectural_feature}
+          />
+          Architectural Spotlight banner
         </label>
         <label className="flex items-center gap-2 text-sm text-navy">
           <input
@@ -103,15 +239,7 @@ export default function ArticleForm({ article }: { article?: Article }) {
             name="is_market_report"
             defaultChecked={article?.is_market_report}
           />
-          Market Report (&quot;Market, Right Now&quot;)
-        </label>
-        <label className="flex items-center gap-2 text-sm text-navy">
-          <input
-            type="checkbox"
-            name="featured"
-            defaultChecked={article?.featured}
-          />
-          Featured
+          Market Report (homepage &quot;Market, Right Now&quot;)
         </label>
         <label className="flex items-center gap-2 text-sm text-navy">
           <input

@@ -1,10 +1,12 @@
 export type ListingStatus = "for_sale" | "investment" | "off_market" | "sold";
 export type ListingCategory = "residential" | "multifamily" | "development";
 export type ArticleCategory =
-  | "residential"
+  | "southern-california"
   | "national"
-  | "market-insights"
-  | "feature";
+  | "rates"
+  | "development"
+  | "alternative-construction"
+  | "architectural-spotlight";
 
 export interface Listing {
   id: string;
@@ -35,12 +37,23 @@ export interface Article {
   title: string;
   slug: string;
   category: ArticleCategory;
+  tags: string[];
   excerpt: string | null;
   body: string | null;
   image_url: string | null;
+  image_caption: string | null;
+  image_position: string | null;
+  read_time: string | null;
   is_feature_story: boolean;
   is_market_report: boolean;
   featured: boolean;
+  architectural_feature: boolean;
+  eyebrow: string | null;
+  stat: string | null;
+  secondary_stat: string | null;
+  annotation: string | null;
+  metadata: string | null;
+  cta_label: string | null;
   published: boolean;
   published_at: string;
   created_at: string;

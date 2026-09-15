@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/format";
+import { CATEGORY_LABELS } from "@/components/article-card";
 import type { Article } from "@/lib/types";
 
 export const revalidate = 0;
@@ -31,7 +32,9 @@ export default async function ArticleDetailPage({
         ← Back to Insights
       </Link>
 
-      <p className="eyebrow mt-6 text-gold">{article.category}</p>
+      <p className="eyebrow mt-6 text-gold">
+        {article.eyebrow || CATEGORY_LABELS[article.category] || article.category}
+      </p>
       <h1 className="mt-2 font-display text-4xl font-semibold leading-tight text-navy">
         {article.title}
       </h1>

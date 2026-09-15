@@ -4,10 +4,12 @@ import ImagePlaceholder from "@/components/image-placeholder";
 import type { Article } from "@/lib/types";
 
 export const CATEGORY_LABELS: Record<string, string> = {
-  residential: "Residential",
+  "southern-california": "Southern California",
   national: "National",
-  "market-insights": "Market Insights",
-  feature: "Feature",
+  rates: "Rates",
+  development: "Development",
+  "alternative-construction": "Alternative Construction",
+  "architectural-spotlight": "Architectural Spotlight",
 };
 
 export default function ArticleCard({ article }: { article: Article }) {
@@ -42,7 +44,7 @@ export default function ArticleCard({ article }: { article: Article }) {
           href={`/insights/${article.slug}`}
           className="mt-auto pt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
         >
-          Read More
+          {article.cta_label || "Read More →"}
         </Link>
       </div>
     </article>

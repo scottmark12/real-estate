@@ -139,7 +139,7 @@ async function getSideArticles(excludeIds: string[]): Promise<Article[]> {
     .from("articles")
     .select("*")
     .eq("published", true)
-    .in("category", ["residential", "national"])
+    .in("category", ["southern-california", "national"])
     .order("published_at", { ascending: false })
     .limit(6);
 
