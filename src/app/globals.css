@@ -2,9 +2,11 @@
 
 :root {
   --background: #faf6ee;
-  --foreground: #1a2b4a;
-  --navy: #1a2b4a;
-  --navy-dark: #101c30;
+  --foreground: #22262e;
+  --navy: #22262e;
+  --navy-dark: #15171c;
+  --blue: #2b57a8;
+  --blue-dark: #1f4283;
   --cream: #faf6ee;
   --cream-deep: #f2ead9;
   --sand: #e8dfc9;
@@ -16,6 +18,8 @@
   --color-foreground: var(--foreground);
   --color-navy: var(--navy);
   --color-navy-dark: var(--navy-dark);
+  --color-blue: var(--blue);
+  --color-blue-dark: var(--blue-dark);
   --color-cream: var(--cream);
   --color-cream-deep: var(--cream-deep);
   --color-sand: var(--sand);

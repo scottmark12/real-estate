@@ -26,6 +26,19 @@ import type {
 
 export const revalidate = 0;
 
+function renderHeadline(headline: string) {
+  const parts = headline.split(/(Actually)/);
+  return parts.map((part, i) =>
+    part === "Actually" ? (
+      <em key={i} className="italic">
+        {part}
+      </em>
+    ) : (
+      part
+    )
+  );
+}
+
 async function getFeaturedListings(): Promise<Listing[]> {
   const supabase = await createClient();
 
@@ -121,14 +134,14 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="pt-6 sm:pt-8">
-        <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr] lg:items-stretch">
-          <div className="flex flex-col justify-center px-6 pb-8 sm:px-10 lg:py-10">
+      <section className="px-[4vw] pb-10 pt-6 sm:pt-8">
+        <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:items-stretch">
+          <div className="flex flex-col justify-center py-6 lg:py-10">
             <p className="eyebrow text-gold">
               {hero.dateline} &middot; {hero.location_label}
             </p>
-            <h1 className="mt-3 font-display text-6xl font-semibold leading-[0.95] text-navy sm:text-7xl lg:text-[5.5rem]">
-              {hero.headline}
+            <h1 className="mt-3 font-display text-6xl font-normal leading-[0.98] text-navy sm:text-7xl lg:text-[5rem]">
+              {renderHeadline(hero.headline)}
             </h1>
             <p className="mt-6 max-w-sm text-base text-navy/70 sm:text-lg">
               {hero.subhead}
@@ -136,7 +149,7 @@ export default async function HomePage() {
             <div className="mt-8 flex flex-wrap gap-4">
               <Link
                 href={hero.cta_primary_href}
-                className="border border-navy bg-navy px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-navy-dark"
+                className="border border-blue bg-blue px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
               >
                 {hero.cta_primary_label} &rarr;
               </Link>
@@ -148,7 +161,7 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="relative min-h-[420px] lg:min-h-[640px]">
+          <div className="relative min-h-[380px] lg:min-h-[560px]">
             {hero.image_url ? (
               <>
                 <Image
@@ -156,7 +169,7 @@ export default async function HomePage() {
                   alt=""
                   fill
                   priority
-                  sizes="(min-width: 1024px) 58vw, 100vw"
+                  sizes="(min-width: 1024px) 55vw, 100vw"
                   className="object-cover"
                 />
                 <p className="eyebrow absolute bottom-4 right-4 bg-cream/90 px-2 py-1 text-navy">
@@ -174,7 +187,7 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Listings */}
-      <section className="mx-auto max-w-6xl px-6 py-12 sm:px-10">
+      <section className="px-[4vw] py-12">
         <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
           <p className="eyebrow text-gold">Featured Listings</p>
           <Link

@@ -11,7 +11,7 @@ import type {
 export const DEFAULT_HERO: HeroSettings = {
   headline: "What Is San Diego Actually Worth?",
   subhead:
-    "A closer look at inventory, affordability, and development — and where the market is actually heading, block by block.",
+    "A closer look at inventory, affordability, development, and where the market is heading.",
   cta_primary_label: "Read the Report",
   cta_primary_href: "/insights",
   cta_secondary_label: "View Properties",
