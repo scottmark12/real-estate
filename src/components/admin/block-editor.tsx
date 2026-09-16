@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { uploadSiteFile } from "@/lib/upload";
 import type { ArticleBlock } from "@/lib/types";
 
@@ -77,16 +77,49 @@ const BLOCK_LABELS: Record<ArticleBlock["type"], string> = Object.fromEntries(
   BLOCK_TEMPLATES.map((t) => [t.type, t.label])
 ) as Record<ArticleBlock["type"], string>;
 
-function fieldClass() {
-  return "mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm";
+const fieldClass =
+  "w-full resize-none border-0 border-b border-transparent bg-transparent px-0 py-1 text-navy placeholder:text-navy/30 focus:border-navy/20 focus:outline-none";
+
+function AutoTextarea({
+  value,
+  onChange,
+  placeholder,
+  className,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder?: string;
+  className?: string;
+}) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  }, [value]);
+
+  return (
+    <textarea
+      ref={ref}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      rows={1}
+      className={`${fieldClass} overflow-hidden ${className ?? ""}`}
+    />
+  );
 }
 
-function InlineImagePicker({
+function EditableImage({
   url,
   onChange,
+  aspectClass,
 }: {
   url: string;
   onChange: (url: string) => void;
+  aspectClass: string;
 }) {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -104,32 +137,38 @@ function InlineImagePicker({
   }
 
   return (
-    <div className="flex items-center gap-3">
-      {url && (
-        <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-lg bg-sand">
-          <Image src={url} alt="" fill sizes="96px" className="object-cover" />
+    <div>
+      <label
+        className={`group/img relative block w-full cursor-pointer overflow-hidden bg-sand ${aspectClass}`}
+      >
+        {url ? (
+          <Image src={url} alt="" fill sizes="800px" className="object-cover" />
+        ) : (
+          <div className="flex h-full items-center justify-center text-xs text-navy/40">
+            Click to upload image
+          </div>
+        )}
+        <div className="absolute inset-0 flex items-center justify-center bg-navy/0 text-xs font-medium text-cream opacity-0 transition group-hover/img:bg-navy/40 group-hover/img:opacity-100">
+          {uploading ? "Uploading…" : url ? "Replace image" : "Upload image"}
         </div>
-      )}
-      <div className="flex-1">
         <input
           type="file"
           accept="image/*"
+          className="hidden"
           onChange={(e) => {
             const file = e.target.files?.[0];
             if (file) handleFile(file);
           }}
-          className="block text-xs text-navy/70"
         />
-        <input
-          type="url"
-          value={url}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="or paste an image URL"
-          className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-2 py-1 text-xs"
-        />
-        {uploading && <p className="text-xs text-navy/50">Uploading…</p>}
-        {error && <p className="text-xs text-red-600">{error}</p>}
-      </div>
+      </label>
+      <input
+        type="url"
+        value={url}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder="or paste an image URL"
+        className="mt-1 w-full border-0 bg-transparent text-[11px] text-navy/40 placeholder:text-navy/30 focus:outline-none"
+      />
+      {error && <p className="mt-1 text-xs text-red-600">{error}</p>}
     </div>
   );
 }
@@ -147,123 +186,129 @@ function BlockFields({
         <input
           value={block.text}
           onChange={(e) => onChange({ ...block, text: e.target.value })}
-          placeholder="Heading text"
-          className={fieldClass()}
+          placeholder="Heading"
+          className={`${fieldClass} font-display text-2xl font-semibold`}
         />
       );
+
     case "text":
       return (
-        <textarea
+        <AutoTextarea
           value={block.text}
-          onChange={(e) => onChange({ ...block, text: e.target.value })}
-          placeholder="Paragraph text — Markdown supported"
-          rows={5}
-          className={`${fieldClass()} font-mono`}
+          onChange={(text) => onChange({ ...block, text })}
+          placeholder="Write here — Markdown supported (bold, italics, links)…"
+          className="text-[15px] leading-relaxed text-navy/80"
         />
       );
+
     case "image":
       return (
         <div className="flex flex-col gap-2">
-          <InlineImagePicker
+          <EditableImage
             url={block.url}
             onChange={(url) => onChange({ ...block, url })}
+            aspectClass="aspect-[16/10]"
           />
           <input
             value={block.caption}
             onChange={(e) => onChange({ ...block, caption: e.target.value })}
             placeholder="Caption (optional)"
-            className={fieldClass()}
+            className={`${fieldClass} text-xs italic`}
           />
         </div>
       );
+
     case "image_text":
       return (
-        <div className="flex flex-col gap-2">
-          <InlineImagePicker
-            url={block.url}
-            onChange={(url) => onChange({ ...block, url })}
-          />
-          <div className="flex items-center gap-4 text-xs text-navy/70">
-            <label className="flex items-center gap-1.5">
-              <input
-                type="radio"
-                checked={block.side === "left"}
-                onChange={() => onChange({ ...block, side: "left" })}
-              />
-              Image on left
-            </label>
-            <label className="flex items-center gap-1.5">
-              <input
-                type="radio"
-                checked={block.side === "right"}
-                onChange={() => onChange({ ...block, side: "right" })}
-              />
-              Image on right
-            </label>
+        <div className="grid gap-4 sm:grid-cols-2 sm:items-center">
+          <div className={block.side === "right" ? "sm:order-2" : ""}>
+            <EditableImage
+              url={block.url}
+              onChange={(url) => onChange({ ...block, url })}
+              aspectClass="aspect-[4/3]"
+            />
+            <div className="mt-2 flex items-center gap-3 text-[11px] text-navy/50">
+              <label className="flex items-center gap-1.5">
+                <input
+                  type="radio"
+                  checked={block.side === "left"}
+                  onChange={() => onChange({ ...block, side: "left" })}
+                />
+                Image on left
+              </label>
+              <label className="flex items-center gap-1.5">
+                <input
+                  type="radio"
+                  checked={block.side === "right"}
+                  onChange={() => onChange({ ...block, side: "right" })}
+                />
+                Image on right
+              </label>
+            </div>
           </div>
-          <textarea
+          <AutoTextarea
             value={block.text}
-            onChange={(e) => onChange({ ...block, text: e.target.value })}
-            placeholder="Text alongside the image — Markdown supported"
-            rows={4}
-            className={`${fieldClass()} font-mono`}
+            onChange={(text) => onChange({ ...block, text })}
+            placeholder="Text alongside the image — Markdown supported…"
+            className="text-[15px] leading-relaxed text-navy/80"
           />
         </div>
       );
+
     case "two_column_text":
       return (
-        <div className="grid gap-2 sm:grid-cols-2">
-          <textarea
+        <div className="grid gap-6 sm:grid-cols-2 sm:divide-x sm:divide-sand">
+          <AutoTextarea
             value={block.left}
-            onChange={(e) => onChange({ ...block, left: e.target.value })}
-            placeholder="Left column — Markdown supported"
-            rows={5}
-            className={`${fieldClass()} font-mono`}
+            onChange={(left) => onChange({ ...block, left })}
+            placeholder="Left column — Markdown supported…"
+            className="text-[15px] leading-relaxed text-navy/80"
           />
-          <textarea
+          <AutoTextarea
             value={block.right}
-            onChange={(e) => onChange({ ...block, right: e.target.value })}
-            placeholder="Right column — Markdown supported"
-            rows={5}
-            className={`${fieldClass()} font-mono`}
+            onChange={(right) => onChange({ ...block, right })}
+            placeholder="Right column — Markdown supported…"
+            className="text-[15px] leading-relaxed text-navy/80 sm:pl-6"
           />
         </div>
       );
+
     case "quote":
       return (
-        <div className="flex flex-col gap-2">
-          <textarea
+        <div className="border-l-2 border-gold pl-6">
+          <AutoTextarea
             value={block.text}
-            onChange={(e) => onChange({ ...block, text: e.target.value })}
-            placeholder="Quote text"
-            rows={3}
-            className={fieldClass()}
+            onChange={(text) => onChange({ ...block, text })}
+            placeholder="Quote text…"
+            className="font-display text-2xl italic leading-snug"
           />
           <input
             value={block.attribution}
             onChange={(e) => onChange({ ...block, attribution: e.target.value })}
             placeholder="Attribution (optional)"
-            className={fieldClass()}
+            className={`${fieldClass} mt-2 text-xs uppercase tracking-wide text-navy/50`}
           />
         </div>
       );
+
     case "stat":
       return (
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div>
           <input
             value={block.value}
             onChange={(e) => onChange({ ...block, value: e.target.value })}
-            placeholder="e.g. +24,000"
-            className={fieldClass()}
+            placeholder="+24,000"
+            className={`${fieldClass} font-display text-5xl font-semibold`}
           />
           <input
             value={block.label}
             onChange={(e) => onChange({ ...block, label: e.target.value })}
             placeholder="Label"
-            className={fieldClass()}
+            className={`${fieldClass} mt-2 text-xs uppercase tracking-wide text-navy/50`}
           />
         </div>
       );
+
     case "gallery":
       return (
         <GalleryFields
@@ -271,8 +316,15 @@ function BlockFields({
           onChange={(urls) => onChange({ ...block, urls })}
         />
       );
+
     case "divider":
-      return <p className="text-xs text-navy/40">A thin horizontal rule.</p>;
+      return (
+        <div className="flex items-center gap-3 py-2 text-[10px] uppercase tracking-wide text-navy/30">
+          <span className="h-px flex-1 bg-sand" />
+          Divider
+          <span className="h-px flex-1 bg-sand" />
+        </div>
+      );
   }
 }
 
@@ -304,31 +356,34 @@ function GalleryFields({
 
   return (
     <div>
-      <div className="flex flex-wrap gap-3">
+      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
         {urls.map((u, i) => (
-          <div key={u + i} className="relative h-16 w-24 overflow-hidden rounded-lg bg-sand">
-            <Image src={u} alt="" fill sizes="96px" className="object-cover" />
+          <div key={u + i} className="group/thumb relative aspect-square overflow-hidden bg-sand">
+            <Image src={u} alt="" fill sizes="150px" className="object-cover" />
             <button
               type="button"
               onClick={() => onChange(urls.filter((_, idx) => idx !== i))}
-              className="absolute right-1 top-1 rounded-full bg-navy/80 px-1.5 text-xs text-cream"
+              className="absolute inset-0 flex items-center justify-center bg-navy/0 text-xs text-cream opacity-0 transition group-hover/thumb:bg-navy/50 group-hover/thumb:opacity-100"
             >
-              ×
+              Remove
             </button>
           </div>
         ))}
+        <label className="flex aspect-square cursor-pointer items-center justify-center border border-dashed border-navy/25 text-2xl font-light text-navy/30 hover:border-navy/50 hover:text-navy/50">
+          +
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            className="hidden"
+            onChange={(e) => {
+              if (e.target.files && e.target.files.length > 0) handleFiles(e.target.files);
+            }}
+          />
+        </label>
       </div>
-      <input
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={(e) => {
-          if (e.target.files && e.target.files.length > 0) handleFiles(e.target.files);
-        }}
-        className="mt-2 block text-xs text-navy/70"
-      />
-      {uploading && <p className="text-xs text-navy/50">Uploading…</p>}
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {uploading && <p className="mt-2 text-xs text-navy/50">Uploading…</p>}
+      {error && <p className="mt-2 text-xs text-red-600">{error}</p>}
     </div>
   );
 }
@@ -341,6 +396,8 @@ export default function BlockEditor({
   initialBlocks?: ArticleBlock[];
 }) {
   const [blocks, setBlocks] = useState<ArticleBlock[]>(initialBlocks ?? []);
+  const [draggingId, setDraggingId] = useState<string | null>(null);
+  const [dragOverId, setDragOverId] = useState<string | null>(null);
   const jsonRef = useRef<HTMLInputElement>(null);
 
   function update(next: ArticleBlock[]) {
@@ -369,6 +426,23 @@ export default function BlockEditor({
     update(next);
   }
 
+  function reorderTo(targetId: string | null) {
+    if (!draggingId || draggingId === targetId) {
+      setDraggingId(null);
+      setDragOverId(null);
+      return;
+    }
+    const from = blocks.findIndex((b) => b.id === draggingId);
+    if (from < 0) return;
+    const next = [...blocks];
+    const [moved] = next.splice(from, 1);
+    const to = targetId ? next.findIndex((b) => b.id === targetId) : next.length;
+    next.splice(to < 0 ? next.length : to, 0, moved);
+    update(next);
+    setDraggingId(null);
+    setDragOverId(null);
+  }
+
   return (
     <div>
       <input
@@ -378,54 +452,108 @@ export default function BlockEditor({
         defaultValue={JSON.stringify(blocks)}
       />
 
-      {blocks.length === 0 && (
-        <p className="text-xs text-navy/50">
-          No content blocks yet — add one below, or use the Body (Markdown)
-          field further down instead.
-        </p>
-      )}
+      <div className="rounded-2xl border border-sand bg-white px-5 py-6 sm:px-10 sm:py-8">
+        {blocks.length === 0 && (
+          <p className="text-xs text-navy/50">
+            No content blocks yet — add one below, or use the Body
+            (Markdown) field further down instead.
+          </p>
+        )}
 
-      <div className="flex flex-col gap-3">
-        {blocks.map((block, i) => (
-          <div key={block.id} className="rounded-lg border border-navy/15 bg-white p-3">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-semibold uppercase tracking-wide text-navy/50">
-                {BLOCK_LABELS[block.type]}
-              </p>
-              <div className="flex items-center gap-2 text-xs text-navy/50">
-                <button
-                  type="button"
-                  onClick={() => moveBlock(block.id, -1)}
-                  disabled={i === 0}
-                  className="disabled:opacity-30"
-                >
-                  ↑
-                </button>
-                <button
-                  type="button"
-                  onClick={() => moveBlock(block.id, 1)}
-                  disabled={i === blocks.length - 1}
-                  className="disabled:opacity-30"
-                >
-                  ↓
-                </button>
-                <button
-                  type="button"
-                  onClick={() => removeBlock(block.id)}
-                  className="text-red-600 hover:text-red-700"
-                >
-                  Remove
-                </button>
+        <div className="flex flex-col">
+          {blocks.map((block, i) => (
+            <div
+              key={block.id}
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (draggingId && draggingId !== block.id) setDragOverId(block.id);
+              }}
+              onDragLeave={() => {
+                setDragOverId((cur) => (cur === block.id ? null : cur));
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                reorderTo(block.id);
+              }}
+              className={`border-t-2 py-4 transition-colors first:border-t-0 first:pt-0 ${
+                dragOverId === block.id && draggingId && draggingId !== block.id
+                  ? "border-blue"
+                  : "border-transparent"
+              } ${draggingId === block.id ? "opacity-40" : ""}`}
+            >
+              <div className="mb-2 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.effectAllowed = "move";
+                      setDraggingId(block.id);
+                    }}
+                    onDragEnd={() => {
+                      setDraggingId(null);
+                      setDragOverId(null);
+                    }}
+                    title="Drag to reorder"
+                    className="cursor-grab select-none text-sm leading-none text-navy/30 hover:text-navy/60 active:cursor-grabbing"
+                  >
+                    ⠿
+                  </span>
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-navy/40">
+                    {BLOCK_LABELS[block.type]}
+                  </p>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-navy/40">
+                  <button
+                    type="button"
+                    onClick={() => moveBlock(block.id, -1)}
+                    disabled={i === 0}
+                    title="Move up"
+                    className="hover:text-navy disabled:opacity-30"
+                  >
+                    ↑
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => moveBlock(block.id, 1)}
+                    disabled={i === blocks.length - 1}
+                    title="Move down"
+                    className="hover:text-navy disabled:opacity-30"
+                  >
+                    ↓
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeBlock(block.id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    Remove
+                  </button>
+                </div>
               </div>
-            </div>
-            <div className="mt-2">
               <BlockFields
                 block={block}
                 onChange={(next) => updateBlock(block.id, next)}
               />
             </div>
-          </div>
-        ))}
+          ))}
+
+          {blocks.length > 0 && (
+            <div
+              onDragOver={(e) => {
+                e.preventDefault();
+                if (draggingId) setDragOverId("__end__");
+              }}
+              onDragLeave={() => setDragOverId((cur) => (cur === "__end__" ? null : cur))}
+              onDrop={(e) => {
+                e.preventDefault();
+                reorderTo(null);
+              }}
+              className={`h-6 border-t-2 ${
+                dragOverId === "__end__" && draggingId ? "border-blue" : "border-transparent"
+              }`}
+            />
+          )}
+        </div>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
