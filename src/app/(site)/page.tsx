@@ -97,7 +97,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="mx-auto max-w-[1500px] px-12">
+    <div className="mx-auto max-w-[1500px] px-0 lg:px-12">
       {/* Hero / cover — mobile */}
       <section className="overflow-hidden pt-8 lg:hidden">
         <p className="eyebrow text-gold">Real Estate</p>
@@ -119,7 +119,7 @@ export default async function HomePage() {
           />
         </div>
 
-        <div className="relative z-10 -mt-10 mb-8 w-[124%]">
+        <div className="relative z-10 -mt-[216px] mb-8 w-[124%]">
           <Image
             src="/images/mark-headshot-illustration.png"
             alt="Mark Scott"
