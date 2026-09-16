@@ -137,10 +137,6 @@ export default function ListingForm({ listing }: { listing?: Partial<Listing> })
 
       <div className="flex gap-6">
         <label className="flex items-center gap-2 text-sm text-navy">
-          <input type="checkbox" name="featured" defaultChecked={listing?.featured} />
-          Featured
-        </label>
-        <label className="flex items-center gap-2 text-sm text-navy">
           <input
             type="checkbox"
             name="published"
@@ -148,6 +144,55 @@ export default function ListingForm({ listing }: { listing?: Partial<Listing> })
           />
           Published
         </label>
+      </div>
+
+      <div className="border-t border-sand pt-8">
+        <p className="eyebrow text-gold">Buy Page — Featured Property</p>
+        <p className="mt-2 text-xs text-navy/50">
+          One featured listing becomes the large editorial hero at the top
+          of the Buy page. Headline and description are optional — leave
+          them blank to fall back to the address, rather than inventing
+          copy.
+        </p>
+        <label className="mt-4 flex items-center gap-2 text-sm text-navy">
+          <input type="checkbox" name="featured" defaultChecked={listing?.featured} />
+          Featured on the Buy page
+        </label>
+        <div className="mt-4 flex flex-col gap-4">
+          <div>
+            <label className={label}>
+              Editorial Headline (optional — falls back to the address)
+            </label>
+            <input
+              name="featured_headline"
+              defaultValue={listing?.featured_headline ?? ""}
+              placeholder="A mid-century retreat under the palms."
+              className={input}
+            />
+          </div>
+          <div>
+            <label className={label}>
+              Editorial Description (optional, 2–3 lines)
+            </label>
+            <textarea
+              name="featured_excerpt"
+              defaultValue={listing?.featured_excerpt ?? ""}
+              rows={2}
+              className={textarea}
+            />
+          </div>
+          <div>
+            <label className={label}>
+              Hero Image Focal Position (CSS object-position)
+            </label>
+            <input
+              name="featured_focal"
+              defaultValue={listing?.featured_focal ?? ""}
+              placeholder="50% 50%"
+              className={input}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="border-t border-sand pt-8">

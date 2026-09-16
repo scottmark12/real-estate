@@ -26,6 +26,9 @@ export interface Listing {
   image_url: string | null;
   gallery_urls: string[];
   featured: boolean;
+  featured_headline: string | null;
+  featured_excerpt: string | null;
+  featured_focal: string | null;
   sort_order: number;
   published: boolean;
   homepage_elsewhere: boolean;
