@@ -1,10 +1,16 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
 type Intent = "Buying" | "Selling" | "Investing" | "Something else";
 
 const INTENTS: Intent[] = ["Buying", "Selling", "Investing", "Something else"];
+
+function intentFromParam(value: string | null): Intent {
+  const match = INTENTS.find((i) => i.toLowerCase() === value?.toLowerCase());
+  return match ?? "Buying";
+}
 
 const CONTEXT_FIELD: Record<
   Intent,
@@ -29,7 +35,10 @@ const CONTEXT_FIELD: Record<
 };
 
 export default function ContactForm() {
-  const [intent, setIntent] = useState<Intent>("Buying");
+  const searchParams = useSearchParams();
+  const [intent, setIntent] = useState<Intent>(() =>
+    intentFromParam(searchParams.get("intent"))
+  );
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">(
     "idle"
   );

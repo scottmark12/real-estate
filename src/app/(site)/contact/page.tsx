@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { Suspense } from "react";
 import ContactForm from "@/components/contact-form";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { DEFAULT_CONTACT, getSetting } from "@/lib/settings";
@@ -81,7 +82,9 @@ export default async function ContactPage() {
         </div>
 
         <div>
-          <ContactForm />
+          <Suspense fallback={null}>
+            <ContactForm />
+          </Suspense>
         </div>
       </div>
     </div>
