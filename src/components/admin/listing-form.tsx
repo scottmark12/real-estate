@@ -1,7 +1,4 @@
-import {
-  GalleryUploader,
-  SingleImageUploader,
-} from "@/components/admin/image-uploader";
+import { PrimaryGalleryUploader } from "@/components/admin/image-uploader";
 import { btnPrimary, input, label, select, textarea } from "@/components/admin/ui";
 import { upsertListing } from "@/app/admin/(dashboard)/listings/actions";
 import type { Listing } from "@/lib/types";
@@ -129,12 +126,13 @@ export default function ListingForm({ listing }: { listing?: Partial<Listing> })
         />
       </div>
 
-      <SingleImageUploader name="image_url" label="Primary Image" initialUrl={listing?.image_url} />
-
-      <GalleryUploader
-        name="gallery_urls"
-        label="Gallery Images"
-        initialUrls={listing?.gallery_urls ?? []}
+      <PrimaryGalleryUploader
+        primaryName="image_url"
+        galleryName="gallery_urls"
+        primaryLabel="Primary Image"
+        galleryLabel="Gallery Images"
+        initialPrimary={listing?.image_url}
+        initialGallery={listing?.gallery_urls ?? []}
       />
 
       <div className="flex gap-6">
