@@ -98,20 +98,60 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-[1500px] px-12">
-      {/* Hero / cover */}
-      <section className="pt-10">
-        <div className="relative flex flex-col gap-10 lg:grid lg:grid-cols-[minmax(0,45fr)_minmax(0,55fr)] lg:gap-x-0 lg:gap-y-0">
-          <div className="lg:relative lg:z-20 lg:col-start-1 lg:row-start-1 lg:self-start lg:pl-32">
-            <h1 className="font-display text-[38px] font-normal leading-[0.95] text-navy sm:text-[64px] lg:text-[120px]">
+      {/* Hero / cover — mobile */}
+      <section className="pt-8 lg:hidden">
+        <p className="eyebrow text-gold">Real Estate</p>
+        <h1 className="relative z-20 mt-2 font-display text-[38px] font-normal leading-[0.95] text-navy">
+          <span className="block">Real Estate,</span>
+          <span className="block">Real Different.</span>
+        </h1>
+        <p className="relative z-20 mt-4 max-w-[62%] text-[15px] text-navy/70">
+          Homes, buildings, and opportunities in San Diego and beyond.
+        </p>
+
+        <div className="relative z-20 mt-5 w-[42%] max-w-[165px] -rotate-2">
+          <Image
+            src="/images/handwriting-curiosity.png"
+            alt="Curiosity is good due diligence! —MS"
+            width={816}
+            height={211}
+            className="h-auto w-full"
+          />
+        </div>
+
+        <div className="relative z-10 -mt-10 ml-auto w-[62%]">
+          <Image
+            src="/images/mark-illustration-v2.png"
+            alt="Mark Scott"
+            width={1000}
+            height={999}
+            priority
+            sizes="62vw"
+            className="h-auto w-full"
+          />
+        </div>
+
+        <p className="eyebrow relative z-20 mt-[26px] text-navy/40">
+          Residential &middot; Commercial &middot; Research
+          <br />
+          San Diego, California
+        </p>
+      </section>
+
+      {/* Hero / cover — desktop */}
+      <section className="hidden pt-10 lg:block">
+        <div className="relative grid grid-cols-[minmax(0,45fr)_minmax(0,55fr)] gap-x-0 gap-y-0">
+          <div className="relative z-20 col-start-1 row-start-1 self-start pl-32">
+            <h1 className="font-display text-[120px] font-normal leading-[0.95] text-navy">
               <span className="block whitespace-nowrap">Real Estate,</span>
               <span className="block whitespace-nowrap">Real Different.</span>
             </h1>
-            <p className="mt-5 max-w-sm text-navy/70 lg:max-w-[560px] lg:text-[22.8px]">
+            <p className="mt-5 max-w-[560px] text-[22.8px] text-navy/70">
               Homes, buildings, and opportunities in San Diego and beyond.
             </p>
           </div>
 
-          <div className="relative w-full max-w-[240px] lg:absolute lg:left-[247px] lg:top-[500px] lg:z-10 lg:w-[320px] lg:max-w-none lg:rotate-[-4deg]">
+          <div className="absolute left-[247px] top-[500px] z-10 w-[320px] rotate-[-4deg]">
             <Image
               src="/images/handwriting-curiosity.png"
               alt="Curiosity is good due diligence! —MS"
@@ -121,20 +161,20 @@ export default async function HomePage() {
             />
           </div>
 
-          <div className="relative lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:-ml-28 lg:w-[120%] lg:self-end">
+          <div className="relative col-start-2 row-start-1 row-span-2 -ml-28 w-[120%] self-end">
             <Image
               src="/images/mark-illustration-v2.png"
               alt="Mark Scott"
               width={1000}
               height={999}
               priority
-              sizes="(min-width: 1024px) 55vw, 100vw"
+              sizes="55vw"
               className="h-auto w-full"
             />
           </div>
 
-          <div className="lg:col-start-1 lg:row-start-2 lg:self-end">
-            <p className="eyebrow mt-6 text-navy/40 lg:mt-0">
+          <div className="col-start-1 row-start-2 self-end">
+            <p className="eyebrow text-navy/40">
               Residential &middot; Commercial &middot; Research
               <br />
               San Diego, California
@@ -143,16 +183,32 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Primary paths */}
-      <section className="mt-12 border-t border-sand py-10 lg:mt-20 lg:py-9">
-        <div className="relative grid grid-cols-1 divide-y divide-sand lg:grid-cols-3 lg:divide-y-0">
-          <span className="pointer-events-none absolute left-1/3 top-1/2 hidden h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand lg:block" />
-          <span className="pointer-events-none absolute left-2/3 top-1/2 hidden h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand lg:block" />
+      {/* Primary paths — mobile */}
+      <section className="mt-6 border-y border-sand py-3 lg:hidden">
+        <div className="relative grid grid-cols-3 divide-x divide-sand">
           {PRIMARY_PATHS.map((p) => (
             <Link
               key={p.title}
               href={p.href}
-              className="group block py-6 first:pt-0 last:pb-0 lg:px-10 lg:py-0 lg:first:pl-0 lg:last:pr-0"
+              className="flex items-center justify-center gap-1.5 py-1 font-display text-[17px] text-navy"
+            >
+              {p.title}
+              <span>&rarr;</span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Primary paths — desktop */}
+      <section className="mt-20 hidden border-t border-sand py-9 lg:block">
+        <div className="relative grid grid-cols-3 divide-y-0">
+          <span className="pointer-events-none absolute left-1/3 top-1/2 h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand" />
+          <span className="pointer-events-none absolute left-2/3 top-1/2 h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand" />
+          {PRIMARY_PATHS.map((p) => (
+            <Link
+              key={p.title}
+              href={p.href}
+              className="group block px-10 py-0 first:pl-0 last:pr-0"
             >
               <h3 className="font-display text-2xl font-normal text-navy">
                 {p.title}
@@ -168,17 +224,70 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* On My Radar */}
+      {/* On My Radar — mobile */}
       {radar && (
-        <section className="border-t border-sand pt-10 lg:pt-14">
-          <div className="grid gap-8 lg:grid-cols-[64px_57fr_38fr] lg:gap-x-10">
-            <div className="flex items-center gap-3 lg:flex-col lg:items-start lg:gap-2">
+        <section className="mt-[54px] lg:hidden">
+          <p className="eyebrow text-gold">
+            On My Radar
+            <span className="ml-2 inline-block h-px w-[44px] bg-gold align-middle" />
+          </p>
+
+          <Link
+            href={`/insights/${radar.slug}`}
+            className="group relative mt-6 ml-auto block aspect-[4/3] w-[88%] overflow-hidden"
+          >
+            {radar.image_url ? (
+              <Image
+                src={radar.image_url}
+                alt={radar.image_caption || radar.title}
+                fill
+                sizes="88vw"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                style={{
+                  objectPosition: radar.image_position || "50% 50%",
+                }}
+              />
+            ) : (
+              <ImagePlaceholder
+                label="On My Radar — Article Image"
+                className="absolute inset-0"
+              />
+            )}
+          </Link>
+
+          <div className="mt-5 flex flex-col">
+            <p className="eyebrow text-gold">
+              {radar.eyebrow || CATEGORY_LABELS[radar.category] || radar.category}
+            </p>
+            <h2 className="mt-2.5 font-display text-[30px] font-normal leading-[1.1] text-navy">
+              {radar.title}
+            </h2>
+            {radar.excerpt && (
+              <p className="mt-3 line-clamp-3 text-navy/70">
+                {radar.excerpt}
+              </p>
+            )}
+            <Link
+              href={`/insights/${radar.slug}`}
+              className="eyebrow mt-4 inline-block w-fit text-navy underline decoration-gold decoration-2 underline-offset-4"
+            >
+              {radar.cta_label || "Read the Full Analysis →"}
+            </Link>
+          </div>
+        </section>
+      )}
+
+      {/* On My Radar — desktop */}
+      {radar && (
+        <section className="hidden border-t border-sand pt-14 lg:block">
+          <div className="grid grid-cols-[64px_57fr_38fr] gap-x-10">
+            <div className="flex flex-col items-start gap-2">
               <p className="eyebrow leading-tight text-gold">
                 On
-                <br className="hidden lg:block" /> My
-                <br className="hidden lg:block" /> Radar
+                <br /> My
+                <br /> Radar
               </p>
-              <div className="h-px w-10 bg-gold lg:h-10 lg:w-px" />
+              <div className="h-10 w-px bg-gold" />
             </div>
 
             <Link
@@ -190,7 +299,7 @@ export default async function HomePage() {
                   src={radar.image_url}
                   alt={radar.image_caption || radar.title}
                   fill
-                  sizes="(min-width: 1024px) 57vw, 100vw"
+                  sizes="57vw"
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   style={{
                     objectPosition: radar.image_position || "50% 50%",
@@ -208,7 +317,7 @@ export default async function HomePage() {
               <p className="eyebrow text-gold">
                 {radar.eyebrow || CATEGORY_LABELS[radar.category] || radar.category}
               </p>
-              <h2 className="mt-3 font-display text-[30px] font-normal leading-[1.1] text-navy sm:text-[36px]">
+              <h2 className="mt-3 font-display text-[36px] font-normal leading-[1.1] text-navy">
                 {radar.title}
               </h2>
               {radar.excerpt && (
