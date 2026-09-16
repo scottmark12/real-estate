@@ -16,8 +16,8 @@ export default async function ContactPage() {
   return (
     <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 lg:pb-24">
       <div className="grid gap-16 lg:grid-cols-[42fr_58fr]">
-        <div className="lg:flex lg:h-full lg:flex-col lg:border-r lg:border-sand lg:pb-6 lg:pr-16">
-          <div>
+        <div className="lg:relative lg:flex lg:h-full lg:flex-col lg:border-r lg:border-sand lg:pb-6 lg:pr-16">
+          <div className="lg:relative lg:z-10 lg:mt-40">
             <p className="eyebrow text-gold">Contact</p>
             <h1 className="mt-2 font-display text-[56px] font-normal leading-[0.95] text-navy [font-size:clamp(56px,5vw,80px)]">
               Let&apos;s talk.
@@ -49,33 +49,34 @@ export default async function ContactPage() {
             </div>
           </div>
 
-          <div className="mt-16 flex items-end justify-end gap-4 lg:mt-auto">
-            {contact.handwritten_note && (
-              <p className="font-[family-name:var(--font-hand)] mb-3 max-w-[9rem] shrink-0 text-right text-[22px] leading-snug text-navy/70">
-                {contact.handwritten_note}
-                <br />
-                &mdash;MS
-              </p>
-            )}
-            {contact.photo_url ? (
-              <div className="relative h-[185px] w-[160px] shrink-0 sm:h-[215px] sm:w-[185px]">
+          <div className="relative mt-10 lg:absolute lg:inset-x-0 lg:bottom-0">
+            <div className="relative ml-[8%] w-[101%] max-w-[546px]">
+              {contact.photo_url ? (
                 <Image
                   src={contact.photo_url}
                   alt={contact.photo_caption || "Mark Scott"}
-                  fill
-                  sizes="200px"
-                  className="object-contain object-bottom"
+                  width={993}
+                  height={866}
+                  sizes="(min-width: 1024px) 22vw, 78vw"
+                  className="h-auto w-full"
                 />
-              </div>
-            ) : (
-              <ImagePlaceholder
-                label="Contact — Editorial Photograph"
-                className="h-[185px] w-[160px] shrink-0 sm:h-[215px] sm:w-[185px]"
-              />
-            )}
+              ) : (
+                <ImagePlaceholder
+                  label="Contact — Editorial Photograph"
+                  className="aspect-[993/866] w-full"
+                />
+              )}
+              {contact.handwritten_note && (
+                <p className="font-[family-name:var(--font-hand)] absolute left-0 top-[64%] max-w-[7rem] -translate-x-[40%] text-xl leading-snug text-navy/80">
+                  {contact.handwritten_note}
+                  <br />
+                  &mdash;MS
+                </p>
+              )}
+            </div>
           </div>
           {contact.photo_caption && (
-            <p className="eyebrow -mt-1 text-right text-navy/40">
+            <p className="eyebrow mt-2 text-right text-navy/40">
               {contact.photo_caption}
             </p>
           )}
