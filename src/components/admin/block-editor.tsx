@@ -1,8 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { uploadSiteFile } from "@/lib/upload";
+import RichText from "@/components/admin/rich-text";
 import type { ArticleBlock } from "@/lib/types";
 
 function newId() {
@@ -26,7 +27,7 @@ const BLOCK_TEMPLATES: {
   {
     type: "text",
     label: "Text",
-    hint: "Paragraph (Markdown)",
+    hint: "Paragraph",
     create: () => ({ id: newId(), type: "text", text: "" }),
   },
   {
@@ -79,38 +80,6 @@ const BLOCK_LABELS: Record<ArticleBlock["type"], string> = Object.fromEntries(
 
 const fieldClass =
   "w-full resize-none border-0 border-b border-transparent bg-transparent px-0 py-1 text-navy placeholder:text-navy/30 focus:border-navy/20 focus:outline-none";
-
-function AutoTextarea({
-  value,
-  onChange,
-  placeholder,
-  className,
-}: {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  className?: string;
-}) {
-  const ref = useRef<HTMLTextAreaElement>(null);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    el.style.height = "auto";
-    el.style.height = `${el.scrollHeight}px`;
-  }, [value]);
-
-  return (
-    <textarea
-      ref={ref}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      rows={1}
-      className={`${fieldClass} overflow-hidden ${className ?? ""}`}
-    />
-  );
-}
 
 function EditableImage({
   url,
@@ -193,10 +162,10 @@ function BlockFields({
 
     case "text":
       return (
-        <AutoTextarea
-          value={block.text}
+        <RichText
+          html={block.text}
           onChange={(text) => onChange({ ...block, text })}
-          placeholder="Write here — Markdown supported (bold, italics, links)…"
+          placeholder="Write here…"
           className="text-[15px] leading-relaxed text-navy/80"
         />
       );
@@ -246,10 +215,10 @@ function BlockFields({
               </label>
             </div>
           </div>
-          <AutoTextarea
-            value={block.text}
+          <RichText
+            html={block.text}
             onChange={(text) => onChange({ ...block, text })}
-            placeholder="Text alongside the image — Markdown supported…"
+            placeholder="Text alongside the image…"
             className="text-[15px] leading-relaxed text-navy/80"
           />
         </div>
@@ -257,18 +226,18 @@ function BlockFields({
 
     case "two_column_text":
       return (
-        <div className="grid gap-6 sm:grid-cols-2 sm:divide-x sm:divide-sand">
-          <AutoTextarea
-            value={block.left}
+        <div className="grid gap-8 sm:grid-cols-2">
+          <RichText
+            html={block.left}
             onChange={(left) => onChange({ ...block, left })}
-            placeholder="Left column — Markdown supported…"
+            placeholder="Left column…"
             className="text-[15px] leading-relaxed text-navy/80"
           />
-          <AutoTextarea
-            value={block.right}
+          <RichText
+            html={block.right}
             onChange={(right) => onChange({ ...block, right })}
-            placeholder="Right column — Markdown supported…"
-            className="text-[15px] leading-relaxed text-navy/80 sm:pl-6"
+            placeholder="Right column…"
+            className="text-[15px] leading-relaxed text-navy/80"
           />
         </div>
       );
@@ -276,8 +245,8 @@ function BlockFields({
     case "quote":
       return (
         <div className="border-l-2 border-gold pl-6">
-          <AutoTextarea
-            value={block.text}
+          <RichText
+            html={block.text}
             onChange={(text) => onChange({ ...block, text })}
             placeholder="Quote text…"
             className="font-display text-2xl italic leading-snug"
@@ -304,7 +273,7 @@ function BlockFields({
             value={block.label}
             onChange={(e) => onChange({ ...block, label: e.target.value })}
             placeholder="Label"
-            className={`${fieldClass} mt-2 text-xs uppercase tracking-wide text-navy/50`}
+            className={`${fieldClass} eyebrow mt-2 text-navy/50`}
           />
         </div>
       );
@@ -356,7 +325,7 @@ function GalleryFields({
 
   return (
     <div>
-      <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         {urls.map((u, i) => (
           <div key={u + i} className="group/thumb relative aspect-square overflow-hidden bg-sand">
             <Image src={u} alt="" fill sizes="150px" className="object-cover" />
@@ -452,7 +421,7 @@ export default function BlockEditor({
         defaultValue={JSON.stringify(blocks)}
       />
 
-      <div className="border border-sand bg-white px-5 py-6 sm:px-10 sm:py-8">
+      <div className="mx-auto max-w-3xl border border-sand bg-white px-6 py-8 sm:px-10 sm:py-10">
         {blocks.length === 0 && (
           <p className="text-xs text-navy/50">
             No content blocks yet — add one below, or use the Body
