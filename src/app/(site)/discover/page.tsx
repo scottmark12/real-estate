@@ -176,16 +176,38 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="px-[4vw] pb-10 pt-6 sm:pt-8">
-        <div className="grid gap-8 lg:grid-cols-[2fr_3fr] lg:items-stretch">
-          <div className="flex flex-col justify-center py-6 lg:py-10">
+      <section className="relative overflow-hidden px-[4vw] pb-10 pt-6 sm:pt-8 lg:overflow-visible">
+        {/* Mobile-only full-bleed background image with a dark scrim so the
+            text stays legible; desktop keeps its own side-by-side image
+            column below and never renders this layer. */}
+        <div className="absolute inset-0 lg:hidden">
+          {hero.image_url ? (
+            <Image
+              src={hero.image_url}
+              alt=""
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          ) : (
+            <ImagePlaceholder
+              label="Hero — San Diego Architecture"
+              className="absolute inset-0"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/40 to-navy/10" />
+        </div>
+
+        <div className="relative grid min-h-[560px] gap-8 lg:min-h-0 lg:grid-cols-[2fr_3fr] lg:items-stretch">
+          <div className="flex flex-col justify-end py-6 lg:justify-center lg:py-10">
             <p className="eyebrow text-gold">
               {hero.dateline} &middot; {hero.location_label}
             </p>
-            <h1 className="mt-3 font-display text-6xl font-normal leading-[0.98] text-navy sm:text-7xl lg:text-[5rem]">
+            <h1 className="mt-3 font-display text-6xl font-normal leading-[0.98] text-cream sm:text-7xl lg:text-[5rem] lg:text-navy">
               {renderHeadline(hero.headline)}
             </h1>
-            <p className="mt-6 max-w-sm text-base text-navy/70 sm:text-lg">
+            <p className="mt-6 max-w-sm text-base text-cream/90 sm:text-lg lg:text-navy/70">
               {hero.subhead}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -197,13 +219,13 @@ export default async function HomePage() {
               </Link>
               <Link
                 href={hero.cta_secondary_href}
-                className="border border-navy px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
+                className="border border-cream px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-navy lg:border-navy lg:text-navy lg:hover:bg-navy lg:hover:text-cream"
               >
                 {hero.cta_secondary_label} &rarr;
               </Link>
             </div>
           </div>
-          <div className="relative min-h-[380px] lg:min-h-[560px]">
+          <div className="relative hidden min-h-[380px] lg:block lg:min-h-[560px]">
             {hero.image_url ? (
               <>
                 <Image
