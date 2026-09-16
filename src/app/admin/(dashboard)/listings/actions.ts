@@ -81,6 +81,22 @@ export async function deleteListing(formData: FormData) {
   revalidatePath("/admin/listings");
 }
 
+export async function reorderListings(orderedIds: string[]) {
+  const supabase = await createClient();
+  await Promise.all(
+    orderedIds.map((id, index) =>
+      supabase.from("listings").update({ sort_order: index }).eq("id", id)
+    )
+  );
+
+  revalidatePath("/");
+  revalidatePath("/discover");
+  revalidatePath("/listings");
+  revalidatePath("/buy");
+  revalidatePath("/invest");
+  revalidatePath("/admin/listings");
+}
+
 export async function toggleListingField(formData: FormData) {
   const id = String(formData.get("id") ?? "");
   const field = String(formData.get("field") ?? "");
