@@ -75,7 +75,7 @@ export default async function AboutPage() {
     <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20">
       {/* Opening composition */}
       <section>
-        <div className="grid gap-12 lg:grid-cols-[36fr_64fr] lg:items-start">
+        <div className="grid gap-12 lg:grid-cols-[36fr_64fr] lg:items-stretch">
           <div>
             <p className="eyebrow text-gold">About</p>
             <h1 className="mt-3 font-display text-[42px] font-normal leading-[1.1] text-navy sm:text-[48px]">
@@ -130,39 +130,15 @@ export default async function AboutPage() {
             </div>
           </div>
 
-          <div className="relative">
-            <div className="relative aspect-[1.7/1] w-full overflow-hidden">
-              {about.opening_photo_url ? (
-                <Image
-                  src={about.opening_photo_url}
-                  alt={about.opening_photo_caption || "San Diego"}
-                  fill
-                  sizes="(min-width: 1024px) 64vw, 100vw"
-                  className="object-cover"
-                  style={{
-                    objectPosition: about.opening_photo_focal || "50% 50%",
-                  }}
-                />
-              ) : (
-                <ImagePlaceholder
-                  label="Opening — San Diego Place"
-                  className="absolute inset-0"
-                />
-              )}
-              {about.handwritten_note && (
-                <p className="font-[family-name:var(--font-hand)] absolute left-5 top-5 max-w-[220px] text-xl leading-snug text-navy drop-shadow-[0_1px_6px_rgba(250,246,236,0.9)]">
-                  {about.handwritten_note}
-                  <br />
-                  &mdash;MS
-                </p>
-              )}
-            </div>
-            {about.opening_photo_caption && (
-              <p className="eyebrow mt-2 text-navy/40">
-                {about.opening_photo_caption}
-              </p>
-            )}
-          </div>
+          <EditorialPhoto
+            src={about.opening_photo_url}
+            alt={about.opening_photo_caption || "San Diego"}
+            caption={about.opening_photo_caption}
+            focal={about.opening_photo_focal}
+            placeholderLabel="Opening — San Diego Place"
+            boxClassName="aspect-[1.7/1] w-full lg:aspect-auto lg:h-full"
+            sizes="(min-width: 1024px) 64vw, 100vw"
+          />
         </div>
       </section>
 
