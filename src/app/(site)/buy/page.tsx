@@ -40,7 +40,7 @@ export default async function BuyPage() {
   return (
     <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10">
       <p className="eyebrow text-gold">Buy</p>
-      <h1 className="mt-2 font-display text-4xl font-semibold text-navy sm:text-5xl">
+      <h1 className="mt-2 font-display text-4xl font-normal text-navy sm:text-5xl">
         Homes worth looking at.
       </h1>
 
@@ -71,25 +71,26 @@ export default async function BuyPage() {
 
             <div className="flex flex-col justify-center py-2">
               <p className="eyebrow text-gold">Featured Property</p>
-              <p className="eyebrow mt-2 text-navy/50">{featured.location}</p>
-              <h2 className="mt-3 font-display text-3xl font-semibold leading-tight text-navy sm:text-4xl">
+              <p className="mt-1 text-[10px] font-medium uppercase tracking-wide text-navy/50">
+                {featured.location}
+              </p>
+              <h2 className="mt-6 font-display text-[34px] font-normal leading-[1.03] text-navy sm:text-[42px]">
                 {featured.featured_headline || featured.title}
               </h2>
               {featured.featured_headline && (
-                <p className="mt-2 text-sm text-navy/50">{featured.title}</p>
+                <p className="mt-2 text-sm text-navy/60">{featured.title}</p>
               )}
-              <p className="mt-4 text-sm text-navy/70">{formatStats(featured)}</p>
-              <p className="mt-3 font-display text-3xl font-semibold text-navy">
+              <p className="mt-2 text-xs text-navy/60">{formatStats(featured)}</p>
+              <p className="mt-5 text-2xl font-semibold text-navy sm:text-[26px]">
                 {formatPrice(featured)}
               </p>
               {featured.featured_excerpt && (
-                <p className="mt-4 max-w-md text-navy/70">{featured.featured_excerpt}</p>
+                <p className="mt-4 max-w-md text-[15px] leading-relaxed text-navy/70">
+                  {featured.featured_excerpt}
+                </p>
               )}
-              <span className="eyebrow mt-6 inline-flex w-fit items-center gap-2 border border-navy px-5 py-3 text-navy transition-colors group-hover:bg-navy group-hover:text-cream">
-                View the Property
-                <span className="inline-block transition-transform group-hover:translate-x-1">
-                  &rarr;
-                </span>
+              <span className="eyebrow mt-6 inline-block w-fit text-navy underline decoration-gold decoration-2 underline-offset-4">
+                View the Property &rarr;
               </span>
             </div>
           </Link>
