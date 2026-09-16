@@ -1,4 +1,5 @@
 import { SingleImageUploader } from "@/components/admin/image-uploader";
+import BlockEditor from "@/components/admin/block-editor";
 import { upsertArticle } from "@/app/admin/(dashboard)/articles/actions";
 import type { Article } from "@/lib/types";
 
@@ -100,12 +101,29 @@ export default function ArticleForm({ article }: { article?: Article }) {
 
       <div>
         <label className="text-sm font-medium text-navy">
+          Content Blocks
+        </label>
+        <p className="mt-1 text-xs text-navy/60">
+          Build the article out of these composable blocks. If any blocks
+          are added, they replace the plain-text body below when the
+          article is published.
+        </p>
+        <div className="mt-2">
+          <BlockEditor name="blocks" initialBlocks={article?.blocks} />
+        </div>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-navy">
           Body (Markdown)
         </label>
+        <p className="mt-1 text-xs text-navy/60">
+          Only used when no Content Blocks are added above.
+        </p>
         <textarea
           name="body"
           defaultValue={article?.body ?? ""}
-          rows={14}
+          rows={10}
           className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 font-mono text-sm"
         />
       </div>

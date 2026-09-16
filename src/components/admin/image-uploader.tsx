@@ -2,16 +2,7 @@
 
 import Image from "next/image";
 import { useRef, useState } from "react";
-import { createClient } from "@/lib/supabase/client";
-
-function randomFileName(originalName: string) {
-  const ext = originalName.split(".").pop() ?? "jpg";
-  const id =
-    typeof crypto !== "undefined" && "randomUUID" in crypto
-      ? crypto.randomUUID()
-      : Math.random().toString(36).slice(2);
-  return `${id}.${ext}`;
-}
+import { uploadSiteFile } from "@/lib/upload";
 
 export function SingleImageUploader({
   name,
@@ -31,14 +22,7 @@ export function SingleImageUploader({
     setUploading(true);
     setError(null);
     try {
-      const supabase = createClient();
-      const path = `uploads/${randomFileName(file.name)}`;
-      const { error: uploadError } = await supabase.storage
-        .from("site-images")
-        .upload(path, file, { upsert: true });
-      if (uploadError) throw uploadError;
-      const { data } = supabase.storage.from("site-images").getPublicUrl(path);
-      setUrl(data.publicUrl);
+      setUrl(await uploadSiteFile(file));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
@@ -99,18 +83,9 @@ export function GalleryUploader({
     setUploading(true);
     setError(null);
     try {
-      const supabase = createClient();
       const newUrls: string[] = [];
       for (const file of Array.from(files)) {
-        const path = `uploads/${randomFileName(file.name)}`;
-        const { error: uploadError } = await supabase.storage
-          .from("site-images")
-          .upload(path, file, { upsert: true });
-        if (uploadError) throw uploadError;
-        const { data } = supabase.storage
-          .from("site-images")
-          .getPublicUrl(path);
-        newUrls.push(data.publicUrl);
+        newUrls.push(await uploadSiteFile(file));
       }
       setUrls((prev) => [...prev, ...newUrls]);
     } catch (err) {

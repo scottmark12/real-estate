@@ -5,6 +5,7 @@ import { marked } from "marked";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/format";
 import { CATEGORY_LABELS } from "@/components/article-card";
+import ArticleBlocks from "@/components/article-blocks";
 import type { Article } from "@/lib/types";
 
 export const revalidate = 0;
@@ -24,7 +25,8 @@ export default async function ArticleDetailPage({
   const article = data as Article | null;
   if (!article) notFound();
 
-  const html = article.body ? await marked.parse(article.body) : "";
+  const hasBlocks = article.blocks && article.blocks.length > 0;
+  const html = !hasBlocks && article.body ? await marked.parse(article.body) : "";
 
   return (
     <article className="mx-auto max-w-3xl px-6 py-16 sm:px-10">
@@ -55,10 +57,16 @@ export default async function ArticleDetailPage({
         </div>
       )}
 
-      <div
-        className="article-body mt-8"
-        dangerouslySetInnerHTML={{ __html: html }}
-      />
+      {hasBlocks ? (
+        <div className="mt-8">
+          <ArticleBlocks blocks={article.blocks} />
+        </div>
+      ) : (
+        <div
+          className="article-body mt-8"
+          dangerouslySetInnerHTML={{ __html: html }}
+        />
+      )}
     </article>
   );
 }

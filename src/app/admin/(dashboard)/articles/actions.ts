@@ -15,6 +15,16 @@ export async function upsertArticle(formData: FormData) {
 
   const tagsInput = String(formData.get("tags") ?? "").trim();
 
+  const blocksInput = String(formData.get("blocks") ?? "").trim();
+  let blocks: unknown = [];
+  if (blocksInput) {
+    try {
+      blocks = JSON.parse(blocksInput);
+    } catch {
+      blocks = [];
+    }
+  }
+
   const payload = {
     title,
     slug: slugInput ? slugify(slugInput) : slugify(title),
@@ -24,6 +34,7 @@ export async function upsertArticle(formData: FormData) {
       : [],
     excerpt: String(formData.get("excerpt") ?? "").trim() || null,
     body: String(formData.get("body") ?? "").trim() || null,
+    blocks,
     image_url: String(formData.get("image_url") ?? "").trim() || null,
     image_caption: String(formData.get("image_caption") ?? "").trim() || null,
     image_position:

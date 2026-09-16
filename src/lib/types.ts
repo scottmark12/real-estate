@@ -34,6 +34,72 @@ export interface Listing {
   updated_at: string;
 }
 
+export interface ArticleBlockBase {
+  id: string;
+}
+
+export interface HeadingBlock extends ArticleBlockBase {
+  type: "heading";
+  text: string;
+}
+
+export interface TextBlock extends ArticleBlockBase {
+  type: "text";
+  text: string;
+}
+
+export interface ImageBlock extends ArticleBlockBase {
+  type: "image";
+  url: string;
+  caption: string;
+  focal: string;
+}
+
+export interface ImageTextBlock extends ArticleBlockBase {
+  type: "image_text";
+  url: string;
+  side: "left" | "right";
+  text: string;
+}
+
+export interface TwoColumnTextBlock extends ArticleBlockBase {
+  type: "two_column_text";
+  left: string;
+  right: string;
+}
+
+export interface QuoteBlock extends ArticleBlockBase {
+  type: "quote";
+  text: string;
+  attribution: string;
+}
+
+export interface StatBlock extends ArticleBlockBase {
+  type: "stat";
+  value: string;
+  label: string;
+}
+
+export interface GalleryBlock extends ArticleBlockBase {
+  type: "gallery";
+  urls: string[];
+}
+
+export interface DividerBlock extends ArticleBlockBase {
+  type: "divider";
+}
+
+export type ArticleBlock =
+  | HeadingBlock
+  | TextBlock
+  | ImageBlock
+  | ImageTextBlock
+  | TwoColumnTextBlock
+  | QuoteBlock
+  | StatBlock
+  | GalleryBlock
+  | DividerBlock;
+
 export interface Article {
   id: string;
   title: string;
@@ -42,6 +108,7 @@ export interface Article {
   tags: string[];
   excerpt: string | null;
   body: string | null;
+  blocks: ArticleBlock[];
   image_url: string | null;
   image_caption: string | null;
   image_position: string | null;
