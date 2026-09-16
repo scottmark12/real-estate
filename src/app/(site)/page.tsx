@@ -100,26 +100,28 @@ export default async function HomePage() {
     <div className="mx-auto max-w-[1500px] px-0 lg:px-12">
       {/* Hero / cover — mobile */}
       <section className="overflow-hidden pt-8 lg:hidden">
-        <p className="eyebrow text-gold">Real Estate</p>
-        <h1 className="relative z-20 mt-2 font-display text-[32px] font-normal leading-[0.95] text-navy">
-          <span className="block">Real Estate,</span>
-          <span className="block">Real Different.</span>
-        </h1>
-        <p className="relative z-20 mt-4 max-w-[37%] text-[15px] text-navy/70">
-          Homes, buildings, and opportunities in San Diego and beyond.
-        </p>
+        <div className="px-4">
+          <p className="eyebrow text-gold">Real Estate</p>
+          <h1 className="relative z-20 mt-2 font-display text-[32px] font-normal leading-[0.95] text-navy">
+            <span className="block">Real Estate,</span>
+            <span className="block">Real Different.</span>
+          </h1>
+          <p className="relative z-20 mt-[65px] max-w-[37%] text-[15px] text-navy/70">
+            Homes, buildings, and opportunities in San Diego and beyond.
+          </p>
 
-        <div className="relative z-20 mt-5 w-[42%] max-w-[165px] -rotate-2">
-          <Image
-            src="/images/handwriting-curiosity.png"
-            alt="Curiosity is good due diligence! —MS"
-            width={816}
-            height={211}
-            className="h-auto w-full"
-          />
+          <div className="relative z-20 mt-[68px] w-[42%] max-w-[165px] -rotate-2">
+            <Image
+              src="/images/handwriting-curiosity.png"
+              alt="Curiosity is good due diligence! —MS"
+              width={816}
+              height={211}
+              className="h-auto w-full"
+            />
+          </div>
         </div>
 
-        <div className="relative z-10 -mt-[216px] mb-8 ml-[15%] w-[124%]">
+        <div className="relative z-10 -mt-[313px] mb-8 ml-[15%] w-[124%]">
           <Image
             src="/images/mark-headshot-illustration.png"
             alt="Mark Scott"
@@ -221,7 +223,7 @@ export default async function HomePage() {
       {/* On My Radar — mobile */}
       {radar && (
         <section className="mt-[54px] lg:hidden">
-          <p className="eyebrow text-gold">
+          <p className="eyebrow px-4 text-gold">
             On My Radar
             <span className="ml-2 inline-block h-px w-[44px] bg-gold align-middle" />
           </p>
@@ -249,7 +251,7 @@ export default async function HomePage() {
             )}
           </Link>
 
-          <div className="mt-5 flex flex-col">
+          <div className="mt-5 flex flex-col px-4">
             <p className="eyebrow text-gold">
               {radar.eyebrow || CATEGORY_LABELS[radar.category] || radar.category}
             </p>
@@ -332,7 +334,7 @@ export default async function HomePage() {
 
       {/* Elsewhere */}
       {elsewhere.length > 0 && (
-        <section className="mt-14 border-t border-sand pb-16 pt-10">
+        <section className="mt-14 border-t border-sand px-4 pb-16 pt-10 lg:px-0">
           <p className="eyebrow text-gold">Elsewhere</p>
           <div className="mt-6 grid gap-10 sm:grid-cols-3 sm:divide-x sm:divide-sand">
             {elsewhere.map((item, i) => (
