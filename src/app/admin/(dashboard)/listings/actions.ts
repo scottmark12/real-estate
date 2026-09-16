@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { slugify } from "@/lib/format";
+import { importListingFromUrl, type ListingImportOutcome } from "@/lib/listing-import";
 
 function num(formData: FormData, key: string): number | null {
   const raw = formData.get(key);
@@ -61,6 +62,11 @@ export async function upsertListing(formData: FormData) {
   revalidatePath("/invest");
   revalidatePath("/admin/listings");
   redirect("/admin/listings");
+}
+
+export async function importListing(url: string): Promise<ListingImportOutcome> {
+  const supabase = await createClient();
+  return importListingFromUrl(supabase, url);
 }
 
 export async function deleteListing(formData: FormData) {

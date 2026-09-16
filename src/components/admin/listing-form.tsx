@@ -6,10 +6,10 @@ import { btnPrimary, input, label, select, textarea } from "@/components/admin/u
 import { upsertListing } from "@/app/admin/(dashboard)/listings/actions";
 import type { Listing } from "@/lib/types";
 
-export default function ListingForm({ listing }: { listing?: Listing }) {
+export default function ListingForm({ listing }: { listing?: Partial<Listing> }) {
   return (
     <form action={upsertListing} className="flex flex-col gap-8">
-      {listing && <input type="hidden" name="id" value={listing.id} />}
+      {listing?.id && <input type="hidden" name="id" value={listing.id} />}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>

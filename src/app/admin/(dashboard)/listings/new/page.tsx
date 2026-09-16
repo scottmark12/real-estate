@@ -1,4 +1,4 @@
-import ListingForm from "@/components/admin/listing-form";
+import QuickAddListing from "@/components/admin/quick-add-listing";
 
 export default function NewListingPage() {
   return (
@@ -8,7 +8,7 @@ export default function NewListingPage() {
         New Listing
       </h1>
       <div className="mt-8">
-        <ListingForm />
+        <QuickAddListing />
       </div>
     </div>
   );
