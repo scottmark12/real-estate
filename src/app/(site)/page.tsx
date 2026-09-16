@@ -9,27 +9,18 @@ export const revalidate = 0;
 
 const PRIMARY_PATHS = [
   {
-    n: "01",
     title: "Buy",
-    body: "Homes worth living in.",
+    body: "Homes. Investments. Opportunities.",
     href: "/buy",
   },
   {
-    n: "02",
     title: "Sell",
     body: "A thoughtful approach.",
     href: "/sell",
   },
   {
-    n: "03",
-    title: "Invest",
-    body: "Off-market opportunities.",
-    href: "/invest",
-  },
-  {
-    n: "04",
-    title: "Market Research",
-    body: "What's actually happening.",
+    title: "Learn",
+    body: "Markets. Buildings. Places.",
     href: "/insights",
   },
 ];
@@ -154,15 +145,14 @@ export default async function HomePage() {
 
       {/* Primary paths */}
       <section className="mt-12 border-t border-sand py-10 lg:mt-20 lg:py-12">
-        <div className="grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4 lg:gap-0 lg:divide-x lg:divide-sand">
+        <div className="grid grid-cols-1 divide-y divide-sand lg:grid-cols-3 lg:gap-0 lg:divide-x lg:divide-y-0">
           {PRIMARY_PATHS.map((p) => (
             <Link
-              key={p.n}
+              key={p.title}
               href={p.href}
-              className="group block lg:px-8 lg:first:pl-0 lg:last:pr-0"
+              className="group block py-6 first:pt-0 last:pb-0 lg:px-8 lg:py-0 lg:first:pl-0 lg:last:pr-0"
             >
-              <p className="eyebrow text-gold">{p.n}</p>
-              <h3 className="mt-2 font-display text-2xl font-normal text-navy">
+              <h3 className="font-display text-2xl font-normal text-navy">
                 {p.title}
               </h3>
               <p className="mt-1 text-sm text-navy/70">{p.body}</p>
