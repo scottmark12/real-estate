@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { STATUS_LABELS, formatPrice } from "@/lib/format";
 import type { Listing } from "@/lib/types";
+import { btnPrimary, tag } from "@/components/admin/ui";
 import { deleteListing, toggleListingField } from "./actions";
 
 export const revalidate = 0;
@@ -25,23 +26,20 @@ export default async function AdminListingsPage() {
             All Listings
           </h1>
         </div>
-        <Link
-          href="/admin/listings/new"
-          className="rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-cream hover:bg-navy-dark"
-        >
+        <Link href="/admin/listings/new" className={btnPrimary}>
           + New Listing
         </Link>
       </div>
 
-      <div className="mt-8 overflow-x-auto rounded-2xl border border-sand bg-white/70">
+      <div className="mt-8 overflow-x-auto border-t border-sand">
         <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="border-b border-sand text-navy/50">
+          <thead className="border-b border-sand text-navy/40">
             <tr>
-              <th className="px-4 py-3 font-medium">Title</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Price</th>
-              <th className="px-4 py-3 font-medium">Published</th>
-              <th className="px-4 py-3 font-medium">Featured</th>
+              <th className="eyebrow px-4 py-3 font-medium">Title</th>
+              <th className="eyebrow px-4 py-3 font-medium">Status</th>
+              <th className="eyebrow px-4 py-3 font-medium">Price</th>
+              <th className="eyebrow px-4 py-3 font-medium">Published</th>
+              <th className="eyebrow px-4 py-3 font-medium">Featured</th>
               <th className="px-4 py-3 font-medium"></th>
             </tr>
           </thead>
@@ -69,10 +67,10 @@ export default async function AdminListingsPage() {
                     />
                     <button
                       type="submit"
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                      className={`${tag} ${
                         listing.published
-                          ? "bg-navy text-cream"
-                          : "bg-sand text-navy/60"
+                          ? "border-navy bg-navy text-cream"
+                          : "border-navy/20 text-navy/50"
                       }`}
                     >
                       {listing.published ? "Published" : "Draft"}
@@ -90,10 +88,10 @@ export default async function AdminListingsPage() {
                     />
                     <button
                       type="submit"
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${
+                      className={`${tag} ${
                         listing.featured
-                          ? "bg-gold text-navy"
-                          : "bg-sand text-navy/60"
+                          ? "border-gold bg-gold text-navy"
+                          : "border-navy/20 text-navy/50"
                       }`}
                     >
                       {listing.featured ? "Featured" : "—"}
@@ -101,19 +99,16 @@ export default async function AdminListingsPage() {
                   </form>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <div className="flex justify-end gap-3">
+                  <div className="flex justify-end gap-4">
                     <Link
                       href={`/admin/listings/${listing.id}/edit`}
-                      className="text-navy/70 hover:text-navy"
+                      className="text-navy/70 underline decoration-gold decoration-2 underline-offset-4 hover:text-navy"
                     >
                       Edit
                     </Link>
                     <form action={deleteListing}>
                       <input type="hidden" name="id" value={listing.id} />
-                      <button
-                        type="submit"
-                        className="text-red-600 hover:text-red-700"
-                      >
+                      <button type="submit" className="text-red-600 hover:text-red-700">
                         Delete
                       </button>
                     </form>

@@ -2,45 +2,35 @@ import {
   GalleryUploader,
   SingleImageUploader,
 } from "@/components/admin/image-uploader";
+import { btnPrimary, input, label, select, textarea } from "@/components/admin/ui";
 import { upsertListing } from "@/app/admin/(dashboard)/listings/actions";
 import type { Listing } from "@/lib/types";
 
 export default function ListingForm({ listing }: { listing?: Listing }) {
   return (
-    <form action={upsertListing} className="flex flex-col gap-6">
+    <form action={upsertListing} className="flex flex-col gap-8">
       {listing && <input type="hidden" name="id" value={listing.id} />}
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-sm font-medium text-navy">Title</label>
-          <input
-            name="title"
-            defaultValue={listing?.title}
-            required
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
-          />
+          <label className={label}>Title</label>
+          <input name="title" defaultValue={listing?.title} required className={input} />
         </div>
         <div>
-          <label className="text-sm font-medium text-navy">
-            Slug (auto-generated if left blank)
-          </label>
+          <label className={label}>Slug (auto-generated if left blank)</label>
           <input
             name="slug"
             defaultValue={listing?.slug}
             placeholder="leucadia-view-home"
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            className={input}
           />
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
         <div>
-          <label className="text-sm font-medium text-navy">Status</label>
-          <select
-            name="status"
-            defaultValue={listing?.status ?? "for_sale"}
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
-          >
+          <label className={label}>Status</label>
+          <select name="status" defaultValue={listing?.status ?? "for_sale"} className={select}>
             <option value="for_sale">For Sale</option>
             <option value="investment">Investment</option>
             <option value="off_market">Off Market</option>
@@ -48,11 +38,11 @@ export default function ListingForm({ listing }: { listing?: Listing }) {
           </select>
         </div>
         <div>
-          <label className="text-sm font-medium text-navy">Category</label>
+          <label className={label}>Category</label>
           <select
             name="category"
             defaultValue={listing?.category ?? "residential"}
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            className={select}
           >
             <option value="residential">Residential</option>
             <option value="multifamily">Multifamily</option>
@@ -60,124 +50,86 @@ export default function ListingForm({ listing }: { listing?: Listing }) {
           </select>
         </div>
         <div>
-          <label className="text-sm font-medium text-navy">Sort Order</label>
+          <label className={label}>Sort Order</label>
           <input
             type="number"
             name="sort_order"
             defaultValue={listing?.sort_order ?? 0}
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            className={input}
           />
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-sm font-medium text-navy">
-            Price (USD, optional)
-          </label>
+          <label className={label}>Price (USD, optional)</label>
           <input
             type="number"
             step="1"
             name="price_dollars"
             defaultValue={
-              listing?.price_cents != null
-                ? listing.price_cents / 100
-                : undefined
+              listing?.price_cents != null ? listing.price_cents / 100 : undefined
             }
             placeholder="1250000"
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            className={input}
           />
         </div>
         <div>
-          <label className="text-sm font-medium text-navy">
-            Price Display Override
-          </label>
+          <label className={label}>Price Display Override</label>
           <input
             name="price_display"
             defaultValue={listing?.price_display ?? ""}
             placeholder="Contact for Details"
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+            className={input}
           />
         </div>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-5">
         <div>
-          <label className="text-sm font-medium text-navy">Beds</label>
-          <input
-            type="number"
-            step="0.5"
-            name="beds"
-            defaultValue={listing?.beds ?? ""}
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
-          />
+          <label className={label}>Beds</label>
+          <input type="number" step="0.5" name="beds" defaultValue={listing?.beds ?? ""} className={input} />
         </div>
         <div>
-          <label className="text-sm font-medium text-navy">Baths</label>
-          <input
-            type="number"
-            step="0.5"
-            name="baths"
-            defaultValue={listing?.baths ?? ""}
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
-          />
+          <label className={label}>Baths</label>
+          <input type="number" step="0.5" name="baths" defaultValue={listing?.baths ?? ""} className={input} />
         </div>
         <div>
-          <label className="text-sm font-medium text-navy">Sqft</label>
-          <input
-            type="number"
-            name="sqft"
-            defaultValue={listing?.sqft ?? ""}
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
-          />
+          <label className={label}>Sqft</label>
+          <input type="number" name="sqft" defaultValue={listing?.sqft ?? ""} className={input} />
         </div>
         <div>
-          <label className="text-sm font-medium text-navy">Acres</label>
-          <input
-            type="number"
-            step="0.01"
-            name="acres"
-            defaultValue={listing?.acres ?? ""}
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
-          />
+          <label className={label}>Acres</label>
+          <input type="number" step="0.01" name="acres" defaultValue={listing?.acres ?? ""} className={input} />
         </div>
         <div>
-          <label className="text-sm font-medium text-navy">Units</label>
-          <input
-            type="number"
-            name="units"
-            defaultValue={listing?.units ?? ""}
-            className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
-          />
+          <label className={label}>Units</label>
+          <input type="number" name="units" defaultValue={listing?.units ?? ""} className={input} />
         </div>
       </div>
 
       <div>
-        <label className="text-sm font-medium text-navy">Location</label>
+        <label className={label}>Location</label>
         <input
           name="location"
           defaultValue={listing?.location}
           required
           placeholder="Leucadia, San Diego"
-          className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+          className={input}
         />
       </div>
 
       <div>
-        <label className="text-sm font-medium text-navy">Description</label>
+        <label className={label}>Description</label>
         <textarea
           name="description"
           defaultValue={listing?.description ?? ""}
           rows={5}
-          className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+          className={textarea}
         />
       </div>
 
-      <SingleImageUploader
-        name="image_url"
-        label="Primary Image"
-        initialUrl={listing?.image_url}
-      />
+      <SingleImageUploader name="image_url" label="Primary Image" initialUrl={listing?.image_url} />
 
       <GalleryUploader
         name="gallery_urls"
@@ -187,11 +139,7 @@ export default function ListingForm({ listing }: { listing?: Listing }) {
 
       <div className="flex gap-6">
         <label className="flex items-center gap-2 text-sm text-navy">
-          <input
-            type="checkbox"
-            name="featured"
-            defaultChecked={listing?.featured}
-          />
+          <input type="checkbox" name="featured" defaultChecked={listing?.featured} />
           Featured
         </label>
         <label className="flex items-center gap-2 text-sm text-navy">
@@ -204,11 +152,9 @@ export default function ListingForm({ listing }: { listing?: Listing }) {
         </label>
       </div>
 
-      <div className="rounded-lg border border-sand bg-cream-deep/50 p-4">
-        <p className="text-sm font-semibold text-navy">
-          Homepage (/) — Elsewhere
-        </p>
-        <div className="mt-3 flex flex-wrap items-center gap-6">
+      <div className="border-t border-sand pt-8">
+        <p className="eyebrow text-gold">Homepage (/) — Elsewhere</p>
+        <div className="mt-4 flex flex-wrap items-center gap-6">
           <label className="flex items-center gap-2 text-sm text-navy">
             <input
               type="checkbox"
@@ -223,16 +169,13 @@ export default function ListingForm({ listing }: { listing?: Listing }) {
               type="number"
               name="homepage_elsewhere_order"
               defaultValue={listing?.homepage_elsewhere_order ?? 0}
-              className="w-16 rounded-lg border border-navy/15 bg-white px-2 py-1 text-sm"
+              className="w-16 border border-navy/15 bg-white px-2 py-1 text-sm"
             />
           </label>
         </div>
       </div>
 
-      <button
-        type="submit"
-        className="self-start rounded-full bg-navy px-6 py-3 text-sm font-semibold text-cream hover:bg-navy-dark"
-      >
+      <button type="submit" className={`self-start ${btnPrimary}`}>
         {listing ? "Save Changes" : "Create Listing"}
       </button>
     </form>

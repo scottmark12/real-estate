@@ -23,34 +23,36 @@ export default async function AdminHomePage() {
         immediately.
       </p>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border border-sand bg-white/70 p-6">
-          <p className="text-3xl font-semibold text-navy">
+      <div className="mt-10 grid grid-cols-1 divide-y divide-sand border-t border-sand sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        <div className="py-6 sm:pr-8">
+          <p className="font-display text-4xl font-normal text-navy">
             {listingCount ?? 0}
           </p>
-          <p className="mt-1 text-sm text-navy/60">Listings</p>
+          <p className="eyebrow mt-2 text-navy/50">Listings</p>
           <Link
             href="/admin/listings"
-            className="mt-3 inline-block text-sm font-semibold text-navy underline decoration-gold"
+            className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4"
           >
-            Manage
+            Manage &rarr;
           </Link>
         </div>
-        <div className="rounded-2xl border border-sand bg-white/70 p-6">
-          <p className="text-3xl font-semibold text-navy">
+        <div className="py-6 sm:px-8">
+          <p className="font-display text-4xl font-normal text-navy">
             {articleCount ?? 0}
           </p>
-          <p className="mt-1 text-sm text-navy/60">Articles</p>
+          <p className="eyebrow mt-2 text-navy/50">Articles</p>
           <Link
             href="/admin/articles"
-            className="mt-3 inline-block text-sm font-semibold text-navy underline decoration-gold"
+            className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4"
           >
-            Manage
+            Manage &rarr;
           </Link>
         </div>
-        <div className="rounded-2xl border border-sand bg-white/70 p-6">
-          <p className="text-3xl font-semibold text-navy">{subCount ?? 0}</p>
-          <p className="mt-1 text-sm text-navy/60">Newsletter Subscribers</p>
+        <div className="py-6 sm:pl-8">
+          <p className="font-display text-4xl font-normal text-navy">
+            {subCount ?? 0}
+          </p>
+          <p className="eyebrow mt-2 text-navy/50">Newsletter Subscribers</p>
         </div>
       </div>
     </div>

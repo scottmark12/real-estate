@@ -452,7 +452,7 @@ export default function BlockEditor({
         defaultValue={JSON.stringify(blocks)}
       />
 
-      <div className="rounded-2xl border border-sand bg-white px-5 py-6 sm:px-10 sm:py-8">
+      <div className="border border-sand bg-white px-5 py-6 sm:px-10 sm:py-8">
         {blocks.length === 0 && (
           <p className="text-xs text-navy/50">
             No content blocks yet — add one below, or use the Body
@@ -563,7 +563,7 @@ export default function BlockEditor({
             type="button"
             onClick={() => addBlock(t.create)}
             title={t.hint}
-            className="rounded-full border border-navy/20 px-3 py-1.5 text-xs font-medium text-navy/70 hover:border-navy hover:text-navy"
+            className="border border-navy/20 px-3 py-1.5 text-xs font-medium text-navy/70 hover:border-navy hover:text-navy"
           >
             + {t.label}
           </button>

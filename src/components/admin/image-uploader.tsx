@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { uploadSiteFile } from "@/lib/upload";
+import { label as labelClass } from "@/components/admin/ui";
 
 export function SingleImageUploader({
   name,
@@ -32,11 +33,11 @@ export function SingleImageUploader({
 
   return (
     <div>
-      <label className="text-sm font-medium text-navy">{label}</label>
+      <label className={labelClass}>{label}</label>
       <input type="hidden" name={name} value={url} />
       <div className="mt-1 flex items-center gap-4">
         {url && (
-          <div className="relative h-20 w-28 overflow-hidden rounded-lg bg-sand">
+          <div className="relative h-20 w-28 overflow-hidden bg-sand">
             <Image src={url} alt="" fill sizes="112px" className="object-cover" />
           </div>
         )}
@@ -56,7 +57,7 @@ export function SingleImageUploader({
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="or paste an image URL"
-            className="mt-2 w-64 rounded-lg border border-navy/15 bg-white px-3 py-1.5 text-xs"
+            className="mt-2 w-64 border border-navy/15 bg-white px-3 py-1.5 text-xs"
           />
           {uploading && <p className="text-xs text-navy/50">Uploading…</p>}
           {error && <p className="text-xs text-red-600">{error}</p>}
@@ -97,21 +98,18 @@ export function GalleryUploader({
 
   return (
     <div>
-      <label className="text-sm font-medium text-navy">{label}</label>
+      <label className={labelClass}>{label}</label>
       {urls.map((u) => (
         <input key={u} type="hidden" name={name} value={u} />
       ))}
       <div className="mt-1 flex flex-wrap gap-3">
         {urls.map((u) => (
-          <div
-            key={u}
-            className="relative h-20 w-28 overflow-hidden rounded-lg bg-sand"
-          >
+          <div key={u} className="relative h-20 w-28 overflow-hidden bg-sand">
             <Image src={u} alt="" fill sizes="112px" className="object-cover" />
             <button
               type="button"
               onClick={() => setUrls((prev) => prev.filter((x) => x !== u))}
-              className="absolute right-1 top-1 rounded-full bg-navy/80 px-1.5 text-xs text-cream"
+              className="absolute right-1 top-1 bg-navy/80 px-1.5 text-xs text-cream"
             >
               ×
             </button>

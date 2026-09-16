@@ -1,4 +1,5 @@
 import { SingleImageUploader } from "@/components/admin/image-uploader";
+import { btnPrimary, input, label, textarea } from "@/components/admin/ui";
 import {
   DEFAULT_ABOUT,
   DEFAULT_CONTACT,
@@ -35,21 +36,19 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-sand bg-white/70 p-6 sm:p-8">
-      <h2 className="font-display text-xl font-semibold text-navy">
-        {title}
-      </h2>
+    <section className="border-t border-sand pt-10 first:border-t-0 first:pt-0">
+      <h2 className="font-display text-xl font-normal text-navy">{title}</h2>
       <div className="mt-5">{children}</div>
     </section>
   );
 }
 
 function Field({
-  label,
+  label: fieldLabel,
   name,
   defaultValue,
   placeholder,
-  textarea,
+  textarea: isTextarea,
 }: {
   label: string;
   name: string;
@@ -59,22 +58,17 @@ function Field({
 }) {
   return (
     <div>
-      <label className="text-sm font-medium text-navy">{label}</label>
-      {textarea ? (
+      <label className={label}>{fieldLabel}</label>
+      {isTextarea ? (
         <textarea
           name={name}
           defaultValue={defaultValue}
           placeholder={placeholder}
           rows={3}
-          className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
+          className={textarea}
         />
       ) : (
-        <input
-          name={name}
-          defaultValue={defaultValue}
-          placeholder={placeholder}
-          className="mt-1 w-full rounded-lg border border-navy/15 bg-white px-3 py-2 text-sm"
-        />
+        <input name={name} defaultValue={defaultValue} placeholder={placeholder} className={input} />
       )}
     </div>
   );
@@ -82,10 +76,7 @@ function Field({
 
 function SaveButton() {
   return (
-    <button
-      type="submit"
-      className="mt-5 rounded-full bg-navy px-5 py-2.5 text-sm font-semibold text-cream hover:bg-navy-dark"
-    >
+    <button type="submit" className={`mt-5 self-start ${btnPrimary}`}>
       Save
     </button>
   );
@@ -118,7 +109,7 @@ export default async function AdminSettingsPage() {
         live immediately.
       </p>
 
-      <div className="mt-8 flex flex-col gap-8">
+      <div className="mt-10 flex flex-col gap-10">
         <Section title="Hero">
           <form action={updateHero} className="flex flex-col gap-4">
             <Field label="Headline" name="headline" defaultValue={hero.headline} />
@@ -195,7 +186,7 @@ export default async function AdminSettingsPage() {
         <Section title="How I Can Help (Services)">
           <form action={updateServices} className="flex flex-col gap-6">
             {servicesPadded.map((service, i) => (
-              <div key={i} className="rounded-xl border border-sand p-4">
+              <div key={i} className="border-t border-sand pt-4 first:border-t-0 first:pt-0">
                 <p className="eyebrow text-navy/40">Column {i + 1}</p>
                 <div className="mt-3 grid gap-3 sm:grid-cols-2">
                   <Field
@@ -279,7 +270,7 @@ export default async function AdminSettingsPage() {
               initialUrl={about.headshot_photo_url}
             />
 
-            <div className="rounded-lg border border-sand p-4">
+            <div className="border-t border-sand pt-6">
               <p className="eyebrow text-navy/50">Opening Photograph</p>
               <div className="mt-3 flex flex-col gap-3">
                 <SingleImageUploader
@@ -303,7 +294,7 @@ export default async function AdminSettingsPage() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-sand p-4">
+            <div className="border-t border-sand pt-6">
               <p className="eyebrow text-navy/50">Community Photograph</p>
               <div className="mt-3 flex flex-col gap-3">
                 <SingleImageUploader
@@ -327,7 +318,7 @@ export default async function AdminSettingsPage() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-sand p-4">
+            <div className="border-t border-sand pt-6">
               <p className="eyebrow text-navy/50">
                 Travel Photograph — Large (left)
               </p>
@@ -353,7 +344,7 @@ export default async function AdminSettingsPage() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-sand p-4">
+            <div className="border-t border-sand pt-6">
               <p className="eyebrow text-navy/50">
                 Travel Photograph — Small (top)
               </p>
@@ -379,7 +370,7 @@ export default async function AdminSettingsPage() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-sand p-4">
+            <div className="border-t border-sand pt-6">
               <p className="eyebrow text-navy/50">
                 Travel Photograph — Small (bottom)
               </p>
