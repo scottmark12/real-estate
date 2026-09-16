@@ -121,10 +121,10 @@ export default async function HomePage() {
 
         <div className="relative z-10 -mt-10 ml-auto w-[62%]">
           <Image
-            src="/images/mark-illustration-v2.png"
+            src="/images/mark-headshot-illustration.png"
             alt="Mark Scott"
-            width={1000}
-            height={999}
+            width={993}
+            height={866}
             priority
             sizes="62vw"
             className="h-auto w-full"
@@ -163,10 +163,10 @@ export default async function HomePage() {
 
           <div className="relative col-start-2 row-start-1 row-span-2 -ml-28 w-[120%] self-end">
             <Image
-              src="/images/mark-illustration-v2.png"
+              src="/images/mark-headshot-illustration.png"
               alt="Mark Scott"
-              width={1000}
-              height={999}
+              width={993}
+              height={866}
               priority
               sizes="55vw"
               className="h-auto w-full"
