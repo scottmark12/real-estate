@@ -101,11 +101,11 @@ export default async function HomePage() {
       {/* Hero / cover — mobile */}
       <section className="overflow-hidden pt-8 lg:hidden">
         <p className="eyebrow text-gold">Real Estate</p>
-        <h1 className="relative z-20 mt-2 font-display text-[38px] font-normal leading-[0.95] text-navy">
+        <h1 className="relative z-20 mt-2 font-display text-[32px] font-normal leading-[0.95] text-navy">
           <span className="block">Real Estate,</span>
           <span className="block">Real Different.</span>
         </h1>
-        <p className="relative z-20 mt-4 max-w-[62%] text-[15px] text-navy/70">
+        <p className="relative z-20 mt-4 max-w-[37%] text-[15px] text-navy/70">
           Homes, buildings, and opportunities in San Diego and beyond.
         </p>
 
@@ -119,7 +119,7 @@ export default async function HomePage() {
           />
         </div>
 
-        <div className="relative z-10 -mt-[216px] mb-8 w-[124%]">
+        <div className="relative z-10 -mt-[216px] mb-8 ml-[15%] w-[124%]">
           <Image
             src="/images/mark-headshot-illustration.png"
             alt="Mark Scott"
