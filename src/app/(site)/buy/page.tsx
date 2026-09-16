@@ -99,7 +99,7 @@ export default async function BuyPage() {
       <div className={`${featured ? "mt-14" : "mt-10"} border-t border-sand pt-8`}>
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="font-display text-2xl font-semibold text-navy">
+            <h2 className="font-display text-3xl font-normal text-navy">
               Available Now
             </h2>
             <p className="text-sm text-navy/60">Homes currently on the market.</p>
@@ -112,7 +112,7 @@ export default async function BuyPage() {
           </Link>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
           {gridListings.map((listing) => (
             <ListingCard key={listing.id} listing={listing} />
           ))}

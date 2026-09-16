@@ -101,13 +101,17 @@ export default function AdminListingsGrid({
             )}
           </div>
 
-          <div className="flex flex-1 flex-col gap-1.5 p-4">
-            <p className="font-display text-lg font-semibold leading-snug text-navy">
+          <div className="flex flex-1 flex-col gap-1 p-4">
+            <p className="font-display text-xl font-normal leading-snug text-navy">
               {listing.title}
             </p>
-            <p className="text-sm text-navy/60">{listing.location}</p>
-            <p className="text-sm text-navy/70">{formatStats(listing)}</p>
-            <p className="mt-2 font-medium text-navy">{formatPrice(listing)}</p>
+            <p className="text-[10px] font-medium uppercase tracking-wide text-navy/50">
+              {listing.location}
+            </p>
+            <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+              <p className="text-xs text-navy/60">{formatStats(listing)}</p>
+              <p className="text-sm font-semibold text-navy">{formatPrice(listing)}</p>
+            </div>
           </div>
 
           <div className="flex items-center justify-between border-t border-sand px-4 py-3">

@@ -6,10 +6,7 @@ import type { Listing } from "@/lib/types";
 
 export default function ListingCard({ listing }: { listing: Listing }) {
   return (
-    <Link
-      href={`/listings/${listing.slug}`}
-      className="group flex flex-col overflow-hidden border border-sand/70 bg-cream transition-shadow hover:shadow-lg"
-    >
+    <Link href={`/listings/${listing.slug}`} className="group flex flex-col">
       <div className="relative aspect-4/3 w-full overflow-hidden">
         {listing.image_url ? (
           <Image
@@ -23,13 +20,17 @@ export default function ListingCard({ listing }: { listing: Listing }) {
           <ImagePlaceholder label="Listing Image" className="h-full" />
         )}
       </div>
-      <div className="flex flex-1 flex-col gap-1.5 p-4">
-        <p className="font-display text-lg font-semibold leading-snug text-navy">
+      <div className="mt-4 flex flex-col gap-1">
+        <p className="font-display text-xl font-normal leading-snug text-navy">
           {listing.title}
         </p>
-        <p className="text-sm text-navy/60">{listing.location}</p>
-        <p className="text-sm text-navy/70">{formatStats(listing)}</p>
-        <p className="mt-2 font-medium text-navy">{formatPrice(listing)}</p>
+        <p className="text-[10px] font-medium uppercase tracking-wide text-navy/50">
+          {listing.location}
+        </p>
+        <div className="mt-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+          <p className="text-xs text-navy/60">{formatStats(listing)}</p>
+          <p className="text-sm font-semibold text-navy">{formatPrice(listing)}</p>
+        </div>
       </div>
     </Link>
   );
