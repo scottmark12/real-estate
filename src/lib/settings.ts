@@ -56,7 +56,7 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
 export const DEFAULT_ABOUT: AboutSettings = {
   quote: "Homes are where community starts.",
   name: "Mark Scott",
-  headshot_url: "/images/mark-illustration-v2.png",
+  headshot_url: "/images/mark-headshot-illustration.png",
   portrait_url: "/images/about-photo.jpg",
   location_label: "San Diego, CA",
   handwritten_note: "Still paying attention.",
