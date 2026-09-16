@@ -10,7 +10,7 @@ export const revalidate = 0;
 const PRIMARY_PATHS = [
   {
     title: "Buy",
-    body: "Homes. Investments. Opportunities.",
+    body: "Homes, investments & opportunities.",
     href: "/buy",
   },
   {
@@ -20,7 +20,7 @@ const PRIMARY_PATHS = [
   },
   {
     title: "Learn",
-    body: "Markets. Buildings. Places.",
+    body: "Markets, buildings & places.",
     href: "/insights",
   },
 ];
@@ -144,21 +144,25 @@ export default async function HomePage() {
       </section>
 
       {/* Primary paths */}
-      <section className="mt-12 border-t border-sand py-10 lg:mt-20 lg:py-12">
-        <div className="grid grid-cols-1 divide-y divide-sand lg:grid-cols-3 lg:gap-0 lg:divide-x lg:divide-y-0">
+      <section className="mt-12 border-t border-sand py-10 lg:mt-20 lg:py-9">
+        <div className="relative grid grid-cols-1 divide-y divide-sand lg:grid-cols-3 lg:divide-y-0">
+          <span className="pointer-events-none absolute left-1/3 top-1/2 hidden h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand lg:block" />
+          <span className="pointer-events-none absolute left-2/3 top-1/2 hidden h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand lg:block" />
           {PRIMARY_PATHS.map((p) => (
             <Link
               key={p.title}
               href={p.href}
-              className="group block py-6 first:pt-0 last:pb-0 lg:px-8 lg:py-0 lg:first:pl-0 lg:last:pr-0"
+              className="group block py-6 first:pt-0 last:pb-0 lg:px-10 lg:py-0 lg:first:pl-0 lg:last:pr-0"
             >
               <h3 className="font-display text-2xl font-normal text-navy">
                 {p.title}
               </h3>
-              <p className="mt-1 text-sm text-navy/70">{p.body}</p>
-              <span className="mt-3 inline-block text-navy transition-transform group-hover:translate-x-1">
-                &rarr;
-              </span>
+              <p className="mt-1 text-sm text-navy/70 transition-colors group-hover:text-navy">
+                {p.body}
+                <span className="ml-3 inline-block transition-transform group-hover:translate-x-1">
+                  &rarr;
+                </span>
+              </p>
             </Link>
           ))}
         </div>
