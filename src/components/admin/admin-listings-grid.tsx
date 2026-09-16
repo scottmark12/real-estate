@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import ImagePlaceholder from "@/components/image-placeholder";
-import StatusBadge from "@/components/status-badge";
 import { formatPrice, formatStats } from "@/lib/format";
 import {
   deleteListing,
@@ -90,9 +89,6 @@ export default function AdminListingsGrid({
             ) : (
               <ImagePlaceholder label="Listing Image" className="h-full" />
             )}
-            <div className="absolute left-3 top-3">
-              <StatusBadge status={listing.status} />
-            </div>
             {listing.featured && (
               <span className="eyebrow absolute right-3 top-3 inline-block bg-gold px-2.5 py-1 text-navy">
                 Featured

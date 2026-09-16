@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import ImagePlaceholder from "@/components/image-placeholder";
-import StatusBadge from "@/components/status-badge";
 import { formatPrice, formatStats } from "@/lib/format";
 import type { Listing } from "@/lib/types";
 
@@ -23,9 +22,6 @@ export default function ListingCard({ listing }: { listing: Listing }) {
         ) : (
           <ImagePlaceholder label="Listing Image" className="h-full" />
         )}
-        <div className="absolute left-3 top-3">
-          <StatusBadge status={listing.status} />
-        </div>
       </div>
       <div className="flex flex-1 flex-col gap-1.5 p-4">
         <p className="font-display text-lg font-semibold leading-snug text-navy">
