@@ -99,7 +99,7 @@ export default async function HomePage() {
   return (
     <div className="mx-auto max-w-[1500px] px-12">
       {/* Hero / cover — mobile */}
-      <section className="pt-8 lg:hidden">
+      <section className="overflow-hidden pt-8 lg:hidden">
         <p className="eyebrow text-gold">Real Estate</p>
         <h1 className="relative z-20 mt-2 font-display text-[38px] font-normal leading-[0.95] text-navy">
           <span className="block">Real Estate,</span>
@@ -119,23 +119,17 @@ export default async function HomePage() {
           />
         </div>
 
-        <div className="relative z-10 -mt-10 ml-auto w-[62%]">
+        <div className="relative z-10 -mt-10 mb-8 w-[124%]">
           <Image
             src="/images/mark-headshot-illustration.png"
             alt="Mark Scott"
             width={993}
             height={866}
             priority
-            sizes="62vw"
+            sizes="124vw"
             className="h-auto w-full"
           />
         </div>
-
-        <p className="eyebrow relative z-20 mt-[26px] text-navy/40">
-          Residential &middot; Commercial &middot; Research
-          <br />
-          San Diego, California
-        </p>
       </section>
 
       {/* Hero / cover — desktop */}
