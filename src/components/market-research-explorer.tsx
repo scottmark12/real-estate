@@ -87,13 +87,11 @@ function StatInline({ value }: { value: string }) {
 function FeaturedBlock({ featured }: { featured: Article }) {
   return (
     <div>
-      <div className="grid gap-6 lg:grid-cols-[36fr_64fr] lg:items-start">
+      <div className="grid gap-6 lg:grid-cols-[28fr_72fr] lg:items-start">
         <div className="flex flex-col pt-1">
           <p className="eyebrow text-gold">Market Research</p>
-          <h1 className="font-georgia mt-3 text-[36px] font-bold leading-[0.92] tracking-[-0.02em] text-navy sm:text-[40px] lg:text-[44px]">
-            Research worth
-            <br />
-            reading.
+          <h1 className="font-display mt-3 text-[32px] font-normal leading-[1.1] text-navy sm:text-[36px] lg:text-[40px]">
+            Research worth reading.
           </h1>
           <p className="mt-4 max-w-[22rem] text-sm text-navy/70">
             Real estate, development, architecture and the forces shaping
@@ -298,10 +296,8 @@ export default function MarketResearchExplorer({
         ) : (
           <div>
             <p className="eyebrow text-gold">Market Research</p>
-            <h1 className="font-georgia mt-3 text-[36px] font-bold leading-[0.92] tracking-[-0.02em] text-navy sm:text-[40px] lg:text-[44px]">
-              Research worth
-              <br />
-              reading.
+            <h1 className="font-display mt-3 text-[32px] font-normal leading-[1.1] text-navy sm:text-[36px] lg:text-[40px]">
+              Research worth reading.
             </h1>
             <p className="mt-4 max-w-md text-navy/70">
               Real estate, development, architecture and the forces shaping
