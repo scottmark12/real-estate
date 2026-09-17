@@ -107,7 +107,7 @@ export default async function HomePage() {
             <span className="block">Real Different.</span>
           </h1>
           <p className="relative z-20 mt-[65px] max-w-[37%] text-[15px] text-navy/70">
-            Homes, buildings, and opportunities in San Diego and beyond.
+            Putting you in the right home, not just any home.
           </p>
 
           <div className="relative z-20 mt-[68px] w-[42%] max-w-[165px] -rotate-2">
@@ -143,7 +143,7 @@ export default async function HomePage() {
               <span className="block whitespace-nowrap">Real Different.</span>
             </h1>
             <p className="mt-5 max-w-[560px] text-[22.8px] text-navy/70">
-              Homes, buildings, and opportunities in San Diego and beyond.
+              Putting you in the right home, not just any home.
             </p>
           </div>
 
