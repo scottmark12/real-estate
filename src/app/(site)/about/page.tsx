@@ -162,28 +162,24 @@ export default async function AboutPage() {
             housing. On the residential side, I help buyers and sellers
             make better decisions about property, value, and place.
           </p>
-          {bioParagraphs.slice(0, 2).map((paragraph, i) => (
+          {bioParagraphs.slice(0, 3).map((paragraph, i) => (
             <p key={i}>{paragraph}</p>
           ))}
         </div>
 
         {/* The six-bedroom duplex Mark bought and renovated near Florida
-            State — kept DOM-adjacent to the paragraph that discusses it
-            so mobile never separates them. The desktop grid only changes
-            the side-by-side arrangement, not the order. */}
-        <div className="mt-8 grid gap-6 lg:grid-cols-[45fr_55fr] lg:items-center lg:gap-10">
+            State, kept DOM-adjacent to the paragraph that discusses it so
+            mobile never separates them from that story. */}
+        <div className="mt-8 max-w-xl">
           <EditorialPhoto
             src={about.community_photo_url}
             alt="The six-bedroom duplex Mark bought and renovated near Florida State University in Tallahassee, FL"
             caption={about.community_photo_caption}
             focal={about.community_photo_focal}
             placeholderLabel="College Renovation — Tallahassee, FL"
-            boxClassName="aspect-[3/2] w-full"
-            sizes="(min-width: 1024px) 45vw, 100vw"
+            boxClassName="aspect-[21/9] w-full"
+            sizes="(min-width: 1024px) 36rem, 100vw"
           />
-          {bioParagraphs[2] && (
-            <p className="max-w-md text-navy/80">{bioParagraphs[2]}</p>
-          )}
         </div>
 
         {bioParagraphs[3] && (
