@@ -243,9 +243,12 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
             <div className="mt-6 flex flex-wrap gap-4">
               <PrimaryCta
                 onClick={() => setValuationOpen(true)}
-                label="Request a Valuation →"
+                label="Get a Pricing Opinion →"
               />
-              <SecondaryCta href="/contact?intent=selling" label="Talk to Mark →" />
+              <SecondaryCta
+                href="/contact?intent=selling"
+                label="Ask Me a Question →"
+              />
             </div>
           </div>
         </div>
