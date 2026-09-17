@@ -17,12 +17,10 @@ const libreCaslonDisplay = Libre_Caslon_Display({
 export const metadata: Metadata = {
   metadataBase: new URL("https://markscott.co"),
   title: "Mark Scott Real Estate | San Diego",
-  description:
-    "Mark Scott Real Estate — residential, commercial, and investment property expertise across San Diego, California.",
+  description: "Homes, market research, and real estate across San Diego.",
   openGraph: {
     title: "Mark Scott Real Estate | San Diego",
-    description:
-      "Mark Scott Real Estate — residential, commercial, and investment property expertise across San Diego, California.",
+    description: "Homes, market research, and real estate across San Diego.",
     url: "https://markscott.co",
     siteName: "Mark Scott Real Estate",
     locale: "en_US",
@@ -31,8 +29,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Mark Scott Real Estate | San Diego",
-    description:
-      "Mark Scott Real Estate — residential, commercial, and investment property expertise across San Diego, California.",
+    description: "Homes, market research, and real estate across San Diego.",
   },
 };
 
