@@ -62,88 +62,84 @@ function ArticleImage({
   );
 }
 
-function StatFigure({ value }: { value: string }) {
+function splitStat(value: string) {
   const match = value.match(/^([+\-$]?[\d.,]+[%MBK]?)\s+(.+)$/);
-  const number = match ? match[1] : value;
-  const label = match ? match[2] : null;
+  return {
+    number: match ? match[1] : value,
+    label: match ? match[2] : null,
+  };
+}
+
+function StatInline({ value }: { value: string }) {
+  const { number, label } = splitStat(value);
   return (
-    <div>
-      <p className="font-display text-2xl font-semibold leading-tight">
-        {number}
-      </p>
+    <p className="text-sm text-navy/70">
+      <span className="font-semibold text-navy">{number}</span>
       {label && (
-        <p className="eyebrow mt-0.5 text-cream/70">{label}</p>
+        <span className="ml-1.5 text-xs uppercase tracking-wide text-navy/50">
+          {label}
+        </span>
       )}
-    </div>
+    </p>
   );
 }
 
 function FeaturedBlock({ featured }: { featured: Article }) {
   return (
-    <div className="grid gap-8 lg:grid-cols-[32fr_68fr] lg:items-start">
-      <div className="flex flex-col pt-1">
-        <p className="eyebrow text-gold">Market Research</p>
-        <h1 className="mt-3 font-display text-[64px] font-normal leading-[0.95] text-navy [font-size:clamp(64px,5.3vw,92px)]">
-          Research
-          <br />
-          worth reading.
-        </h1>
-        <p className="mt-4 max-w-[22rem] text-sm text-navy/70">
-          Real estate, development, architecture and the forces shaping
-          Southern California and beyond.
-        </p>
-        <p className="font-[family-name:var(--font-hand)] ml-1 mt-24 text-lg leading-snug text-navy/70">
-          Better places happen by design.
-          <br />
-          &mdash;MS
-        </p>
-      </div>
+    <div>
+      <div className="grid gap-6 lg:grid-cols-[36fr_64fr] lg:items-start">
+        <div className="flex flex-col pt-1">
+          <p className="eyebrow text-gold">Market Research</p>
+          <h1 className="font-georgia mt-3 text-[36px] font-bold leading-[0.92] tracking-[-0.02em] text-navy sm:text-[40px] lg:text-[44px]">
+            Research worth
+            <br />
+            reading.
+          </h1>
+          <p className="mt-4 max-w-[22rem] text-sm text-navy/70">
+            Real estate, development, architecture and the forces shaping
+            Southern California and beyond.
+          </p>
+        </div>
 
-      <div className="relative">
-        <div className="relative h-[235px] w-full overflow-hidden sm:h-[310px] lg:h-[365px] lg:w-[90%]">
-          <ArticleImage article={featured} placeholderLabel="Featured Article Image" />
+        <div className="relative">
+          <div className="relative h-[235px] w-full overflow-hidden sm:h-[310px] lg:h-[365px] lg:w-[90%]">
+            <ArticleImage article={featured} placeholderLabel="Featured Article Image" />
+          </div>
+
           {(featured.stat || featured.secondary_stat) && (
-            <div className="absolute bottom-0 right-0 flex h-[52%] w-[52%] min-w-[150px] flex-col justify-center gap-2 bg-navy/95 px-5 py-4 text-cream sm:w-[40%] lg:w-[34%]">
-              {featured.stat && <StatFigure value={featured.stat} />}
-              {featured.stat && featured.secondary_stat && (
-                <div className="h-px w-full bg-cream/20" />
-              )}
+            <div className="mt-3 flex flex-wrap items-baseline gap-x-8 gap-y-1 border-t border-sand pt-3 lg:w-[90%]">
+              {featured.stat && <StatInline value={featured.stat} />}
               {featured.secondary_stat && (
-                <StatFigure value={featured.secondary_stat} />
-              )}
-              {featured.annotation && (
-                <>
-                  <div className="h-px w-full bg-cream/20" />
-                  <p className="font-[family-name:var(--font-hand)] text-base italic leading-snug text-cream/80">
-                    {featured.annotation}
-                  </p>
-                </>
+                <StatInline value={featured.secondary_stat} />
               )}
             </div>
           )}
         </div>
+      </div>
 
-        <div className="relative mt-4 lg:pr-[6%]">
-          <div className="lg:max-w-[74%]">
-            <p className="eyebrow text-gold">
-              {featured.eyebrow || CATEGORY_LABELS[featured.category]}
-            </p>
-            <h2 className="mt-1 font-display text-[29px] font-semibold leading-[1.05] text-navy lg:text-[34px]">
-              {featured.title}
-            </h2>
-            {featured.excerpt && (
-              <p className="mt-2 line-clamp-2 max-w-xl text-sm text-navy/70">
-                {featured.excerpt}
-              </p>
-            )}
-            <p className="eyebrow mt-2 text-navy/40">
-              {formatDate(featured.published_at)}
-              {featured.read_time ? ` · ${featured.read_time}` : ""}
-            </p>
-          </div>
+      {/* Feature headline is deliberately not aligned to the image column —
+          it breaks left across the grid so the story reads as the
+          dominant event on the page, not a caption under the photo. */}
+      <div className="mt-6 flex flex-col gap-4 lg:mt-10 lg:flex-row lg:items-start lg:gap-8">
+        <div className="lg:ml-[2%] lg:w-[68%]">
+          <p className="eyebrow text-gold">
+            {featured.eyebrow || CATEGORY_LABELS[featured.category]}
+          </p>
+          <h2 className="font-georgia mt-2 text-[36px] font-bold leading-[1.05] tracking-[-0.01em] text-navy lg:text-[46px]">
+            {featured.title}
+          </h2>
+        </div>
+        <div className="lg:w-[22%] lg:pt-14">
+          {featured.excerpt && (
+            <p className="text-sm text-navy/70">{featured.excerpt}</p>
+          )}
+          <p className="eyebrow mt-2 text-navy/40">
+            {formatDate(featured.published_at)}
+            {featured.read_time ? ` · ${featured.read_time}` : ""}
+          </p>
           <Link
             href={`/insights/${featured.slug}`}
-            className="eyebrow mt-3 inline-block shrink-0 text-navy underline decoration-gold decoration-2 underline-offset-4 lg:absolute lg:right-0 lg:bottom-1 lg:mt-0"
+            className="eyebrow mt-3 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4"
           >
             {featured.cta_label || "Read the Full Report →"}
           </Link>
@@ -153,19 +149,26 @@ function FeaturedBlock({ featured }: { featured: Article }) {
   );
 }
 
-function PrimaryStory({ article }: { article: Article }) {
-  const chartLed = article.category === "rates" && article.stat;
+function PrimaryStory({
+  article,
+  textLed = false,
+}: {
+  article: Article;
+  textLed?: boolean;
+}) {
+  const chartLed = (textLed || article.category === "rates") && article.stat;
+  const stat = chartLed && article.stat ? splitStat(article.stat) : null;
   return (
     <Link href={`/insights/${article.slug}`} className="group block">
       <div className="relative aspect-[7/4] w-full overflow-hidden">
         {chartLed ? (
-          <div className="flex h-full flex-col justify-between bg-cream-deep p-6">
-            <p className="font-display text-6xl font-semibold text-navy">
-              {article.stat}
+          <div className="flex h-full flex-col justify-center gap-1.5 bg-[color-mix(in_srgb,var(--cream)_97%,var(--navy)_3%)] p-6">
+            <p className="font-georgia text-5xl font-bold leading-none text-navy">
+              {stat?.number}
             </p>
-            {article.secondary_stat && (
-              <p className="font-[family-name:var(--font-hand)] text-lg text-blue">
-                {article.secondary_stat}
+            {stat?.label && (
+              <p className="text-xs uppercase tracking-wide text-navy/50">
+                {stat.label}
               </p>
             )}
           </div>
@@ -283,21 +286,22 @@ export default function MarketResearchExplorer({
     : articles.filter((a) => a.category === active && a.id !== featured?.id);
 
   const primaryStories = isAll ? pool.slice(0, 3) : [];
+  const textLedStoryId = primaryStories.find((a) => a.stat)?.id ?? null;
   const moreResearch = isAll ? pool.slice(3, 7) : [];
   const archiveList = isAll ? [] : pool;
 
   return (
     <div className="mx-auto max-w-[1500px] px-12">
-      <section className="pt-8 lg:pt-10">
+      <section className="pt-6 lg:pt-8">
         {featured ? (
           <FeaturedBlock featured={featured} />
         ) : (
           <div>
             <p className="eyebrow text-gold">Market Research</p>
-            <h1 className="mt-2 max-w-lg font-display text-5xl font-normal leading-[1.05] text-navy sm:text-6xl">
-              Research
+            <h1 className="font-georgia mt-3 text-[36px] font-bold leading-[0.92] tracking-[-0.02em] text-navy sm:text-[40px] lg:text-[44px]">
+              Research worth
               <br />
-              worth reading.
+              reading.
             </h1>
             <p className="mt-4 max-w-md text-navy/70">
               Real estate, development, architecture and the forces shaping
@@ -340,23 +344,27 @@ export default function MarketResearchExplorer({
       {isAll ? (
         <>
           {primaryStories.length > 0 && (
-            <section className="border-t border-sand py-8">
-              <div className="grid gap-8 lg:grid-cols-3">
+            <section className="border-t border-sand py-6">
+              <div className="grid gap-6 lg:grid-cols-3">
                 {primaryStories.map((article) => (
-                  <PrimaryStory key={article.id} article={article} />
+                  <PrimaryStory
+                    key={article.id}
+                    article={article}
+                    textLed={article.id === textLedStoryId}
+                  />
                 ))}
               </div>
             </section>
           )}
 
           {architectural && (
-            <section className="pb-10">
+            <section className="pb-8">
               <ArchitecturalBanner article={architectural} />
             </section>
           )}
 
           {moreResearch.length > 0 && (
-            <section className="border-t border-sand py-10">
+            <section className="border-t border-sand py-8">
               <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
                 <p className="eyebrow text-gold">More Research</p>
                 <Link
@@ -366,7 +374,7 @@ export default function MarketResearchExplorer({
                   View All Articles &rarr;
                 </Link>
               </div>
-              <div className="mt-6 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-5 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
                 {moreResearch.map((article) => (
                   <MoreResearchItem key={article.id} article={article} />
                 ))}
