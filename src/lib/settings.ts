@@ -62,13 +62,9 @@ export const DEFAULT_ABOUT: AboutSettings = {
   handwritten_note: "Still paying attention.",
   bio: `Before real estate, I studied interior design, entrepreneurship, and marketing at Florida State University. I graduated early, packed a bag, and spent a good amount of time seeing the world.
 
-What stuck with me wasn't that other places looked different. Of course they did. It was how differently they worked.
+What stuck with me wasn't that other places looked different — it was how differently they worked. I've seen incredible buildings that didn't make particularly good places around them, and that curiosity about why followed me home.
 
-I've also seen incredible buildings that didn't make particularly good places around them. Travel made me pay attention to the relationship between a home and the life happening around it, not just what it looks like inside.
-
-That curiosity followed me home.
-
-Eventually it became my job. My first real education in property wasn't theoretical. I renovated and managed a six bedroom property near Florida State and saw firsthand how design decisions, costs, and the surrounding neighborhood all shape whether a place actually works for the people living in it.
+Eventually it became my job. I renovated and managed a six bedroom property near Florida State and saw firsthand how design decisions, costs, and the neighborhood around it shape whether a place actually works for the people living in it.
 
 That's the lens I bring to real estate now. Whether I'm evaluating an investment, helping someone choose a neighborhood, weighing what's worth improving, or figuring out what a property is really worth, I'm interested in how all of it fits together.`,
   headshot_photo_url: "/images/mark-headshot.jpeg",

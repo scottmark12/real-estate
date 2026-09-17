@@ -168,12 +168,10 @@ export default async function AboutPage() {
               ))}
             </div>
 
-            <div className="mt-12 max-w-md lg:mt-16">
-              <h3 className="font-georgia text-[26px] font-normal leading-tight text-navy">
-                How I look at a property.
-              </h3>
+            <div className="mt-12 lg:mt-16">
+              <p className="eyebrow text-gold">How I Look at a Property</p>
             </div>
-            <div className="mt-6 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
+            <div className="mt-4 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
               {ATTENTION_ITEMS.map((item) => (
                 <div
                   key={item.label}
