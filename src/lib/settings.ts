@@ -45,7 +45,7 @@ export const DEFAULT_SERVICES: ServiceItem[] = [
     icon: "building",
   },
   {
-    title: "Market Insights",
+    title: "Market Research",
     description:
       "Data-driven reporting on what's actually happening in the market, not what sells headlines.",
     href: "/insights",
@@ -70,9 +70,7 @@ That curiosity followed me home.
 
 Eventually it became my job. My first real education in property wasn't theoretical. I renovated and managed a six bedroom property near Florida State and saw firsthand how design decisions, costs, and the surrounding neighborhood all shape whether a place actually works for the people living in it.
 
-That's the lens I bring now, helping people buy and sell homes in San Diego. Whether you're picking a neighborhood, weighing what's worth fixing up, or figuring out what a place is really worth, I'm thinking about how it all fits your life, not just the transaction.
-
-A house is a big decision. I want it to feel like a good one.`,
+That's the lens I bring to real estate now. Whether I'm evaluating an investment, helping someone choose a neighborhood, weighing what's worth improving, or figuring out what a property is really worth, I'm interested in how all of it fits together.`,
   headshot_photo_url: "/images/mark-headshot.jpeg",
   opening_photo_url: "/images/about-opening.jpeg",
   opening_photo_caption: "Moonlight Beach, Encinitas, CA",

@@ -182,7 +182,7 @@ export default async function AboutPage() {
                   key={item.label}
                   className="py-5 first:pt-0 last:pb-0 lg:flex-1 lg:px-6 lg:py-0 lg:first:pl-0 lg:last:pr-0"
                 >
-                  <p className="eyebrow text-gold">
+                  <p className="eyebrow whitespace-nowrap text-gold">
                     {item.n} &middot; {item.label}
                   </p>
                   <p className="mt-2 text-navy">{item.body}</p>

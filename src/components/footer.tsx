@@ -5,7 +5,7 @@ const FOOTER_NAV = [
   { href: "/buy", label: "Buy" },
   { href: "/sell", label: "Sell" },
   { href: "/invest", label: "Invest" },
-  { href: "/insights", label: "Market Insights" },
+  { href: "/insights", label: "Market Research" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
