@@ -38,7 +38,7 @@ export default async function ContactPage() {
           </Suspense>
         </div>
 
-        <div className="mt-10 lg:relative lg:col-start-1 lg:row-start-2 lg:mt-0 lg:flex lg:h-full lg:flex-col lg:overflow-hidden lg:border-r lg:border-sand lg:pb-6 lg:pr-16">
+        <div className="mt-10 lg:relative lg:col-start-1 lg:row-start-2 lg:mt-0 lg:flex lg:h-full lg:flex-col lg:border-r lg:border-sand lg:pb-6 lg:pr-16">
           <div className="lg:relative lg:z-10">
             {contact.name && (
               <p className="eyebrow text-navy">{contact.name}</p>
@@ -60,7 +60,7 @@ export default async function ContactPage() {
             )}
           </div>
 
-          <div className="relative mt-6 lg:absolute lg:inset-x-0 lg:bottom-0">
+          <div className="relative mt-6 lg:absolute lg:inset-x-0 lg:bottom-0 lg:z-20">
             <div className="relative ml-[8%] w-[101%] max-w-[546px]">
               {contact.photo_url ? (
                 <Image
