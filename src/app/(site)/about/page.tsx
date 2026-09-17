@@ -6,14 +6,22 @@ import type { AboutSettings, ContactSettings } from "@/lib/types";
 export const revalidate = 0;
 
 const ATTENTION_ITEMS = [
-  { title: "The property", body: "What's actually here?" },
-  { title: "The numbers", body: "What is it really worth?" },
-  { title: "The neighborhood", body: "Why do people want to be here?" },
+  { n: "01", label: "Property", body: "What's actually here?" },
+  { n: "02", label: "Numbers", body: "What is it really worth?" },
   {
-    title: "The long view",
+    n: "03",
+    label: "Neighborhood",
+    body: "Why do people want to be here?",
+  },
+  {
+    n: "04",
+    label: "Long view",
     body: "What makes this better—or worse—ten years from now?",
   },
 ];
+
+const PULL_QUOTE =
+  "I've felt completely at home in places where the houses were smaller, streets were tighter, cars were less important, and public space did more of the work.";
 
 function EditorialPhoto({
   src,
@@ -73,26 +81,26 @@ export default async function AboutPage() {
 
   return (
     <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20">
-      {/* Opening composition */}
+      {/* I care about what makes a place worth living in. */}
       <section>
         <div className="grid gap-12 lg:grid-cols-[36fr_64fr] lg:items-stretch">
           <div>
             <p className="eyebrow text-gold">About</p>
-            <h1 className="mt-3 font-display text-[42px] font-normal leading-[1.1] text-navy sm:text-[48px]">
+            <h1 className="mt-3 font-georgia text-[42px] font-normal leading-[1.1] text-navy sm:text-[48px]">
               I care about what makes a place worth living in.
             </h1>
-            <p className="mt-5 max-w-sm text-navy/70">
+            <p className="mt-5 max-w-sm text-navy/80">
               I moved across the country to Encinitas for a pretty simple
               reason: I wanted to live somewhere I actually loved.
             </p>
-            <p className="mt-4 max-w-sm text-navy/70">
+            <p className="mt-4 max-w-sm text-navy/80">
               The beaches are beautiful, sure. But it&apos;s also walkable
               neighborhoods, local restaurants, people you run into twice in
               the same week, and mountains and desert close enough for a
               weekend. The things that make San Diego valuable aren&apos;t
               contained within anybody&apos;s property lines.
             </p>
-            <p className="mt-4 max-w-sm text-navy/70">
+            <p className="mt-4 max-w-sm text-navy/80">
               That&apos;s a big part of what drew me to real estate.
             </p>
 
@@ -115,10 +123,10 @@ export default async function AboutPage() {
               </div>
               <div>
                 <p className="eyebrow text-navy">{about.name}</p>
-                <p className="mt-1 text-sm text-navy/70">
+                <p className="mt-1 text-sm text-navy/80">
                   San Diego, California
                 </p>
-                <p className="text-sm text-navy/70">
+                <p className="text-sm text-navy/80">
                   Residential + Commercial Real Estate
                 </p>
                 {contact.dre_number && (
@@ -142,7 +150,7 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Community composition */}
+      {/* Homes are where community starts. */}
       <section className="mt-16 border-t border-sand pt-16">
         <div className="grid gap-12 lg:grid-cols-[43fr_57fr] lg:items-stretch">
           <div className="lg:order-2 lg:pt-2">
@@ -150,9 +158,35 @@ export default async function AboutPage() {
             <h2 className="mt-4 font-display text-[34px] font-normal leading-[1.1] text-navy sm:text-[40px]">
               {about.quote}
             </h2>
-            <div className="mt-5 flex max-w-xl flex-col gap-4 text-navy/75">
+            <div className="mt-5 flex max-w-xl flex-col gap-4 text-navy/80">
+              <p>
+                My work spans residential brokerage and commercial
+                acquisitions. On the commercial side, I source and evaluate
+                investment opportunities across multifamily and senior
+                housing. On the residential side, I help buyers and sellers
+                make better decisions about property, value, and place.
+              </p>
               {bioParagraphs.map((paragraph, i) => (
                 <p key={i}>{paragraph}</p>
+              ))}
+            </div>
+
+            <div className="mt-12 max-w-md lg:mt-16">
+              <h3 className="font-display text-[26px] font-normal leading-tight text-navy">
+                How I look at a property.
+              </h3>
+            </div>
+            <div className="mt-6 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
+              {ATTENTION_ITEMS.map((item) => (
+                <div
+                  key={item.label}
+                  className="py-5 first:pt-0 last:pb-0 lg:flex-1 lg:px-6 lg:py-0 lg:first:pl-0 lg:last:pr-0"
+                >
+                  <p className="eyebrow text-gold">
+                    {item.n} &middot; {item.label}
+                  </p>
+                  <p className="mt-2 text-navy">{item.body}</p>
+                </div>
               ))}
             </div>
           </div>
@@ -170,27 +204,16 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* What I Want to Understand */}
-      <section className="mt-16 border-t border-sand pt-10">
-        <p className="eyebrow text-gold">What I Want to Understand</p>
-        <div className="mt-6 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
-          {ATTENTION_ITEMS.map((item) => (
-            <div
-              key={item.title}
-              className="py-5 first:pt-0 last:pb-0 lg:flex-1 lg:px-8 lg:py-0 lg:first:pl-0 lg:last:pr-0"
-            >
-              <h3 className="font-display text-xl font-normal text-navy">
-                {item.title}
-              </h3>
-              <p className="mt-2 text-sm text-navy/70">{item.body}</p>
-            </div>
-          ))}
-        </div>
+      {/* Pull quote — transition between the property section and travel */}
+      <section className="mt-16 lg:mt-24">
+        <p className="font-display max-w-3xl text-[30px] font-normal leading-[1.3] text-navy sm:text-[34px] lg:ml-[12%] lg:max-w-2xl lg:text-[38px]">
+          {PULL_QUOTE}
+        </p>
       </section>
 
-      {/* A Broader Perspective — travel collage */}
-      <section className="mt-16 border-t border-sand pt-16">
-        <div className="grid gap-6 lg:grid-cols-[40fr_22fr_38fr]">
+      {/* I've seen a lot of ways to build a good place. There isn't just one. */}
+      <section className="mt-16 border-t border-sand pt-14 lg:mt-20">
+        <div className="grid gap-6 lg:grid-cols-[42fr_20fr_38fr]">
           <EditorialPhoto
             src={about.travel_photo_1_url}
             alt={about.travel_photo_1_caption || "A place Mark has traveled to"}
@@ -198,7 +221,7 @@ export default async function AboutPage() {
             focal={about.travel_photo_1_focal}
             placeholderLabel="Travel — Large"
             boxClassName="aspect-[4/5] w-full lg:h-full lg:aspect-auto"
-            sizes="(min-width: 1024px) 40vw, 100vw"
+            sizes="(min-width: 1024px) 42vw, 100vw"
           />
           <div className="flex flex-col gap-6">
             <EditorialPhoto
@@ -207,8 +230,8 @@ export default async function AboutPage() {
               caption={about.travel_photo_2_caption}
               focal={about.travel_photo_2_focal}
               placeholderLabel="Travel — Small"
-              boxClassName="aspect-[4/3] w-full"
-              sizes="(min-width: 1024px) 22vw, 100vw"
+              boxClassName="aspect-square w-full"
+              sizes="(min-width: 1024px) 20vw, 100vw"
             />
             <EditorialPhoto
               src={about.travel_photo_3_url}
@@ -216,17 +239,17 @@ export default async function AboutPage() {
               caption={about.travel_photo_3_caption}
               focal={about.travel_photo_3_focal}
               placeholderLabel="Travel — Small"
-              boxClassName="aspect-[4/3] w-full"
-              sizes="(min-width: 1024px) 22vw, 100vw"
+              boxClassName="aspect-[3/4] w-full lg:mt-10"
+              sizes="(min-width: 1024px) 20vw, 100vw"
             />
           </div>
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center lg:pt-10">
             <p className="eyebrow text-gold">A Broader Perspective</p>
             <h2 className="mt-4 font-display text-[30px] font-normal leading-[1.2] text-navy sm:text-[34px]">
               I&apos;ve seen a lot of ways to build a good place. There
               isn&apos;t just one.
             </h2>
-            <p className="mt-4 max-w-sm text-sm text-navy/60">
+            <p className="mt-4 max-w-sm text-sm text-navy/70">
               Design taught me to notice buildings. Travel taught me to
               notice how people use them. Real estate taught me to
               understand the numbers that make them possible.

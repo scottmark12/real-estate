@@ -64,9 +64,7 @@ export const DEFAULT_ABOUT: AboutSettings = {
 
 What stuck with me wasn't that other places looked different. Of course they did. It was how differently they worked.
 
-I've felt completely at home in places where the houses were smaller, streets were tighter, cars were less important, and public space did more of the work. I've also seen incredible buildings that didn't make particularly good places around them.
-
-Travel made me pay attention to the relationship between a home and the life happening around it, not just what it looks like inside.
+I've also seen incredible buildings that didn't make particularly good places around them. Travel made me pay attention to the relationship between a home and the life happening around it, not just what it looks like inside.
 
 That curiosity followed me home.
 
