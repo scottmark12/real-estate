@@ -102,7 +102,7 @@ export default async function HomePage() {
       <section className="overflow-hidden pt-8 lg:hidden">
         <div className="px-4">
           <p className="eyebrow text-gold">Real Estate</p>
-          <h1 className="relative z-20 mt-2 font-display text-[32px] font-normal leading-[0.95] text-navy">
+          <h1 className="relative z-20 mt-2 font-georgia text-[32px] font-normal leading-[0.95] text-navy">
             <span className="block">Real Estate,</span>
             <span className="block">Real Different.</span>
           </h1>
@@ -138,7 +138,7 @@ export default async function HomePage() {
       <section className="hidden pt-10 lg:block">
         <div className="relative grid grid-cols-[minmax(0,45fr)_minmax(0,55fr)] gap-x-0 gap-y-0">
           <div className="relative z-20 col-start-1 row-start-1 self-start pl-32">
-            <h1 className="font-display text-[120px] font-normal leading-[0.95] text-navy">
+            <h1 className="font-georgia text-[120px] font-normal leading-[0.95] text-navy">
               <span className="block whitespace-nowrap">Real Estate,</span>
               <span className="block whitespace-nowrap">Real Different.</span>
             </h1>

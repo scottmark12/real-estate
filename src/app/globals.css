@@ -30,7 +30,7 @@
   --color-ink: var(--ink);
   --color-ink-cream: var(--ink-cream);
   --color-ink-muted: var(--ink-muted);
-  --font-display: Georgia, "Times New Roman", serif;
+  --font-display: var(--font-libre-caslon), Georgia, "Times New Roman", serif;
   --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
@@ -38,6 +38,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-synthesis: none;
+}
+
+.font-georgia {
+  font-family: Georgia, "Times New Roman", serif;
 }
 
 .eyebrow {
