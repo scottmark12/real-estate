@@ -34,7 +34,7 @@ export default function MarketChart({ data }: { data: MarketChartSettings }) {
           className="font-[family-name:var(--font-hand)] absolute right-[8%] top-[18%] rotate-[-4deg] text-xl text-blue"
           aria-hidden
         >
-          The gap keeps growing.
+          The gap is closing.
         </span>
         <svg
         viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
