@@ -170,7 +170,7 @@ export default async function AboutPage() {
         {/* The six-bedroom duplex Mark bought and renovated near Florida
             State, kept DOM-adjacent to the paragraph that discusses it so
             mobile never separates them from that story. */}
-        <div className="mt-8 max-w-xl">
+        <div className="mt-8">
           <EditorialPhoto
             src={about.community_photo_url}
             alt="The six-bedroom duplex Mark bought and renovated near Florida State University in Tallahassee, FL"
@@ -178,7 +178,7 @@ export default async function AboutPage() {
             focal={about.community_photo_focal}
             placeholderLabel="College Renovation — Tallahassee, FL"
             boxClassName="aspect-[21/9] w-full"
-            sizes="(min-width: 1024px) 36rem, 100vw"
+            sizes="(min-width: 1024px) 1400px, 100vw"
           />
         </div>
 
