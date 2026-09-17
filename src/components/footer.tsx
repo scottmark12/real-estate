@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ContactSettings } from "@/lib/types";
 
@@ -18,8 +19,13 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
     >
       <div className="grid gap-x-8 gap-y-10 px-[4vw] py-14 lg:grid-cols-[1.3fr_1fr_1fr_1fr] lg:gap-10">
         <div>
-          <p className="font-display text-2xl font-normal">Mark Scott</p>
-          <p className="eyebrow mt-1 text-blue">Real Estate</p>
+          <Image
+            src="/images/footer-logo.png"
+            alt="Mark Scott Real Estate"
+            width={1844}
+            height={610}
+            className="h-14 w-auto"
+          />
           <p className="mt-4 max-w-xs text-sm text-ink-muted">
             Residential, commercial, and investment real estate across{" "}
             {contact.city_state}.
