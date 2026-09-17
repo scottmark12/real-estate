@@ -201,9 +201,7 @@ export default async function HomePage() {
 
         <div className="relative grid min-h-[560px] gap-8 lg:min-h-0 lg:grid-cols-[2fr_3fr] lg:items-stretch">
           <div className="flex flex-col justify-end py-6 lg:justify-center lg:py-10">
-            <p className="eyebrow text-gold">
-              {hero.dateline} &middot; {hero.location_label}
-            </p>
+            <p className="eyebrow text-gold">{hero.location_label}</p>
             <h1 className="mt-3 font-display text-6xl font-normal leading-[0.98] text-cream sm:text-7xl lg:text-[5rem] lg:text-navy">
               {renderHeadline(hero.headline)}
             </h1>
