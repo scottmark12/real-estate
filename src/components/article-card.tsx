@@ -44,7 +44,7 @@ export default function ArticleCard({ article }: { article: Article }) {
           href={`/insights/${article.slug}`}
           className="mt-auto pt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
         >
-          {article.cta_label || "Read More →"}
+          Read &rarr;
         </Link>
       </div>
     </article>

@@ -75,7 +75,7 @@ async function getElsewhere(): Promise<ElsewhereItem[]> {
       order: a.homepage_elsewhere_order,
       category: a.eyebrow || CATEGORY_LABELS[a.category] || a.category,
       title: a.title,
-      cta: a.cta_label || "Read More →",
+      cta: "Read →",
       href: `/insights/${a.slug}`,
     })),
     ...listings.map((l) => ({

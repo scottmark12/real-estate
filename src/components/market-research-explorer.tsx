@@ -204,7 +204,7 @@ function PrimaryStory({
         </p>
       )}
       <span className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
-        {article.cta_label || "Read More →"}
+        Read &rarr;
       </span>
     </Link>
   );
@@ -228,7 +228,7 @@ function ArchitecturalBanner({ article }: { article: Article }) {
           <p className="mt-3 italic text-navy/80">{article.excerpt}</p>
         )}
         <span className="mt-4 inline-block w-fit text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
-          {article.cta_label || "Take a Look →"}
+          Read &rarr;
         </span>
       </div>
       <div className="relative h-[300px] w-full overflow-hidden lg:h-auto lg:min-h-[340px]">

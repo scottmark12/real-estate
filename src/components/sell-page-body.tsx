@@ -256,15 +256,9 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
 
       {/* Closing metadata */}
       <div className="border-t border-sand px-[4vw] py-6">
-        <div className="flex flex-col items-start justify-between gap-2 text-xs text-navy/50 sm:flex-row sm:items-center">
-          <p className="eyebrow text-navy/50">
-            Local Expertise.
-            <br className="sm:hidden" /> Better Outcomes.
-          </p>
-          <p className="eyebrow text-navy/50">
-            {contact.city_state} &middot; 32.7157&deg; N, 117.1611&deg; W
-          </p>
-        </div>
+        <p className="eyebrow text-navy/50">
+          {contact.city_state} &middot; 32.7157&deg; N, 117.1611&deg; W
+        </p>
       </div>
 
       <ValuationModal open={valuationOpen} onClose={() => setValuationOpen(false)} />
