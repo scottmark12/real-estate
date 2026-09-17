@@ -281,11 +281,11 @@ export default async function HomePage() {
 
       {/* Featured Listings */}
       <section className="px-[4vw] pb-12 pt-12 lg:pt-6">
-        <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
+        <div className="flex items-end justify-between gap-4 border-b border-sand pb-3 lg:block">
           <p className="eyebrow text-gold">Featured Listings</p>
           <Link
             href="/listings"
-            className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
+            className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4 lg:mt-2 lg:block lg:w-fit"
           >
             View All Listings &rarr;
           </Link>
