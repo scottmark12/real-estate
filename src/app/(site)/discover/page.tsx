@@ -199,13 +199,14 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/40 to-navy/10" />
         </div>
 
-        <div className="relative grid min-h-[560px] gap-8 lg:min-h-0 lg:grid-cols-[2fr_3fr] lg:items-stretch">
-          <div className="flex flex-col justify-end py-6 lg:justify-center lg:py-10">
+        {/* Mobile hero — unchanged full-bleed image with headline overlay */}
+        <div className="relative grid min-h-[560px] gap-8 lg:hidden">
+          <div className="flex flex-col justify-end py-6">
             <p className="eyebrow text-gold">{hero.location_label}</p>
-            <h1 className="mt-3 font-display text-6xl font-normal leading-[0.98] text-cream sm:text-7xl lg:text-[5rem] lg:text-navy">
+            <h1 className="mt-3 font-display text-6xl font-normal leading-[0.98] text-cream sm:text-7xl">
               {renderHeadline(hero.headline)}
             </h1>
-            <p className="mt-6 max-w-sm text-base text-cream/90 sm:text-lg lg:text-navy/70">
+            <p className="mt-6 max-w-sm text-base text-cream/90 sm:text-lg">
               {hero.subhead}
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
@@ -217,13 +218,17 @@ export default async function HomePage() {
               </Link>
               <Link
                 href={hero.cta_secondary_href}
-                className="border border-cream px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-navy lg:border-navy lg:text-navy lg:hover:bg-navy lg:hover:text-cream"
+                className="border border-cream px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-cream hover:text-navy"
               >
                 {hero.cta_secondary_label} &rarr;
               </Link>
             </div>
           </div>
-          <div className="relative hidden min-h-[380px] lg:block lg:min-h-[560px]">
+        </div>
+
+        {/* Desktop hero — editorial composition: photograph first, headline below */}
+        <div className="relative hidden lg:block">
+          <div className="relative w-[92%] lg:h-[560px]">
             {hero.image_url ? (
               <>
                 <Image
@@ -231,10 +236,10 @@ export default async function HomePage() {
                   alt=""
                   fill
                   priority
-                  sizes="(min-width: 1024px) 55vw, 100vw"
+                  sizes="92vw"
                   className="object-cover"
                 />
-                <p className="eyebrow absolute bottom-4 right-4 bg-cream/90 px-2 py-1 text-navy">
+                <p className="eyebrow absolute right-4 top-4 bg-cream/90 px-2 py-1 text-navy">
                   {hero.location_label}
                 </p>
               </>
@@ -244,6 +249,32 @@ export default async function HomePage() {
                 className="absolute inset-0"
               />
             )}
+          </div>
+
+          <div className="mt-8 grid grid-cols-[65fr_35fr] items-start gap-x-16">
+            <div>
+              <p className="eyebrow text-gold">{hero.location_label}</p>
+              <h1 className="font-georgia mt-3 text-[clamp(56px,4.2vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] text-navy">
+                {renderHeadline(hero.headline)}
+              </h1>
+            </div>
+            <div className="pt-2">
+              <p className="text-lg text-navy/70">{hero.subhead}</p>
+              <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3">
+                <Link
+                  href={hero.cta_primary_href}
+                  className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
+                >
+                  {hero.cta_primary_label} &rarr;
+                </Link>
+                <Link
+                  href={hero.cta_secondary_href}
+                  className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
+                >
+                  {hero.cta_secondary_label} &rarr;
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>
