@@ -176,7 +176,7 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden px-[4vw] pb-10 pt-6 sm:pt-8 lg:overflow-visible">
+      <section className="relative overflow-hidden px-[4vw] pb-10 pt-6 sm:pt-8 lg:overflow-visible lg:pb-0">
         {/* Mobile-only full-bleed background image with a dark scrim so the
             text stays legible; desktop keeps its own side-by-side image
             column below and never renders this layer. */}
@@ -253,12 +253,12 @@ export default async function HomePage() {
 
           <div className="mt-8 grid grid-cols-[65fr_35fr] items-start gap-x-16">
             <div>
-              <p className="eyebrow text-gold">{hero.location_label}</p>
-              <h1 className="font-georgia mt-3 text-[clamp(56px,4.2vw,72px)] font-bold leading-[0.95] tracking-[-0.025em] text-navy">
+              <p className="eyebrow-sm text-gold">{hero.location_label}</p>
+              <h1 className="font-georgia mt-3 text-[clamp(54px,4vw,69px)] font-bold leading-[0.95] tracking-[-0.025em] text-navy">
                 {renderHeadline(hero.headline)}
               </h1>
             </div>
-            <div className="pt-2">
+            <div className="pt-14">
               <p className="text-lg text-navy/70">{hero.subhead}</p>
               <div className="mt-5 flex flex-wrap gap-x-8 gap-y-3">
                 <Link
@@ -280,7 +280,7 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Listings */}
-      <section className="px-[4vw] py-12">
+      <section className="px-[4vw] pb-12 pt-12 lg:pt-6">
         <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
           <p className="eyebrow text-gold">Featured Listings</p>
           <Link
