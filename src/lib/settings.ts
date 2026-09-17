@@ -9,9 +9,9 @@ import type {
 } from "@/lib/types";
 
 export const DEFAULT_HERO: HeroSettings = {
-  headline: "What Is San Diego Actually Worth?",
+  headline: "America’s Finest City starts with its finest homes.",
   subhead:
-    "A closer look at inventory, affordability, development, and where the market is heading.",
+    "Finding the right community, the right neighborhood, and the right home, all at the right price.",
   cta_primary_label: "Read the Report",
   cta_primary_href: "/insights",
   cta_secondary_label: "View Properties",
