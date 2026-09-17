@@ -10,7 +10,7 @@
   --cream: #faf6ee;
   --cream-deep: #f2ead9;
   --sand: #e8dfc9;
-  --gold: #b98c4a;
+  --gold: #2448a0;
   --ink: #1c1c1a;
   --ink-cream: #f4efe4;
   --ink-muted: #b9b5ac;
@@ -37,6 +37,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-synthesis: none;
 }
 
 .eyebrow {
