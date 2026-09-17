@@ -154,7 +154,7 @@ export default async function AboutPage() {
           {about.quote}
         </h2>
 
-        <div className="mt-5 flex max-w-xl flex-col gap-4 text-navy/80">
+        <div className="mt-5 flex flex-col gap-4 text-navy/80">
           <p>
             My work spans residential brokerage and commercial
             acquisitions. On the commercial side, I source and evaluate
@@ -183,7 +183,7 @@ export default async function AboutPage() {
         </div>
 
         {bioParagraphs[3] && (
-          <div className="mt-8 max-w-xl text-navy/80">
+          <div className="mt-8 text-navy/80">
             <p>{bioParagraphs[3]}</p>
           </div>
         )}
