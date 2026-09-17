@@ -64,7 +64,7 @@ export const DEFAULT_ABOUT: AboutSettings = {
 
 What stuck with me wasn't that other places looked different — it was how differently they worked. I've seen incredible buildings that didn't make particularly good places around them, and that curiosity about why followed me home.
 
-Eventually it became my job. I renovated and managed a six bedroom property near Florida State and saw firsthand how design decisions, costs, and the neighborhood around it shape whether a place actually works for the people living in it.
+Eventually it became my job. While at Florida State, I bought and renovated a six-bedroom duplex near campus, and saw firsthand what improvements were worth making, what they cost, and how the neighborhood around it shaped whether the place actually worked for the people living in it.
 
 That's the lens I bring to real estate now. Whether I'm evaluating an investment, helping someone choose a neighborhood, weighing what's worth improving, or figuring out what a property is really worth, I'm interested in how all of it fits together.`,
   headshot_photo_url: "/images/mark-headshot.jpeg",
@@ -72,7 +72,7 @@ That's the lens I bring to real estate now. Whether I'm evaluating an investment
   opening_photo_caption: "Moonlight Beach, Encinitas, CA",
   opening_photo_focal: "50% 50%",
   community_photo_url: "/images/about-community.webp",
-  community_photo_caption: "",
+  community_photo_caption: "Tallahassee, FL · College Renovation",
   community_photo_focal: "50% 50%",
   travel_photo_1_url: "/images/travel-giza.jpeg",
   travel_photo_1_caption: "Giza, Egypt",

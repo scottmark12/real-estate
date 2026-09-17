@@ -149,53 +149,64 @@ export default async function AboutPage() {
 
       {/* Homes are where community starts. */}
       <section className="mt-16 border-t border-sand pt-16">
-        <div className="grid gap-12 lg:grid-cols-[43fr_57fr] lg:items-stretch">
-          <div className="lg:order-2 lg:pt-2">
-            <p className="eyebrow text-gold">Homes &amp; Community</p>
-            <h2 className="mt-3 font-georgia text-[34px] font-normal leading-[1.1] text-navy sm:text-[40px]">
-              {about.quote}
-            </h2>
-            <div className="mt-5 flex max-w-xl flex-col gap-4 text-navy/80">
-              <p>
-                My work spans residential brokerage and commercial
-                acquisitions. On the commercial side, I source and evaluate
-                investment opportunities across multifamily and senior
-                housing. On the residential side, I help buyers and sellers
-                make better decisions about property, value, and place.
-              </p>
-              {bioParagraphs.map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
-            </div>
+        <p className="eyebrow text-gold">Homes &amp; Community</p>
+        <h2 className="mt-3 font-georgia max-w-2xl text-[34px] font-normal leading-[1.1] text-navy sm:text-[40px]">
+          {about.quote}
+        </h2>
 
-            <div className="mt-12 lg:mt-16">
-              <p className="eyebrow text-gold">How I Look at a Property</p>
-            </div>
-            <div className="mt-4 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
-              {ATTENTION_ITEMS.map((item) => (
-                <div
-                  key={item.label}
-                  className="py-5 first:pt-0 last:pb-0 lg:flex-1 lg:px-6 lg:py-0 lg:first:pl-0 lg:last:pr-0"
-                >
-                  <p className="eyebrow whitespace-nowrap text-gold">
-                    {item.n} &middot; {item.label}
-                  </p>
-                  <p className="mt-2 text-navy">{item.body}</p>
-                </div>
-              ))}
-            </div>
+        <div className="mt-5 flex max-w-xl flex-col gap-4 text-navy/80">
+          <p>
+            My work spans residential brokerage and commercial
+            acquisitions. On the commercial side, I source and evaluate
+            investment opportunities across multifamily and senior
+            housing. On the residential side, I help buyers and sellers
+            make better decisions about property, value, and place.
+          </p>
+          {bioParagraphs.slice(0, 2).map((paragraph, i) => (
+            <p key={i}>{paragraph}</p>
+          ))}
+        </div>
+
+        {/* The six-bedroom duplex Mark bought and renovated near Florida
+            State — kept DOM-adjacent to the paragraph that discusses it
+            so mobile never separates them. The desktop grid only changes
+            the side-by-side arrangement, not the order. */}
+        <div className="mt-8 grid gap-6 lg:grid-cols-[45fr_55fr] lg:items-center lg:gap-10">
+          <EditorialPhoto
+            src={about.community_photo_url}
+            alt="The six-bedroom duplex Mark bought and renovated near Florida State University in Tallahassee, FL"
+            caption={about.community_photo_caption}
+            focal={about.community_photo_focal}
+            placeholderLabel="College Renovation — Tallahassee, FL"
+            boxClassName="aspect-[3/2] w-full"
+            sizes="(min-width: 1024px) 45vw, 100vw"
+          />
+          {bioParagraphs[2] && (
+            <p className="max-w-md text-navy/80">{bioParagraphs[2]}</p>
+          )}
+        </div>
+
+        {bioParagraphs[3] && (
+          <div className="mt-8 max-w-xl text-navy/80">
+            <p>{bioParagraphs[3]}</p>
           </div>
-          <div className="lg:order-1 lg:h-full">
-            <EditorialPhoto
-              src={about.community_photo_url}
-              alt={about.community_photo_caption || "A San Diego neighborhood"}
-              caption={about.community_photo_caption}
-              focal={about.community_photo_focal}
-              placeholderLabel="Community — Neighborhood"
-              boxClassName="aspect-[4/5] w-full sm:aspect-[6/5] lg:aspect-auto lg:h-full lg:min-h-[420px]"
-              sizes="(min-width: 1024px) 43vw, 100vw"
-            />
-          </div>
+        )}
+
+        <div className="mt-12 lg:mt-16">
+          <p className="eyebrow text-gold">How I Look at a Property</p>
+        </div>
+        <div className="mt-4 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
+          {ATTENTION_ITEMS.map((item) => (
+            <div
+              key={item.label}
+              className="py-5 first:pt-0 last:pb-0 lg:flex-1 lg:px-6 lg:py-0 lg:first:pl-0 lg:last:pr-0"
+            >
+              <p className="eyebrow whitespace-nowrap text-gold">
+                {item.n} &middot; {item.label}
+              </p>
+              <p className="mt-2 text-navy">{item.body}</p>
+            </div>
+          ))}
         </div>
       </section>
 
