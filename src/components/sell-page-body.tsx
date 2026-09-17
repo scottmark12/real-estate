@@ -171,19 +171,50 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
           </p>
         </div>
 
-        <div className="relative mt-10 flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-0">
-          <div className="absolute bottom-3 left-0 top-3 w-px bg-navy/15 lg:hidden" />
+        {/* Mobile: compact accordion, collapsed by default */}
+        <div className="mt-8 lg:hidden">
           {STEPS.map((step, i) => {
             const expanded = expandedStep === step.title;
             return (
-              <div key={step.title} className="contents lg:flex lg:flex-1">
+              <div key={step.title} className="border-b border-sand first:border-t">
+                <button
+                  type="button"
+                  onClick={() => setExpandedStep(expanded ? null : step.title)}
+                  className="flex w-full items-center justify-between gap-4 py-4 text-left"
+                  aria-expanded={expanded}
+                >
+                  <span className="eyebrow text-navy">
+                    0{i + 1} &middot; {step.title}
+                  </span>
+                  <span className="shrink-0 text-lg font-normal text-navy/40">
+                    {expanded ? "−" : "+"}
+                  </span>
+                </button>
+                {expanded && (
+                  <div className="pb-4">
+                    <p className="text-sm text-navy/70">{step.body}</p>
+                    <p className="mt-2 text-sm leading-relaxed text-navy/60">
+                      {step.detail}
+                    </p>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Desktop: full four-column layout */}
+        <div className="mt-10 hidden lg:flex lg:items-start lg:gap-0">
+          {STEPS.map((step, i) => {
+            const expanded = expandedStep === step.title;
+            return (
+              <div key={step.title} className="contents">
                 {i > 0 && (
-                  <div className="hidden shrink-0 items-center justify-center px-4 pt-6 text-navy/30 lg:flex">
+                  <div className="flex shrink-0 items-center justify-center px-4 pt-6 text-navy/30">
                     &rarr;
                   </div>
                 )}
-                <div className="relative pl-6 lg:flex-1 lg:pl-0">
-                  <div className="absolute left-0 top-1 h-2.5 w-2.5 -translate-x-1/2 rounded-full border-2 border-cream bg-navy/40 lg:hidden" />
+                <div className="relative flex-1">
                   <button
                     type="button"
                     onClick={() => setExpandedStep(expanded ? null : step.title)}
