@@ -20,9 +20,6 @@ const ATTENTION_ITEMS = [
   },
 ];
 
-const PULL_QUOTE =
-  "I've felt completely at home in places where the houses were smaller, streets were tighter, cars were less important, and public space did more of the work.";
-
 function EditorialPhoto({
   src,
   alt,
@@ -154,8 +151,8 @@ export default async function AboutPage() {
       <section className="mt-16 border-t border-sand pt-16">
         <div className="grid gap-12 lg:grid-cols-[43fr_57fr] lg:items-stretch">
           <div className="lg:order-2 lg:pt-2">
-            <div className="h-px w-10 bg-gold" />
-            <h2 className="mt-4 font-display text-[34px] font-normal leading-[1.1] text-navy sm:text-[40px]">
+            <p className="eyebrow text-gold">Homes &amp; Community</p>
+            <h2 className="mt-3 font-georgia text-[34px] font-normal leading-[1.1] text-navy sm:text-[40px]">
               {about.quote}
             </h2>
             <div className="mt-5 flex max-w-xl flex-col gap-4 text-navy/80">
@@ -172,7 +169,7 @@ export default async function AboutPage() {
             </div>
 
             <div className="mt-12 max-w-md lg:mt-16">
-              <h3 className="font-display text-[26px] font-normal leading-tight text-navy">
+              <h3 className="font-georgia text-[26px] font-normal leading-tight text-navy">
                 How I look at a property.
               </h3>
             </div>
@@ -204,55 +201,52 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* Pull quote — transition between the property section and travel */}
-      <section className="mt-16 lg:mt-24">
-        <p className="font-display max-w-3xl text-[30px] font-normal leading-[1.3] text-navy sm:text-[34px] lg:ml-[12%] lg:max-w-2xl lg:text-[38px]">
-          {PULL_QUOTE}
-        </p>
-      </section>
-
       {/* I've seen a lot of ways to build a good place. There isn't just one. */}
-      <section className="mt-16 border-t border-sand pt-14 lg:mt-20">
-        <div className="grid gap-6 lg:grid-cols-[42fr_20fr_38fr]">
+      <section className="mt-16 border-t border-sand pt-16">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 lg:grid-cols-[38fr_31fr_31fr]">
           <EditorialPhoto
             src={about.travel_photo_1_url}
             alt={about.travel_photo_1_caption || "A place Mark has traveled to"}
             caption={about.travel_photo_1_caption}
             focal={about.travel_photo_1_focal}
-            placeholderLabel="Travel — Large"
-            boxClassName="aspect-[4/5] w-full lg:h-full lg:aspect-auto"
-            sizes="(min-width: 1024px) 42vw, 100vw"
+            placeholderLabel="Travel — Giza"
+            boxClassName="aspect-[4/5] w-full"
+            sizes="(min-width: 1024px) 38vw, 100vw"
           />
-          <div className="flex flex-col gap-6">
-            <EditorialPhoto
-              src={about.travel_photo_2_url}
-              alt={about.travel_photo_2_caption || "A place Mark has traveled to"}
-              caption={about.travel_photo_2_caption}
-              focal={about.travel_photo_2_focal}
-              placeholderLabel="Travel — Small"
-              boxClassName="aspect-square w-full"
-              sizes="(min-width: 1024px) 20vw, 100vw"
-            />
-            <EditorialPhoto
-              src={about.travel_photo_3_url}
-              alt={about.travel_photo_3_caption || "A place Mark has traveled to"}
-              caption={about.travel_photo_3_caption}
-              focal={about.travel_photo_3_focal}
-              placeholderLabel="Travel — Small"
-              boxClassName="aspect-[3/4] w-full lg:mt-10"
-              sizes="(min-width: 1024px) 20vw, 100vw"
-            />
-          </div>
-          <div className="flex flex-col justify-center lg:pt-10">
-            <p className="eyebrow text-gold">A Broader Perspective</p>
-            <h2 className="mt-4 font-display text-[30px] font-normal leading-[1.2] text-navy sm:text-[34px]">
+          <EditorialPhoto
+            src={about.travel_photo_2_url}
+            alt={about.travel_photo_2_caption || "A place Mark has traveled to"}
+            caption={about.travel_photo_2_caption}
+            focal={about.travel_photo_2_focal}
+            placeholderLabel="Travel — Chiang Mai"
+            boxClassName="aspect-[4/5] w-full"
+            sizes="(min-width: 1024px) 31vw, 100vw"
+          />
+          <EditorialPhoto
+            src={about.travel_photo_3_url}
+            alt={about.travel_photo_3_caption || "A place Mark has traveled to"}
+            caption={about.travel_photo_3_caption}
+            focal={about.travel_photo_3_focal}
+            placeholderLabel="Travel — Casablanca"
+            boxClassName="aspect-[4/5] w-full"
+            sizes="(min-width: 1024px) 31vw, 100vw"
+          />
+        </div>
+
+        <div className="mt-10">
+          <p className="eyebrow text-gold">A Broader Perspective</p>
+          <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-12">
+            <h2 className="font-georgia max-w-lg text-[30px] font-normal leading-[1.2] text-navy sm:text-[34px] lg:flex-1">
               I&apos;ve seen a lot of ways to build a good place. There
               isn&apos;t just one.
             </h2>
-            <p className="mt-4 max-w-sm text-sm text-navy/70">
+            <p className="max-w-sm text-sm text-navy/70 lg:flex-1 lg:pt-2">
               Design taught me to notice buildings. Travel taught me to
-              notice how people use them. Real estate taught me to
-              understand the numbers that make them possible.
+              notice how people use them. I&apos;ve felt completely at home
+              in places where the houses were smaller, streets were
+              tighter, cars were less important, and public space did more
+              of the work. Real estate taught me to understand the numbers
+              that make those places possible.
             </p>
           </div>
         </div>
