@@ -87,39 +87,41 @@ function StatInline({ value }: { value: string }) {
 function FeaturedBlock({ featured }: { featured: Article }) {
   return (
     <div>
-      <div className="grid gap-6 lg:grid-cols-[28fr_72fr] lg:items-start">
-        <div className="flex flex-col pt-1">
-          <p className="eyebrow text-gold">Market Research</p>
-          <h1 className="font-display mt-3 text-[32px] font-normal leading-[1.1] text-navy sm:text-[36px] lg:text-[40px]">
-            Research worth reading.
-          </h1>
-          <p className="mt-4 max-w-[22rem] text-sm text-navy/70">
-            Real estate, development, architecture and the forces shaping
-            Southern California and beyond.
-          </p>
-        </div>
-
-        <div className="relative">
-          <div className="relative h-[235px] w-full overflow-hidden sm:h-[310px] lg:h-[365px] lg:w-[90%]">
-            <ArticleImage article={featured} placeholderLabel="Featured Article Image" />
-          </div>
-
-          {(featured.stat || featured.secondary_stat) && (
-            <div className="mt-3 flex flex-wrap items-baseline gap-x-8 gap-y-1 border-t border-sand pt-3 lg:w-[90%]">
-              {featured.stat && <StatInline value={featured.stat} />}
-              {featured.secondary_stat && (
-                <StatInline value={featured.secondary_stat} />
-              )}
-            </div>
-          )}
-        </div>
+      {/* Masthead — utilitarian, not a headline. The articles do the
+          talking; this just says what the section is. */}
+      <div className="max-w-lg">
+        <h1 className="eyebrow text-gold">Market Research</h1>
+        <p className="mt-3 max-w-[26rem] text-sm text-navy/70">
+          Real estate, development, architecture and the forces shaping
+          Southern California and beyond.
+        </p>
       </div>
 
-      {/* Feature headline is deliberately not aligned to the image column —
-          it breaks left across the grid so the story reads as the
-          dominant event on the page, not a caption under the photo. */}
+      {/* Image is inset from the left margin rather than sitting beside
+          the masthead, so an editorial axis runs down the page instead
+          of a conventional two-column split. */}
+      <div className="relative mt-8 lg:ml-[22%] lg:w-[78%]">
+        <div className="relative h-[235px] w-full overflow-hidden sm:h-[310px] lg:h-[400px]">
+          <ArticleImage article={featured} placeholderLabel="Featured Article Image" />
+        </div>
+
+        {(featured.stat || featured.secondary_stat) && (
+          <div className="mt-3 flex flex-wrap items-baseline gap-x-8 gap-y-1 border-t border-sand pt-3">
+            {featured.stat && <StatInline value={featured.stat} />}
+            {featured.secondary_stat && (
+              <StatInline value={featured.secondary_stat} />
+            )}
+          </div>
+        )}
+      </div>
+
+      {/* Feature headline is deliberately not aligned to the image column
+          — it breaks left across the grid so the story reads as the
+          dominant event on the page, not a caption under the photo. Its
+          own inset is also intentionally smaller than the category rail
+          and article grid below, so sections don't all share one axis. */}
       <div className="mt-6 flex flex-col gap-4 lg:mt-10 lg:flex-row lg:items-start lg:gap-8">
-        <div className="lg:ml-[2%] lg:w-[68%]">
+        <div className="lg:ml-[40px] lg:w-[68%]">
           <p className="eyebrow text-gold">
             {featured.eyebrow || CATEGORY_LABELS[featured.category]}
           </p>
@@ -294,12 +296,9 @@ export default function MarketResearchExplorer({
         {featured ? (
           <FeaturedBlock featured={featured} />
         ) : (
-          <div>
-            <p className="eyebrow text-gold">Market Research</p>
-            <h1 className="font-display mt-3 text-[32px] font-normal leading-[1.1] text-navy sm:text-[36px] lg:text-[40px]">
-              Research worth reading.
-            </h1>
-            <p className="mt-4 max-w-md text-navy/70">
+          <div className="max-w-lg">
+            <h1 className="eyebrow text-gold">Market Research</h1>
+            <p className="mt-3 max-w-[26rem] text-sm text-navy/70">
               Real estate, development, architecture and the forces shaping
               Southern California and beyond.
             </p>
