@@ -61,30 +61,30 @@ const STEPS = [
   {
     icon: "evaluate" as const,
     title: "Evaluate",
-    body: "Get a data-backed valuation and strategy tailored to your goals.",
+    body: "What's it worth, who's likely to buy it, and where should we price it?",
     detail:
-      "Review the property, recent comparable sales, current competition, and the likely buyer pool. Then build a pricing strategy around your goals — not an automated estimate.",
+      "We'll walk the property, look at recent comparable sales, and consider who's actually shopping in this price range before landing on a number.",
   },
   {
     icon: "prepare" as const,
     title: "Prepare",
-    body: "Guidance on what to improve, stage, or leave as is.",
+    body: "What's worth fixing, improving, staging, or simply leaving alone?",
     detail:
-      "Decide what's actually worth fixing, staging, or leaving alone before going to market.",
+      "Some things are worth doing before you list. Others aren't. We'll go through the property room by room and decide together.",
   },
   {
     icon: "market" as const,
     title: "Market",
-    body: "Professional photography, listing materials, and targeted outreach.",
+    body: "Photography, positioning, and a launch designed to get the right buyers through the door.",
     detail:
-      "Professional photography, well-written listing materials, and outreach to the buyers and agents most likely to bring the right offer.",
+      "Good photography and the right positioning bring in serious buyers instead of lookers. We'll launch it in a way that gets it seen by the right people.",
   },
   {
     icon: "close" as const,
     title: "Close",
-    body: "Skilled negotiation and transaction management through closing.",
+    body: "Compare the offers, negotiate the details, and get it across the finish line.",
     detail:
-      "Skilled negotiation and hands-on management of every deadline and detail, from accepted offer through closing day.",
+      "Offers get compared on more than price. We'll go through each one, negotiate what matters, and manage the process through to closing.",
   },
 ];
 
@@ -128,13 +128,14 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
               way to sell.
             </h1>
             <p className="mt-5 max-w-sm text-navy/70">
-              Local expertise, a clear plan, and hands-on support from start
-              to finish. No guesswork.
+              Good sales start before the sign goes up. We&apos;ll figure out
+              what your home is worth, what&apos;s worth doing to it, and how
+              to bring it to market.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <PrimaryCta
                 onClick={() => setValuationOpen(true)}
-                label="Get a Home Valuation →"
+                label="Start with a Valuation →"
               />
               <SecondaryCta href="/contact?intent=selling" label="Talk to Mark →" />
             </div>
@@ -167,7 +168,7 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
             </h2>
           </div>
           <p className="max-w-xs text-sm text-navy/70">
-            I handle the details, so you can move forward with confidence.
+            Do what matters. Skip what doesn&apos;t. Price it right.
           </p>
         </div>
 
@@ -237,8 +238,8 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
               selling?
             </h2>
             <p className="mt-4 max-w-sm italic text-navy/70">
-              Whether you&apos;re ready now or six months from now, the first
-              step is understanding the property and your options.
+              You don&apos;t need to be ready to list to start figuring out
+              what your next move looks like.
             </p>
             <div className="mt-6 flex flex-wrap gap-4">
               <PrimaryCta
