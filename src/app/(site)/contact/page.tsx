@@ -15,28 +15,30 @@ export default async function ContactPage() {
 
   return (
     <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 lg:pb-24">
-      <div className="max-w-xl">
-        <p className="eyebrow text-gold">Contact</p>
-        <h1 className="mt-2 font-display text-[56px] font-normal leading-[0.95] text-navy [font-size:clamp(56px,5vw,80px)]">
-          Let&apos;s talk.
-        </h1>
-        <p className="mt-6 max-w-md text-navy/70">
-          Buying, selling, investing—or just have a question about the
-          market? Send me a note. I read everything myself.
-        </p>
-      </div>
+      {/* Header, form, and contact info are DOM-ordered for mobile (intro,
+          then form, then contact info) via normal stacking. The lg: grid
+          places the header and the form on the same row so "Contact" lines
+          up with "I'm interested in", with contact info below the header
+          and the form spanning both rows. */}
+      <div className="lg:grid lg:grid-cols-[42fr_58fr] lg:gap-x-16 lg:gap-y-6">
+        <div className="max-w-xl lg:col-start-1 lg:row-start-1">
+          <p className="eyebrow text-gold">Contact</p>
+          <h1 className="mt-2 font-display text-[56px] font-normal leading-[0.95] text-navy [font-size:clamp(56px,5vw,80px)]">
+            Let&apos;s talk.
+          </h1>
+          <p className="mt-6 max-w-md text-navy/70">
+            Buying, selling, investing—or just have a question about the
+            market? Send me a note. I read everything myself.
+          </p>
+        </div>
 
-      {/* The form is DOM-first so it sits high on mobile, right after the
-          intro. The desktop grid only flips it back to the right column;
-          contact info and the photo stay in the same relative order. */}
-      <div className="mt-10 grid gap-x-16 gap-y-8 lg:mt-4 lg:grid-cols-[42fr_58fr]">
-        <div className="lg:order-2">
+        <div className="mt-10 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:mt-0">
           <Suspense fallback={null}>
             <ContactForm />
           </Suspense>
         </div>
 
-        <div className="lg:relative lg:order-1 lg:flex lg:h-full lg:flex-col lg:overflow-hidden lg:border-r lg:border-sand lg:pb-6 lg:pr-16">
+        <div className="mt-10 lg:relative lg:col-start-1 lg:row-start-2 lg:mt-0 lg:flex lg:h-full lg:flex-col lg:overflow-hidden lg:border-r lg:border-sand lg:pb-6 lg:pr-16">
           <div className="lg:relative lg:z-10">
             {contact.name && (
               <p className="eyebrow text-navy">{contact.name}</p>
