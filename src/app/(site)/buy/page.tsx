@@ -38,9 +38,9 @@ export default async function BuyPage() {
     : listings;
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-20 sm:px-10">
+    <div className="mx-auto max-w-6xl px-6 py-20 max-[600px]:py-12 sm:px-10">
       <p className="eyebrow text-gold">Buy</p>
-      <h1 className="mt-2 font-display text-4xl font-normal text-navy sm:text-5xl">
+      <h1 className="mt-2 font-display text-4xl font-normal text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-5xl">
         Homes worth looking at.
       </h1>
 
@@ -74,7 +74,7 @@ export default async function BuyPage() {
               <p className="mt-1 text-[10px] font-medium uppercase tracking-wide text-navy/50">
                 {featured.location}
               </p>
-              <h2 className="mt-6 font-display text-[34px] font-normal leading-[1.03] text-navy sm:text-[42px]">
+              <h2 className="mt-6 font-display text-[34px] font-normal leading-[1.03] text-navy max-[600px]:text-[26px] max-[600px]:leading-[1.12] sm:text-[42px]">
                 {featured.featured_headline || featured.title}
               </h2>
               {featured.featured_headline && (

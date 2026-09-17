@@ -125,7 +125,7 @@ function FeaturedBlock({ featured }: { featured: Article }) {
           <p className="eyebrow text-gold">
             {featured.eyebrow || CATEGORY_LABELS[featured.category]}
           </p>
-          <h2 className="font-georgia mt-2 text-[36px] font-bold leading-[1.05] tracking-[-0.01em] text-navy lg:text-[46px]">
+          <h2 className="font-georgia mt-2 text-[36px] font-bold leading-[1.05] tracking-[-0.01em] text-navy max-[600px]:text-[32px] max-[600px]:leading-[1.03] max-[600px]:tracking-[-0.015em] lg:text-[46px]">
             {featured.title}
           </h2>
         </div>
@@ -203,7 +203,7 @@ function PrimaryStory({
             }`}
         </p>
       )}
-      <span className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
+      <span className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 max-[600px]:text-[13px] max-[600px]:tracking-[0.12em]">
         Read &rarr;
       </span>
     </Link>
@@ -218,7 +218,7 @@ function ArchitecturalBanner({ article }: { article: Article }) {
     >
       <div className="flex flex-col justify-center bg-cream-deep px-8 py-10">
         <p className="eyebrow text-gold">Architectural Spotlight</p>
-        <h3 className="mt-3 font-display text-3xl font-normal leading-tight text-navy sm:text-4xl">
+        <h3 className="mt-3 font-display text-3xl font-normal leading-tight text-navy max-[600px]:text-[26px] max-[600px]:leading-[1.12] sm:text-4xl">
           {article.title}
         </h3>
         {article.metadata && (
@@ -227,7 +227,7 @@ function ArchitecturalBanner({ article }: { article: Article }) {
         {article.excerpt && (
           <p className="mt-3 italic text-navy/80">{article.excerpt}</p>
         )}
-        <span className="mt-4 inline-block w-fit text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
+        <span className="mt-4 inline-block w-fit text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 max-[600px]:text-[13px] max-[600px]:tracking-[0.12em]">
           Read &rarr;
         </span>
       </div>
@@ -296,7 +296,7 @@ export default function MarketResearchExplorer({
   const archiveList = isAll ? [] : pool;
 
   return (
-    <div className="mx-auto max-w-[1500px] px-12">
+    <div className="mx-auto max-w-[1500px] px-12 max-[600px]:px-6">
       <section className="pt-6 lg:pt-8">
         {featured ? (
           <FeaturedBlock featured={featured} />

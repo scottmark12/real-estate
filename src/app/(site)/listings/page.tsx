@@ -54,7 +54,7 @@ export default async function ListingsPage({
   return (
     <div className="mx-auto max-w-6xl px-6 py-16 sm:px-10">
       <p className="eyebrow text-gold">Listings</p>
-      <h1 className="mt-2 font-display text-4xl font-semibold text-navy">
+      <h1 className="mt-2 font-display text-4xl font-semibold text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em]">
         All Listings
       </h1>
 

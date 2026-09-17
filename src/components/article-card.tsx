@@ -42,7 +42,7 @@ export default function ArticleCard({ article }: { article: Article }) {
         )}
         <Link
           href={`/insights/${article.slug}`}
-          className="mt-auto pt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+          className="mt-auto pt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 max-[600px]:text-[13px] max-[600px]:tracking-[0.12em]"
         >
           Read &rarr;
         </Link>

@@ -99,3 +99,20 @@ body {
   font-style: italic;
   margin: 1.5em 0;
 }
+
+/* Mobile typography pass (phone widths only, ~600px and below). Quiets
+   the eyebrow/label scale and article prose sitewide without touching
+   desktop/tablet, which is otherwise untouched by this rule. */
+@media (max-width: 600px) {
+  .eyebrow,
+  .eyebrow-sm {
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    line-height: 1.2;
+  }
+
+  .article-body {
+    font-size: 17px;
+    line-height: 1.55;
+  }
+}

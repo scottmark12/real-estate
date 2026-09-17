@@ -77,13 +77,13 @@ export default async function AboutPage() {
     .filter(Boolean);
 
   return (
-    <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20">
+    <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 max-[600px]:px-6 max-[600px]:pt-10 max-[600px]:pb-12">
       {/* I care about what makes a place worth living in. */}
       <section>
         <div className="grid gap-12 lg:grid-cols-[36fr_64fr] lg:items-stretch">
           <div>
             <p className="eyebrow text-gold">About</p>
-            <h1 className="mt-3 font-georgia text-[42px] font-normal leading-[1.1] text-navy sm:text-[48px]">
+            <h1 className="mt-3 font-georgia text-[42px] font-normal leading-[1.1] text-navy max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-[48px]">
               I care about what makes a place worth living in.
             </h1>
             <p className="mt-5 max-w-sm text-navy/80">
@@ -150,7 +150,7 @@ export default async function AboutPage() {
       {/* Homes are where community starts. */}
       <section className="mt-16 border-t border-sand pt-16">
         <p className="eyebrow text-gold">Homes &amp; Community</p>
-        <h2 className="mt-3 font-georgia max-w-2xl text-[34px] font-normal leading-[1.1] text-navy sm:text-[40px]">
+        <h2 className="mt-3 font-georgia max-w-2xl text-[34px] font-normal leading-[1.1] text-navy max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-[40px]">
           {about.quote}
         </h2>
 
@@ -241,7 +241,7 @@ export default async function AboutPage() {
         <div className="mt-10">
           <p className="eyebrow text-gold">A Broader Perspective</p>
           <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-12">
-            <h2 className="font-georgia max-w-lg text-[30px] font-normal leading-[1.2] text-navy sm:text-[34px] lg:flex-1">
+            <h2 className="font-georgia max-w-lg text-[30px] font-normal leading-[1.2] text-navy max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-[34px] lg:flex-1">
               I&apos;ve seen a lot of ways to build a good place. There
               isn&apos;t just one.
             </h2>

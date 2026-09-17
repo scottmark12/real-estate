@@ -14,7 +14,7 @@ export default async function ContactPage() {
   );
 
   return (
-    <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 lg:pb-24">
+    <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 max-[600px]:px-6 max-[600px]:pt-10 max-[600px]:pb-12 lg:pb-24">
       {/* Header, form, and contact info are DOM-ordered for mobile (intro,
           then form, then contact info) via normal stacking. The lg: grid
           places the header and the form on the same row so "Contact" lines
@@ -23,7 +23,7 @@ export default async function ContactPage() {
       <div className="lg:grid lg:grid-cols-[42fr_58fr] lg:gap-x-16 lg:gap-y-6">
         <div className="max-w-xl lg:col-start-1 lg:row-start-1">
           <p className="eyebrow text-gold">Contact</p>
-          <h1 className="mt-2 font-display text-[56px] font-normal leading-[0.95] text-navy [font-size:clamp(56px,5vw,80px)]">
+          <h1 className="mt-2 font-display text-[56px] font-normal leading-[0.95] text-navy [font-size:clamp(56px,5vw,80px)] max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em]">
             Let&apos;s talk.
           </h1>
           <p className="mt-6 max-w-md text-navy/70">

@@ -40,10 +40,10 @@ export default async function ListingDetailPage({
         </span>
       </div>
 
-      <h1 className="mt-3 font-display text-4xl font-semibold text-navy">
+      <h1 className="mt-3 font-display text-4xl font-semibold text-navy max-[600px]:text-[26px] max-[600px]:leading-[1.1]">
         {listing.title}
       </h1>
-      <p className="mt-1 text-lg text-navy/60">{listing.location}</p>
+      <p className="mt-1 text-lg text-navy/60 max-[600px]:text-sm">{listing.location}</p>
 
       {gallery.length > 0 && (
         <div className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2">

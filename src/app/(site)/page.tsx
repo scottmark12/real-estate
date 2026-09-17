@@ -100,9 +100,9 @@ export default async function HomePage() {
     <div className="mx-auto max-w-[1500px] px-0 lg:px-12">
       {/* Hero / cover — mobile */}
       <section className="overflow-hidden pt-8 lg:hidden">
-        <div className="px-4">
+        <div className="px-4 max-[600px]:px-6">
           <p className="eyebrow text-gold">Real Estate</p>
-          <h1 className="relative z-20 mt-2 font-georgia text-[32px] font-normal leading-[0.95] text-navy">
+          <h1 className="relative z-20 mt-2 font-georgia text-[32px] font-normal leading-[0.95] text-navy max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em]">
             <span className="block">Real Estate,</span>
             <span className="block">Real Different.</span>
           </h1>
@@ -223,7 +223,7 @@ export default async function HomePage() {
       {/* On My Radar — mobile */}
       {radar && (
         <section className="mt-[54px] lg:hidden">
-          <p className="eyebrow px-4 text-gold">
+          <p className="eyebrow px-4 text-gold max-[600px]:px-6">
             On My Radar
             <span className="ml-2 inline-block h-px w-[44px] bg-gold align-middle" />
           </p>
@@ -251,11 +251,11 @@ export default async function HomePage() {
             )}
           </Link>
 
-          <div className="mt-5 flex flex-col px-4">
+          <div className="mt-5 flex flex-col px-4 max-[600px]:px-6">
             <p className="eyebrow text-gold">
               {radar.eyebrow || CATEGORY_LABELS[radar.category] || radar.category}
             </p>
-            <h2 className="mt-2.5 font-display text-[30px] font-normal leading-[1.1] text-navy">
+            <h2 className="mt-2.5 font-display text-[30px] font-normal leading-[1.1] text-navy max-[600px]:text-[26px] max-[600px]:leading-[1.12]">
               {radar.title}
             </h2>
             {radar.excerpt && (
@@ -334,7 +334,7 @@ export default async function HomePage() {
 
       {/* Elsewhere */}
       {elsewhere.length > 0 && (
-        <section className="mt-14 border-t border-sand px-4 pb-16 pt-10 lg:px-0">
+        <section className="mt-14 border-t border-sand px-4 pb-16 pt-10 max-[600px]:px-6 lg:px-0">
           <p className="eyebrow text-gold">Elsewhere</p>
           <div className="mt-6 grid gap-10 sm:grid-cols-3 sm:divide-x sm:divide-sand">
             {elsewhere.map((item, i) => (

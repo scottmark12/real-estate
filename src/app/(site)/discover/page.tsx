@@ -203,7 +203,7 @@ export default async function HomePage() {
         <div className="relative grid min-h-[560px] gap-8 lg:hidden">
           <div className="flex flex-col justify-end py-6">
             <p className="eyebrow text-gold">{hero.location_label}</p>
-            <h1 className="mt-3 font-display text-6xl font-normal leading-[0.98] text-cream sm:text-7xl">
+            <h1 className="mt-3 font-display text-6xl font-normal leading-[0.98] text-cream max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-7xl">
               {renderHeadline(hero.headline)}
             </h1>
             <p className="mt-6 max-w-sm text-base text-cream/90 sm:text-lg">
@@ -317,7 +317,7 @@ export default async function HomePage() {
             <div className="lg:pr-10">
               {marketReport && (
                 <>
-                  <h3 className="font-display text-4xl font-normal leading-[1.05] text-navy sm:text-5xl">
+                  <h3 className="font-display text-4xl font-normal leading-[1.05] text-navy max-[600px]:text-[26px] max-[600px]:leading-[1.12] sm:text-5xl">
                     {marketReport.title}
                   </h3>
                   {marketReport.excerpt && (
@@ -327,7 +327,7 @@ export default async function HomePage() {
                   )}
                   <Link
                     href={`/insights/${marketReport.slug}`}
-                    className="mt-5 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                    className="mt-5 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 max-[600px]:text-[13px] max-[600px]:tracking-[0.12em]"
                   >
                     Read the Full Report &rarr;
                   </Link>
@@ -370,7 +370,7 @@ export default async function HomePage() {
                     )}
                     <Link
                       href={`/insights/${sideArticles[0].slug}`}
-                      className="mt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                      className="mt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 max-[600px]:text-[13px] max-[600px]:tracking-[0.12em]"
                     >
                       Read More &rarr;
                     </Link>
@@ -408,7 +408,7 @@ export default async function HomePage() {
                       )}
                       <Link
                         href={`/insights/${sideArticles[1].slug}`}
-                        className="mt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                        className="mt-2 text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 max-[600px]:text-[13px] max-[600px]:tracking-[0.12em]"
                       >
                         Read More &rarr;
                       </Link>
@@ -450,13 +450,13 @@ export default async function HomePage() {
           </div>
           <div className="flex flex-col justify-center px-[8%] py-10 lg:py-0">
             <p className="eyebrow text-gold">A Broader Perspective</p>
-            <h2 className="mt-3 font-display text-3xl font-normal leading-tight text-navy lg:text-4xl">
+            <h2 className="mt-3 font-display text-3xl font-normal leading-tight text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] lg:text-4xl">
               Real Estate Is a People Business.
             </h2>
             <p className="mt-4 max-w-md text-navy/70">{about.quote}</p>
             <Link
               href="/about"
-              className="mt-4 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+              className="mt-4 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 max-[600px]:text-[13px] max-[600px]:tracking-[0.12em]"
             >
               More About Me &rarr;
             </Link>
@@ -493,7 +493,7 @@ export default async function HomePage() {
               </p>
               <Link
                 href={service.href}
-                className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4"
+                className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4 max-[600px]:text-[13px] max-[600px]:tracking-[0.12em]"
               >
                 Learn More &rarr;
               </Link>
@@ -544,7 +544,7 @@ export default async function HomePage() {
         />
         <div className="relative mx-auto max-w-2xl text-center">
           <p className="eyebrow text-blue">{newsletter.tagline_line1}</p>
-          <h2 className="mt-4 font-display text-4xl font-normal sm:text-5xl">
+          <h2 className="mt-4 font-display text-4xl font-normal max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-5xl">
             {newsletter.heading}
           </h2>
           <p className="mx-auto mt-4 max-w-xl text-ink-muted">

@@ -37,7 +37,7 @@ export default async function ArticleDetailPage({
       <p className="eyebrow mt-6 text-gold">
         {article.eyebrow || CATEGORY_LABELS[article.category] || article.category}
       </p>
-      <h1 className="mt-2 font-display text-4xl font-semibold leading-tight text-navy">
+      <h1 className="mt-2 font-display text-4xl font-semibold leading-tight text-navy max-[600px]:text-[27px] max-[600px]:leading-[1.1]">
         {article.title}
       </h1>
       <p className="mt-3 text-sm text-navy/50">

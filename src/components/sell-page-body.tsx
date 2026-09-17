@@ -122,7 +122,7 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
         <div className="grid gap-10 lg:grid-cols-[48fr_52fr] lg:items-stretch">
           <div className="flex flex-col justify-center py-6 lg:py-0">
             <p className="eyebrow text-gold">Sell</p>
-            <h1 className="mt-3 font-display text-5xl font-normal leading-[1.02] text-navy sm:text-6xl">
+            <h1 className="mt-3 font-display text-5xl font-normal leading-[1.02] text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-6xl">
               A straightforward
               <br />
               way to sell.
@@ -162,7 +162,7 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
         <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
           <div>
             <p className="eyebrow text-gold">The Process</p>
-            <h2 className="mt-2 font-display text-3xl font-normal text-navy sm:text-4xl">
+            <h2 className="mt-2 font-display text-3xl font-normal text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-4xl">
               Four simple steps.
             </h2>
           </div>
@@ -262,7 +262,7 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
           </div>
           <div className="flex flex-col justify-center bg-[#f7f3ea] px-[8%] py-12 lg:py-0">
             <p className="eyebrow text-gold">Ready When You Are</p>
-            <h2 className="mt-3 font-display text-4xl font-normal leading-[1.05] text-navy sm:text-5xl">
+            <h2 className="mt-3 font-display text-4xl font-normal leading-[1.05] text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-5xl">
               Thinking about
               <br />
               selling?
