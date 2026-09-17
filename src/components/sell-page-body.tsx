@@ -128,9 +128,8 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
               way to sell.
             </h1>
             <p className="mt-5 max-w-sm text-navy/70">
-              Good sales start before the sign goes up. We&apos;ll figure out
-              what your home is worth, what&apos;s worth doing to it, and how
-              to bring it to market.
+              You know what you want from the sale. My job is to build the
+              strategy around it.
             </p>
             <div className="mt-8 flex flex-wrap gap-4">
               <PrimaryCta
