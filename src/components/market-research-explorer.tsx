@@ -89,9 +89,9 @@ function FeaturedBlock({ featured }: { featured: Article }) {
     <div>
       {/* Masthead — utilitarian, not a headline. The articles do the
           talking; this just says what the section is. */}
-      <div className="max-w-lg">
+      <div className="max-w-lg lg:pt-5">
         <h1 className="eyebrow text-gold">Market Research</h1>
-        <p className="mt-3 max-w-[26rem] text-sm text-navy/70">
+        <p className="mt-3 max-w-[26rem] text-sm text-navy/80">
           Real estate, development, architecture and the forces shaping
           Southern California and beyond.
         </p>
@@ -106,7 +106,7 @@ function FeaturedBlock({ featured }: { featured: Article }) {
         </div>
 
         {(featured.stat || featured.secondary_stat) && (
-          <div className="mt-3 flex flex-wrap items-baseline gap-x-8 gap-y-1 border-t border-sand pt-3">
+          <div className="mt-5 flex flex-wrap items-baseline gap-x-8 gap-y-1">
             {featured.stat && <StatInline value={featured.stat} />}
             {featured.secondary_stat && (
               <StatInline value={featured.secondary_stat} />
@@ -120,8 +120,8 @@ function FeaturedBlock({ featured }: { featured: Article }) {
           dominant event on the page, not a caption under the photo. Its
           own inset is also intentionally smaller than the category rail
           and article grid below, so sections don't all share one axis. */}
-      <div className="mt-6 flex flex-col gap-4 lg:mt-10 lg:flex-row lg:items-start lg:gap-8">
-        <div className="lg:ml-[40px] lg:w-[68%]">
+      <div className="mt-6 flex flex-col gap-4 lg:mt-10 lg:flex-row lg:items-start lg:gap-12">
+        <div className="lg:ml-[40px] lg:w-[66%]">
           <p className="eyebrow text-gold">
             {featured.eyebrow || CATEGORY_LABELS[featured.category]}
           </p>
@@ -129,9 +129,9 @@ function FeaturedBlock({ featured }: { featured: Article }) {
             {featured.title}
           </h2>
         </div>
-        <div className="lg:w-[22%] lg:pt-14">
+        <div className="lg:w-[22%] lg:pt-16">
           {featured.excerpt && (
-            <p className="text-sm text-navy/70">{featured.excerpt}</p>
+            <p className="text-sm text-navy/80">{featured.excerpt}</p>
           )}
           <p className="eyebrow mt-2 text-navy/40">
             {formatDate(featured.published_at)}
@@ -187,16 +187,21 @@ function PrimaryStory({
       <p className="eyebrow mt-3 text-gold">
         {article.eyebrow || CATEGORY_LABELS[article.category]}
       </p>
-      <h3 className="mt-1 font-display text-xl font-semibold leading-snug text-navy">
+      <h3 className="mt-1 font-display text-[21px] font-semibold leading-snug text-navy">
         {article.title}
       </h3>
       {article.excerpt && (
-        <p className="mt-1 line-clamp-2 text-sm text-navy/70">
+        <p className="mt-1 line-clamp-2 text-sm text-navy/80">
           {article.excerpt}
         </p>
       )}
-      {article.metadata && (
-        <p className="eyebrow mt-2 text-navy/40">{article.metadata}</p>
+      {(article.metadata || article.read_time) && (
+        <p className="eyebrow mt-2 text-navy/40">
+          {article.metadata ||
+            `${formatDate(article.published_at)}${
+              article.read_time ? ` · ${article.read_time}` : ""
+            }`}
+        </p>
       )}
       <span className="mt-2 inline-block text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
         {article.cta_label || "Read More →"}
@@ -220,7 +225,7 @@ function ArchitecturalBanner({ article }: { article: Article }) {
           <p className="eyebrow mt-3 text-navy/50">{article.metadata}</p>
         )}
         {article.excerpt && (
-          <p className="mt-3 italic text-navy/70">{article.excerpt}</p>
+          <p className="mt-3 italic text-navy/80">{article.excerpt}</p>
         )}
         <span className="mt-4 inline-block w-fit text-sm font-semibold text-navy underline decoration-gold decoration-2 underline-offset-4">
           {article.cta_label || "Take a Look →"}
@@ -298,7 +303,7 @@ export default function MarketResearchExplorer({
         ) : (
           <div className="max-w-lg">
             <h1 className="eyebrow text-gold">Market Research</h1>
-            <p className="mt-3 max-w-[26rem] text-sm text-navy/70">
+            <p className="mt-3 max-w-[26rem] text-sm text-navy/80">
               Real estate, development, architecture and the forces shaping
               Southern California and beyond.
             </p>
