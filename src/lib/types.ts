@@ -219,3 +219,64 @@ export interface ContactSettings {
   photo_caption?: string;
   handwritten_note?: string;
 }
+
+export type ClientStatus =
+  | "lead"
+  | "active"
+  | "under_contract"
+  | "past_client"
+  | "lost";
+export type ClientType = "buyer" | "seller" | "investor" | "other";
+
+export interface Client {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  status: ClientStatus;
+  client_type: ClientType;
+  timeline: string | null;
+  next_follow_up_date: string | null;
+  last_contacted_at: string | null;
+  notes: string | null;
+  source: string | null;
+  contact_message_id: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface BuyBox {
+  id: string;
+  client_id: string;
+  label: string;
+  property_type: string | null;
+  min_price_cents: number | null;
+  max_price_cents: number | null;
+  beds_min: number | null;
+  baths_min: number | null;
+  areas: string[];
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ClientNote {
+  id: string;
+  client_id: string;
+  body: string;
+  next_follow_up_date: string | null;
+  created_at: string;
+}
+
+export interface ContactMessage {
+  id: string;
+  name: string | null;
+  email: string | null;
+  phone: string | null;
+  message: string | null;
+  intent: string | null;
+  context: string | null;
+  source: string | null;
+  timeline: string | null;
+  created_at: string;
+}
