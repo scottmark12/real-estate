@@ -398,14 +398,38 @@ export interface DailyBriefArticle {
   summary: string;
 }
 
+export interface CalendarNote {
+  title: string;
+  detail?: string;
+  url?: string | null;
+}
+
+export interface HeadlineItem {
+  title: string;
+  url: string;
+  source: string;
+}
+
+// deep_report is where the calendar-derived sections actually live —
+// written by another Claude session with a Supabase MCP connection to
+// this same project, ahead of this app's own use of this table.
+export interface DeepReport {
+  needs_attention?: CalendarNote[];
+  resolved?: CalendarNote[];
+  headlines?: HeadlineItem[];
+  brief_url?: string;
+}
+
 export interface DailyBrief {
   id: string;
   brief_date: string;
   headline: string | null;
   articles: DailyBriefArticle[];
-  deep_report: DailyBriefArticle | null;
+  deep_report: DeepReport | null;
   call_summary: string | null;
   day_plan: string | null;
+  needs_attention: CalendarNote[] | null;
+  resolved: CalendarNote[] | null;
   created_at: string;
 }
 
