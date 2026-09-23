@@ -444,4 +444,5 @@ export interface MarketRead {
   theme: string | null;
   published_at: string | null;
   fetched_at: string;
+  kept: boolean;
 }

@@ -220,5 +220,21 @@ export async function fetchMarketReads(): Promise<FetchedMarketRead[]> {
   for (const result of results) {
     if (result.status === "fulfilled") reads.push(...result.value);
   }
-  return reads;
+
+  // Cheap, deterministic pre-filter so the (expensive) grading step only
+  // ever sees a reasonably-sized, already-deduped candidate list: drop
+  // items clearly stale (Google's site:-restricted searches surface old
+  // evergreen pages, not just fresh articles) and collapse near-identical
+  // titles that multiple feeds picked up (wire stories, syndication).
+  const cutoff = Date.now() - 45 * 24 * 60 * 60 * 1000;
+  const seenTitles = new Set<string>();
+  const filtered: FetchedMarketRead[] = [];
+  for (const r of reads) {
+    if (r.published_at && new Date(r.published_at).getTime() < cutoff) continue;
+    const normalizedTitle = r.title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    if (seenTitles.has(normalizedTitle)) continue;
+    seenTitles.add(normalizedTitle);
+    filtered.push(r);
+  }
+  return filtered;
 }

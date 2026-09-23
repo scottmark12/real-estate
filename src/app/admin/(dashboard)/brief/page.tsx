@@ -67,7 +67,12 @@ export default async function AdminBriefPage() {
       .lte("period_start", todayIso)
       .gte("period_end", todayIso)
       .order("sort_order", { ascending: true }),
-    supabase.from("market_reads").select("*").order("published_at", { ascending: false }).limit(30),
+    supabase
+      .from("market_reads")
+      .select("*")
+      .eq("kept", true)
+      .order("published_at", { ascending: false })
+      .limit(30),
   ]);
 
   const allBlocks = (allBlocksData as ScheduleBlock[]) ?? [];
