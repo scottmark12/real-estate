@@ -15,7 +15,7 @@ export const CALL_OUTCOMES: CallOutcomeOption[] = [
   { value: "no_answer", label: "No Answer", autoScheduleDays: 2 },
   { value: "left_voicemail", label: "Left Voicemail", autoScheduleDays: 3 },
   { value: "spoke_interested", label: "Spoke — Interested", autoScheduleDays: 7 },
-  { value: "spoke_not_ready", label: "Spoke — Not Ready Yet", autoScheduleDays: 30 },
+  { value: "spoke_not_ready", label: "Spoke — Not Ready Yet", autoScheduleDays: 90 },
   {
     value: "requested_callback",
     label: "Requested Callback (pick a date below)",
