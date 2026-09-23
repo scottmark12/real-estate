@@ -14,6 +14,27 @@ export function MorningBriefTeaser({
 }) {
   const { expanded, toggle } = useMorningBrief();
 
+  // Once read, this shouldn't keep holding the most valuable spot on the
+  // page — collapse to a thin line and let the full brief live at the
+  // bottom instead (see MorningBriefPanel, id="morning-brief"). A plain
+  // anchor link (not the toggle) so this scrolls down rather than hiding
+  // the panel again.
+  if (expanded) {
+    return (
+      <a
+        href="#morning-brief"
+        className="mt-6 flex w-full items-center justify-between border border-navy/15 bg-white/60 px-4 py-2.5 transition-colors hover:border-navy/30"
+      >
+        <span className="eyebrow-sm text-navy/50">
+          &#10003; Morning Brief read — {totalBriefCount} {totalBriefCount === 1 ? "story" : "stories"}
+        </span>
+        <span className="eyebrow-sm text-navy/40 underline decoration-gold decoration-2 underline-offset-4">
+          Jump to Brief &darr;
+        </span>
+      </a>
+    );
+  }
+
   return (
     <button
       type="button"
@@ -33,7 +54,7 @@ export function MorningBriefTeaser({
         <p className="mt-3 text-cream/70">No brief pulled yet today.</p>
       )}
       <span className="eyebrow mt-5 inline-block text-gold underline decoration-gold decoration-2 underline-offset-4">
-        {expanded ? "Hide the Brief ↑" : "Read the Brief ↓"}
+        Read the Brief &darr;
       </span>
     </button>
   );

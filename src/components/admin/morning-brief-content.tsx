@@ -29,7 +29,7 @@ export function groupIntoSections(reads: MarketRead[]): GroupedSection[] {
 // Renders "**bold**" spans as real emphasis — lets the sweep bold the
 // numbers/facts that matter, Morning-Brew style, without a full markdown
 // parser or dangerouslySetInnerHTML.
-function Bolded({ text }: { text: string }) {
+export function Bolded({ text }: { text: string }) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return (
     <>

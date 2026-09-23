@@ -405,6 +405,7 @@ export interface DailyBrief {
   articles: DailyBriefArticle[];
   deep_report: DailyBriefArticle | null;
   call_summary: string | null;
+  day_plan: string | null;
   created_at: string;
 }
 

@@ -9,7 +9,7 @@ export function MorningBriefPanel({ sections }: { sections: GroupedSection[] }) 
   if (!expanded) return null;
 
   return (
-    <div className="mt-14 border-t-4 border-double border-navy pt-8">
+    <div id="morning-brief" className="mt-14 scroll-mt-6 border-t-4 border-double border-navy pt-8">
       <div className="flex items-baseline justify-between">
         <p className="eyebrow text-gold">The Morning Brief</p>
         <form action={refreshMarketReads}>

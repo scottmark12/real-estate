@@ -2,12 +2,13 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnSecondary, input, label, select } from "@/components/admin/ui";
 import { currentWeekNumber } from "@/lib/format";
-import { groupIntoSections } from "@/components/admin/morning-brief-content";
+import { Bolded, groupIntoSections } from "@/components/admin/morning-brief-content";
 import { MorningBriefProvider } from "@/components/admin/morning-brief-context";
 import { MorningBriefTeaser } from "@/components/admin/morning-brief-teaser";
 import { MorningBriefPanel } from "@/components/admin/morning-brief-panel";
 import type {
   Client,
+  DailyBrief,
   DealCompany,
   Goal,
   GoalDailyCheck,
@@ -76,6 +77,7 @@ export default async function AdminHomePage() {
     { count: clientCount },
     { count: leadCount },
     { count: dealCount },
+    { data: dailyBriefData },
   ] = await Promise.all([
     supabase.from("schedule_blocks").select("*").order("day_of_week").order("start_time"),
     supabase.from("todos").select("*").eq("scheduled_date", todayIso),
@@ -116,8 +118,10 @@ export default async function AdminHomePage() {
     supabase.from("clients").select("*", { count: "exact", head: true }),
     supabase.from("contact_messages").select("*", { count: "exact", head: true }),
     supabase.from("deal_companies").select("*", { count: "exact", head: true }),
+    supabase.from("daily_briefs").select("*").eq("brief_date", todayIso).maybeSingle(),
   ]);
 
+  const dayPlan = (dailyBriefData as DailyBrief | null)?.day_plan ?? null;
   const allBlocks = (allBlocksData as ScheduleBlock[]) ?? [];
   const todayBlocks = allBlocks.filter((b) => b.day_of_week === dayOfWeek);
   const todayTodos = (todayTodosData as Todo[]) ?? [];
@@ -216,7 +220,16 @@ export default async function AdminHomePage() {
     <MorningBriefProvider>
     <div className="mx-auto max-w-2xl">
       <p className="eyebrow text-gold">{formatToday()}</p>
-      <h1 className="mt-2 font-display text-4xl font-semibold text-navy">Dashboard</h1>
+      <h1 className="mt-2 font-display text-4xl font-semibold text-navy">Good morning, Mark.</h1>
+
+      {dayPlan && (
+        <div className="mt-4 border-l-2 border-gold/50 pl-4">
+          <p className="eyebrow-sm text-navy/40">Today, Optimized</p>
+          <p className="mt-1.5 text-[15px] leading-[1.7] text-navy/80">
+            <Bolded text={dayPlan} />
+          </p>
+        </div>
+      )}
 
       {/* Morning brief teaser — clicking it reveals the full brief further
           down this same page (MorningBriefPanel), rather than navigating
