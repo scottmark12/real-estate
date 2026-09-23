@@ -302,8 +302,11 @@ function ContactCard({ companyId, contact }: { companyId: string; contact?: Deal
 
 export default async function EditDealCompanyPage({
   params,
+  searchParams,
 }: PageProps<"/admin/deals/[id]/edit">) {
   const { id } = await params;
+  const sp = await searchParams;
+  const error = typeof sp.error === "string" ? sp.error : undefined;
   const supabase = await createClient();
 
   const [
@@ -353,6 +356,12 @@ export default async function EditDealCompanyPage({
         {company.name}
       </h1>
 
+      {error && (
+        <p className="mt-4 border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
       <div className="mt-8">
         <CompanyForm company={company} />
       </div>
@@ -397,6 +406,11 @@ export default async function EditDealCompanyPage({
 
         <form action={addCallLog} className="mt-4 flex flex-col gap-4">
           <input type="hidden" name="company_id" value={company.id} />
+          <input
+            type="hidden"
+            name="return_to"
+            value={`/admin/deals/${company.id}/edit`}
+          />
           {contacts.length > 0 && (
             <div>
               <label className={label}>Contact (optional)</label>

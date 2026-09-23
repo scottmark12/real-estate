@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { parseCsvToRecords } from "@/lib/csv";
-import { isTerminalOutcome, outcomeLabel, resolveNextDate } from "@/lib/call-outcomes";
+import {
+  isTerminalOutcome,
+  outcomeLabel,
+  requiresManualDate,
+  resolveNextDate,
+} from "@/lib/call-outcomes";
 import type { PipelineStage } from "@/lib/types";
 
 const PIPELINE_STAGES: PipelineStage[] = [
@@ -184,16 +189,25 @@ export async function addCallLog(formData: FormData) {
   const companyId = String(formData.get("company_id") ?? "");
   const outcome = String(formData.get("outcome") ?? "").trim();
   const notes = str(formData, "notes");
+  const returnTo = str(formData, "return_to") ?? `/admin/deals/${companyId}/edit`;
   if (!companyId || !outcome) return;
 
   const contactId = str(formData, "contact_id");
   const manualDate = str(formData, "next_action_date");
+  if (requiresManualDate(outcome) && !manualDate) {
+    redirect(
+      `${returnTo}?error=${encodeURIComponent(
+        `"${outcomeLabel(outcome)}" needs a date — nothing was logged.`
+      )}`
+    );
+  }
+
   const nextActionDate = isTerminalOutcome(outcome)
     ? null
     : resolveNextDate(outcome, manualDate);
   const nextActionType = outcomeLabel(outcome);
 
-  await supabase.from("deal_call_logs").insert({
+  const { error: logError } = await supabase.from("deal_call_logs").insert({
     company_id: companyId,
     contact_id: contactId,
     outcome: nextActionType,
@@ -206,14 +220,24 @@ export async function addCallLog(formData: FormData) {
   // (re)scheduled — the outcome picked above determines it automatically
   // unless a manual date override was given, so this never depends on
   // remembering to type a date in by hand.
-  await supabase
-    .from("deal_companies")
-    .update({
-      next_action_date: nextActionDate,
-      next_action_type: nextActionDate ? nextActionType : null,
-      ...(isTerminalOutcome(outcome) ? { pipeline_stage: "dead" } : {}),
-    })
-    .eq("id", companyId);
+  const { error: companyError } = logError
+    ? { error: null }
+    : await supabase
+        .from("deal_companies")
+        .update({
+          next_action_date: nextActionDate,
+          next_action_type: nextActionDate ? nextActionType : null,
+          ...(isTerminalOutcome(outcome) ? { pipeline_stage: "dead" } : {}),
+        })
+        .eq("id", companyId);
+
+  if (logError || companyError) {
+    redirect(
+      `${returnTo}?error=${encodeURIComponent(
+        "That call didn't save — try logging it again."
+      )}`
+    );
+  }
 
   revalidatePath(`/admin/deals/${companyId}/edit`);
   revalidatePath("/admin/deals");

@@ -24,16 +24,32 @@ export const CALL_OUTCOMES: CallOutcomeOption[] = [
   { value: "not_interested", label: "Not Interested", autoScheduleDays: null, terminal: true },
 ];
 
+// A manual date is only ever honored for outcomes that have no auto
+// interval of their own (today, just "Requested Callback"). Every other
+// outcome always uses its own fixed interval — a stray value left in the
+// shared date field on the Call Center form must never silently override
+// "No Answer" -> +2 days just because it happened to still be there when
+// that button was clicked.
 export function resolveNextDate(
   outcomeValue: string,
   manualDate: string | null
 ): string | null {
-  if (manualDate) return manualDate;
   const outcome = CALL_OUTCOMES.find((o) => o.value === outcomeValue);
-  if (!outcome || outcome.autoScheduleDays == null) return null;
+  if (!outcome || outcome.terminal) return null;
+  if (outcome.autoScheduleDays == null) return manualDate || null;
   const d = new Date();
   d.setUTCDate(d.getUTCDate() + outcome.autoScheduleDays);
   return d.toISOString().slice(0, 10);
+}
+
+// True for outcomes that can't schedule themselves (autoScheduleDays is
+// null) and aren't terminal either — i.e. they require the manual date
+// field to be filled in, or nothing gets scheduled at all. Used to reject
+// the submission up front instead of silently saving a call with no
+// follow-up date.
+export function requiresManualDate(outcomeValue: string): boolean {
+  const outcome = CALL_OUTCOMES.find((o) => o.value === outcomeValue);
+  return !!outcome && !outcome.terminal && outcome.autoScheduleDays == null;
 }
 
 export function outcomeLabel(value: string | null): string {

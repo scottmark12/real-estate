@@ -4,7 +4,12 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { parseCsvToRecords } from "@/lib/csv";
-import { isTerminalOutcome, outcomeLabel, resolveNextDate } from "@/lib/call-outcomes";
+import {
+  isTerminalOutcome,
+  outcomeLabel,
+  requiresManualDate,
+  resolveNextDate,
+} from "@/lib/call-outcomes";
 import type { ClientStatus, ClientType } from "@/lib/types";
 
 const CLIENT_STATUSES: ClientStatus[] = [
@@ -128,17 +133,26 @@ export async function addClientNote(formData: FormData) {
 
   const clientId = String(formData.get("client_id") ?? "");
   const outcome = String(formData.get("outcome") ?? "").trim();
+  const returnTo = str(formData, "return_to") ?? `/admin/clients/${clientId}/edit`;
   if (!clientId || !outcome) return;
+
+  const manualDate = str(formData, "next_follow_up_date");
+  if (requiresManualDate(outcome) && !manualDate) {
+    redirect(
+      `${returnTo}?error=${encodeURIComponent(
+        `"${outcomeLabel(outcome)}" needs a date — nothing was logged.`
+      )}`
+    );
+  }
+
   // Notes are optional — a call-center-style session shouldn't require
   // typing something every time; the outcome label stands in on its own.
   const body = String(formData.get("body") ?? "").trim() || outcomeLabel(outcome);
-
-  const manualDate = str(formData, "next_follow_up_date");
   const nextFollowUpDate = isTerminalOutcome(outcome)
     ? null
     : resolveNextDate(outcome, manualDate);
 
-  await supabase.from("client_notes").insert({
+  const { error: noteError } = await supabase.from("client_notes").insert({
     client_id: clientId,
     body,
     outcome,
@@ -149,14 +163,24 @@ export async function addClientNote(formData: FormData) {
   // the outcome picked above determines it automatically unless a manual
   // date override was given, so this never depends on remembering to type
   // a date in by hand.
-  await supabase
-    .from("clients")
-    .update({
-      next_follow_up_date: nextFollowUpDate,
-      last_contacted_at: new Date().toISOString(),
-      ...(isTerminalOutcome(outcome) ? { status: "lost" } : {}),
-    })
-    .eq("id", clientId);
+  const { error: clientError } = noteError
+    ? { error: null }
+    : await supabase
+        .from("clients")
+        .update({
+          next_follow_up_date: nextFollowUpDate,
+          last_contacted_at: new Date().toISOString(),
+          ...(isTerminalOutcome(outcome) ? { status: "lost" } : {}),
+        })
+        .eq("id", clientId);
+
+  if (noteError || clientError) {
+    redirect(
+      `${returnTo}?error=${encodeURIComponent(
+        "That call didn't save — try logging it again."
+      )}`
+    );
+  }
 
   revalidatePath(`/admin/clients/${clientId}/edit`);
   revalidatePath("/admin/clients");

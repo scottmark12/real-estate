@@ -125,8 +125,11 @@ function BuyBoxCard({ clientId, box }: { clientId: string; box?: BuyBox }) {
 
 export default async function EditClientPage({
   params,
+  searchParams,
 }: PageProps<"/admin/clients/[id]/edit">) {
   const { id } = await params;
+  const sp = await searchParams;
+  const error = typeof sp.error === "string" ? sp.error : undefined;
   const supabase = await createClient();
 
   const [{ data: clientData }, { data: buyBoxData }, { data: notesData }] =
@@ -156,6 +159,12 @@ export default async function EditClientPage({
       <h1 className="mt-2 font-display text-3xl font-semibold text-navy">
         {client.name}
       </h1>
+
+      {error && (
+        <p className="mt-4 border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
 
       <div className="mt-8">
         <ClientForm client={client} />
@@ -187,6 +196,11 @@ export default async function EditClientPage({
 
         <form action={addClientNote} className="mt-4 flex flex-col gap-4">
           <input type="hidden" name="client_id" value={client.id} />
+          <input
+            type="hidden"
+            name="return_to"
+            value={`/admin/clients/${client.id}/edit`}
+          />
           <div>
             <label className={label}>Outcome</label>
             <select name="outcome" required defaultValue="" className={select}>

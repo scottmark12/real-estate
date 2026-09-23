@@ -20,7 +20,12 @@ const outcomeButton =
 const terminalButton =
   "border border-red-300 px-4 py-3 text-center text-sm font-medium text-red-700 transition-colors hover:border-red-600 hover:bg-red-600 hover:text-white";
 
-export default async function AdminCallsPage() {
+export default async function AdminCallsPage({
+  searchParams,
+}: PageProps<"/admin/calls">) {
+  const params = await searchParams;
+  const error = typeof params.error === "string" ? params.error : undefined;
+
   const supabase = await createClient();
   const today = new Date().toISOString().slice(0, 10);
 
@@ -142,6 +147,12 @@ export default async function AdminCallsPage() {
         <p className="eyebrow text-navy/40">{remaining} remaining</p>
       </div>
 
+      {error && (
+        <p className="mt-4 border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {error}
+        </p>
+      )}
+
       <div className="mt-8 border border-sand bg-white/60 p-8">
         <span
           className={`inline-block border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${
@@ -179,6 +190,7 @@ export default async function AdminCallsPage() {
           action={current.kind === "client" ? addClientNote : addCallLog}
           className="mt-8 flex flex-col gap-3 border-t border-sand pt-6"
         >
+          <input type="hidden" name="return_to" value="/admin/calls" />
           <input
             type="hidden"
             name={current.kind === "client" ? "client_id" : "company_id"}
