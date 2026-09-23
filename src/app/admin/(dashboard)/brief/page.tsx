@@ -143,6 +143,9 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
 
   const dailyBrief = dailyBriefData as DailyBrief | null;
   const deepReport = dailyBrief?.deep_report ?? null;
+  const needsAttention = (deepReport?.needs_attention ?? []).slice(0, 6);
+  const resolved = (deepReport?.resolved ?? []).slice(0, 6);
+  const headlines = (deepReport?.headlines ?? []).slice(0, 6);
   const dayOfWeek = new Date(`${showingDate}T00:00:00`).getDay();
   const isToday = showingDate === todayIso;
   const nowHHMM = now.toTimeString().slice(0, 5);
@@ -244,21 +247,21 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
 
       <div className="px-6 py-9 sm:px-10 sm:py-16">
         <div className="mx-auto flex max-w-[860px] flex-col gap-12">
-          {deepReport?.needs_attention && deepReport.needs_attention.length > 0 && (
+          {needsAttention.length > 0 && (
             <div>
               <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
                 Needs Attention
               </h2>
-              <CalendarNoteList notes={deepReport.needs_attention} />
+              <CalendarNoteList notes={needsAttention} />
             </div>
           )}
 
-          {deepReport?.resolved && deepReport.resolved.length > 0 && (
+          {resolved.length > 0 && (
             <div>
               <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
                 Resolved
               </h2>
-              <CalendarNoteList notes={deepReport.resolved} />
+              <CalendarNoteList notes={resolved} />
             </div>
           )}
 
@@ -315,12 +318,12 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
             </div>
           )}
 
-          {deepReport?.headlines && deepReport.headlines.length > 0 && (
+          {headlines.length > 0 && (
             <div>
               <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
                 Headlines
               </h2>
-              <HeadlineList items={deepReport.headlines} />
+              <HeadlineList items={headlines} />
             </div>
           )}
 

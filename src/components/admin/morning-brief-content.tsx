@@ -50,9 +50,30 @@ export function Bolded({ text }: { text: string }) {
 // matching SECTION_ORDER) rather than six separate colored sections —
 // each entry: a small caps theme tag, a bold title, one flowing
 // paragraph (summary + the "why it matters" angle folded in), and a
-// muted "via Source" close. Matches the reference format directly.
-export function ResearchList({ sections }: { sections: GroupedSection[] }) {
-  const items = sections.flatMap((s) => s.reads.map((a) => ({ theme: s.meta.label, read: a })));
+// muted "via Source" close. Matches the reference format directly —
+// including its length: that page ran 5-6 items total, not a dump of
+// everything ever kept. Capped here the same way, taking up to
+// `perThemeCap` from each theme first (for spread across priorities)
+// before filling any remaining slots with leftovers.
+export function ResearchList({ sections, limit = 6, perThemeCap = 2 }: { sections: GroupedSection[]; limit?: number; perThemeCap?: number }) {
+  const picked: { theme: string; read: MarketRead }[] = [];
+  for (const s of sections) {
+    for (const r of s.reads.slice(0, perThemeCap)) {
+      if (picked.length >= limit) break;
+      picked.push({ theme: s.meta.label, read: r });
+    }
+  }
+  if (picked.length < limit) {
+    const pickedIds = new Set(picked.map((p) => p.read.id));
+    for (const s of sections) {
+      for (const r of s.reads) {
+        if (picked.length >= limit) break;
+        if (pickedIds.has(r.id)) continue;
+        picked.push({ theme: s.meta.label, read: r });
+      }
+    }
+  }
+  const items = picked.slice(0, limit);
   if (items.length === 0) return null;
 
   return (
