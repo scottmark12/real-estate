@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import CompanyForm from "@/components/admin/company-form";
-import { btnPrimary, btnSecondary, input, label, textarea } from "@/components/admin/ui";
-import { formatDate } from "@/lib/format";
+import { btnPrimary, btnSecondary, input, label, select, textarea } from "@/components/admin/ui";
+import { formatDate, PROPERTY_TYPE_OPTIONS } from "@/lib/format";
 import type {
   DealCallLog,
   DealCompany,
@@ -42,12 +42,31 @@ function PropertyCard({
         </div>
         <div>
           <label className={label}>Property Type</label>
-          <input
+          <select
             name="property_type"
             defaultValue={property?.property_type ?? ""}
-            placeholder="multifamily / senior_living / development"
-            className={input}
-          />
+            className={select}
+          >
+            <option value="">—</option>
+            <optgroup label="Commercial">
+              {PROPERTY_TYPE_OPTIONS.filter((o) => o.category === "commercial").map(
+                (o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                )
+              )}
+            </optgroup>
+            <optgroup label="Residential">
+              {PROPERTY_TYPE_OPTIONS.filter((o) => o.category === "residential").map(
+                (o) => (
+                  <option key={o.value} value={o.value}>
+                    {o.label}
+                  </option>
+                )
+              )}
+            </optgroup>
+          </select>
         </div>
 
         <div className="sm:col-span-2">

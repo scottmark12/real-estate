@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, tag } from "@/components/admin/ui";
+import { propertyTypeCategory, type PropertyTypeCategory } from "@/lib/format";
 import { deleteCompany } from "./actions";
 import type { DealCompany, PipelineStage } from "@/lib/types";
 
@@ -32,12 +33,22 @@ function isOverdue(dateStr: string) {
   return dateStr <= today;
 }
 
+const CATEGORY_TABS: { value: PropertyTypeCategory | "all"; label: string }[] = [
+  { value: "all", label: "All" },
+  { value: "commercial", label: "Commercial" },
+  { value: "residential", label: "Residential" },
+];
+
 export default async function AdminDealsPage({
   searchParams,
 }: PageProps<"/admin/deals">) {
   const params = await searchParams;
   const stageFilter =
     typeof params.stage === "string" ? (params.stage as PipelineStage) : undefined;
+  const categoryFilter =
+    typeof params.category === "string"
+      ? (params.category as PropertyTypeCategory)
+      : undefined;
 
   const supabase = await createClient();
   let query = supabase
@@ -47,11 +58,43 @@ export default async function AdminDealsPage({
 
   if (stageFilter) query = query.eq("pipeline_stage", stageFilter);
 
-  const { data } = await query;
-  const companies = (data as DealCompany[]) ?? [];
+  const [{ data }, { data: propertyData }] = await Promise.all([
+    query,
+    supabase.from("deal_properties").select("company_id, property_type"),
+  ]);
+
+  let companies = (data as DealCompany[]) ?? [];
+
+  // A company's category is the set of categories across its properties —
+  // most have one property, so this is almost always a single value, but
+  // it's computed as a set rather than assumed 1:1.
+  const categoriesByCompany = new Map<string, Set<PropertyTypeCategory | "unspecified">>();
+  for (const p of (propertyData as { company_id: string; property_type: string | null }[]) ?? []) {
+    const set = categoriesByCompany.get(p.company_id) ?? new Set();
+    set.add(propertyTypeCategory(p.property_type));
+    categoriesByCompany.set(p.company_id, set);
+  }
+
+  if (categoryFilter) {
+    companies = companies.filter((c) =>
+      categoriesByCompany.get(c.id)?.has(categoryFilter)
+    );
+  }
 
   function hrefFor(stage: PipelineStage | "all") {
-    return stage === "all" ? "/admin/deals" : `/admin/deals?stage=${stage}`;
+    const qs = new URLSearchParams();
+    if (stage !== "all") qs.set("stage", stage);
+    if (categoryFilter) qs.set("category", categoryFilter);
+    const s = qs.toString();
+    return s ? `/admin/deals?${s}` : "/admin/deals";
+  }
+
+  function hrefForCategory(category: PropertyTypeCategory | "all") {
+    const qs = new URLSearchParams();
+    if (stageFilter) qs.set("stage", stageFilter);
+    if (category !== "all") qs.set("category", category);
+    const s = qs.toString();
+    return s ? `/admin/deals?${s}` : "/admin/deals";
   }
 
   return (
@@ -69,6 +112,22 @@ export default async function AdminDealsPage({
       </div>
 
       <div className="mt-6 flex flex-wrap gap-2">
+        {CATEGORY_TABS.map((t) => (
+          <Link
+            key={t.value}
+            href={hrefForCategory(t.value)}
+            className={`rounded-full border px-4 py-1.5 text-sm ${
+              (categoryFilter ?? "all") === t.value
+                ? "border-gold bg-gold text-navy"
+                : "border-navy/20 text-navy/70"
+            }`}
+          >
+            {t.label}
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-3 flex flex-wrap gap-2">
         {TABS.map((t) => (
           <Link
             key={t.value}
@@ -89,6 +148,7 @@ export default async function AdminDealsPage({
           <thead className="border-b border-sand text-navy/40">
             <tr>
               <th className="eyebrow px-4 py-3 font-medium">Company</th>
+              <th className="eyebrow px-4 py-3 font-medium">Type</th>
               <th className="eyebrow px-4 py-3 font-medium">Stage</th>
               <th className="eyebrow px-4 py-3 font-medium">Heat</th>
               <th className="eyebrow px-4 py-3 font-medium">Source</th>
@@ -111,6 +171,11 @@ export default async function AdminDealsPage({
                       {c.website}
                     </p>
                   )}
+                </td>
+                <td className="px-4 py-3 capitalize text-navy/70">
+                  {[...(categoriesByCompany.get(c.id) ?? [])]
+                    .filter((cat) => cat !== "unspecified")
+                    .join(" / ") || "—"}
                 </td>
                 <td className="px-4 py-3">
                   <span className={`${tag} border-navy/20 text-navy/70`}>
@@ -155,7 +220,7 @@ export default async function AdminDealsPage({
             ))}
             {companies.length === 0 && (
               <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-navy/50">
+                <td colSpan={7} className="px-4 py-8 text-center text-navy/50">
                   No companies yet.
                 </td>
               </tr>

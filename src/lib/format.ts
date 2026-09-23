@@ -53,3 +53,28 @@ export function slugify(input: string) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)+/g, "");
 }
+
+export type PropertyTypeCategory = "commercial" | "residential";
+
+export const PROPERTY_TYPE_OPTIONS: {
+  value: string;
+  label: string;
+  category: PropertyTypeCategory;
+}[] = [
+  { value: "multifamily", label: "Multifamily", category: "commercial" },
+  { value: "senior_living", label: "Senior Living", category: "commercial" },
+  { value: "development", label: "Development", category: "commercial" },
+  { value: "office", label: "Office", category: "commercial" },
+  { value: "retail", label: "Retail", category: "commercial" },
+  { value: "industrial", label: "Industrial", category: "commercial" },
+  { value: "single_family", label: "Single Family", category: "residential" },
+  { value: "condo", label: "Condo", category: "residential" },
+  { value: "townhome", label: "Townhome", category: "residential" },
+];
+
+export function propertyTypeCategory(
+  propertyType: string | null
+): PropertyTypeCategory | "unspecified" {
+  const match = PROPERTY_TYPE_OPTIONS.find((o) => o.value === propertyType);
+  return match ? match.category : "unspecified";
+}
