@@ -67,7 +67,7 @@ export default async function AdminBriefPage() {
       .lte("period_start", todayIso)
       .gte("period_end", todayIso)
       .order("sort_order", { ascending: true }),
-    supabase.from("market_reads").select("*").order("published_at", { ascending: false }).limit(6),
+    supabase.from("market_reads").select("*").order("published_at", { ascending: false }).limit(30),
   ]);
 
   const allBlocks = (allBlocksData as ScheduleBlock[]) ?? [];
@@ -76,7 +76,16 @@ export default async function AdminBriefPage() {
   const backlogTodos = (backlogTodosData as Todo[]) ?? [];
   const totalDue = (clientsDueCount ?? 0) + (dealsDueCount ?? 0);
   const goals = (goalsData as Goal[]) ?? [];
-  const marketReads = (marketReadsData as MarketRead[]) ?? [];
+  const allMarketReads = (marketReadsData as MarketRead[]) ?? [];
+  // Rates/San Diego are Mark's specific interests — give them their own
+  // section instead of letting higher-volume national CRE news bury them
+  // in a single "latest N" list.
+  const spotlightReads = allMarketReads
+    .filter((a) => a.theme === "rates" || a.theme === "san_diego")
+    .slice(0, 4);
+  const marketReads = allMarketReads
+    .filter((a) => a.theme !== "rates" && a.theme !== "san_diego")
+    .slice(0, 6);
 
   const todosByBlock = new Map<string, Todo[]>();
   const unassignedToday: Todo[] = [];
@@ -362,6 +371,29 @@ export default async function AdminBriefPage() {
         )}
       </div>
 
+      {spotlightReads.length > 0 && (
+        <div className="mt-10 border border-blue/20 bg-blue/5 p-6">
+          <p className="eyebrow text-blue">Rates &amp; San Diego</p>
+          <div className="mt-3 flex flex-col divide-y divide-blue/10">
+            {spotlightReads.map((a) => (
+              <a
+                key={a.id}
+                href={a.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block py-3 hover:bg-white/40"
+              >
+                <p className="eyebrow text-navy/40">
+                  {a.source} {a.theme === "rates" ? "· Rates" : "· San Diego"}
+                </p>
+                <p className="mt-1 font-medium text-navy">{a.title}</p>
+                {a.summary && <p className="mt-1 text-sm text-navy/60">{a.summary}</p>}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
       {marketReads.length > 0 && (
         <div className="mt-10">
           <div className="flex items-center justify-between">
@@ -390,7 +422,7 @@ export default async function AdminBriefPage() {
         </div>
       )}
 
-      {marketReads.length === 0 && (
+      {marketReads.length === 0 && spotlightReads.length === 0 && (
         <div className="mt-10 border border-dashed border-navy/20 p-6 text-center">
           <p className="text-navy/50">No articles pulled yet.</p>
           <form action={refreshMarketReads} className="mt-3">

@@ -2,7 +2,9 @@ export type MarketReadTheme =
   | "opportunities"
   | "practices"
   | "systems_codes"
-  | "vision";
+  | "vision"
+  | "rates"
+  | "san_diego";
 
 // Ported from an earlier newsletter project's two-layer feed schema:
 // working_feeds.json (hand-tested direct RSS) + google_news_feeds.json
@@ -55,6 +57,17 @@ export const FEED_SOURCES: { url: string; source: string; theme: MarketReadTheme
   { url: "https://news.google.com/rss/search?q=Colliers+research+OR+insights+site:colliers.com", source: "Colliers (via Google News)", theme: "opportunities" },
   { url: "https://news.google.com/rss/search?q=Brookfield+insights+site:brookfield.com", source: "Brookfield (via Google News)", theme: "opportunities" },
   { url: "https://news.google.com/rss/search?q=market+insights+site:nar.realtor", source: "NAR (via Google News)", theme: "opportunities" },
+  // Rates
+  { url: "https://news.google.com/rss/search?q=mortgage+rates+30-year+fixed", source: "Google News", theme: "rates" },
+  { url: "https://news.google.com/rss/search?q=Federal+Reserve+interest+rate+decision+housing+OR+mortgage", source: "Google News", theme: "rates" },
+  { url: "https://news.google.com/rss/search?q=10-year+treasury+yield+mortgage+rates", source: "Google News", theme: "rates" },
+  // San Diego / SoCal market — bisnow.com/san-diego/rss turned out to be
+  // their national feed with a city-branded URL, not genuinely SD-filtered,
+  // so it's left out; SDBJ is a real local feed, the rest are Google News.
+  { url: "https://www.sdbj.com/feed/", source: "San Diego Business Journal", theme: "san_diego" },
+  { url: "https://news.google.com/rss/search?q=San+Diego+real+estate+market+OR+home+prices", source: "Google News", theme: "san_diego" },
+  { url: "https://news.google.com/rss/search?q=San+Diego+commercial+real+estate+OR+industrial+OR+multifamily", source: "Google News", theme: "san_diego" },
+  { url: "https://news.google.com/rss/search?q=Southern+California+housing+market+OR+SoCal+real+estate", source: "Google News", theme: "san_diego" },
 ];
 
 type RawFeedItem = {
@@ -116,18 +129,33 @@ export function parseFeed(xml: string): RawFeedItem[] {
   return items;
 }
 
-const THEME_KEYWORDS: Record<MarketReadTheme, string[]> = {
+// Keyword reclassification only applies within these 4 general topic
+// themes. "rates" and "san_diego" come from deliberately dedicated feeds
+// (see FEED_SOURCES) and are trusted as-is — an SD housing story can
+// easily contain "investment"/"growth" language and would otherwise get
+// reclassified into "opportunities" and vanish from the SD-specific view.
+type KeywordTheme = "opportunities" | "practices" | "systems_codes" | "vision";
+
+const THEME_KEYWORDS: Record<KeywordTheme, string[]> = {
   opportunities: ["investment", "invest", "returns", "roi", "acquisition", "portfolio", "growth", "expand"],
   practices: ["construction", "modular", "prefab", "timber", "productivity", "technology", "build", "design-build"],
   systems_codes: ["zoning", "code", "regulation", "policy", "incentive", "opportunity zone", "compliance", "sustainab", "green building"],
   vision: ["future", "smart city", "urban planning", "innovation", "placemaking", "architecture", "vision"],
 };
 
+const KEYWORD_THEMES = Object.keys(THEME_KEYWORDS) as KeywordTheme[];
+
+function isKeywordTheme(theme: MarketReadTheme): theme is KeywordTheme {
+  return (KEYWORD_THEMES as string[]).includes(theme);
+}
+
 export function detectTheme(title: string, summary: string, fallback: MarketReadTheme): MarketReadTheme {
+  if (!isKeywordTheme(fallback)) return fallback;
+
   const text = `${title} ${summary}`.toLowerCase();
   let best: MarketReadTheme = fallback;
   let bestScore = 0;
-  for (const theme of Object.keys(THEME_KEYWORDS) as MarketReadTheme[]) {
+  for (const theme of KEYWORD_THEMES) {
     const score = THEME_KEYWORDS[theme].filter((kw) => text.includes(kw)).length;
     if (score > bestScore) {
       bestScore = score;
