@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { parseCsvToRecords } from "@/lib/csv";
-import { isTerminalOutcome, resolveNextDate } from "@/lib/call-outcomes";
+import { isTerminalOutcome, outcomeLabel, resolveNextDate } from "@/lib/call-outcomes";
 import type { ClientStatus, ClientType } from "@/lib/types";
 
 const CLIENT_STATUSES: ClientStatus[] = [
@@ -127,9 +127,11 @@ export async function addClientNote(formData: FormData) {
   const supabase = await createClient();
 
   const clientId = String(formData.get("client_id") ?? "");
-  const body = String(formData.get("body") ?? "").trim();
   const outcome = String(formData.get("outcome") ?? "").trim();
-  if (!clientId || !body || !outcome) return;
+  if (!clientId || !outcome) return;
+  // Notes are optional — a call-center-style session shouldn't require
+  // typing something every time; the outcome label stands in on its own.
+  const body = String(formData.get("body") ?? "").trim() || outcomeLabel(outcome);
 
   const manualDate = str(formData, "next_follow_up_date");
   const nextFollowUpDate = isTerminalOutcome(outcome)
@@ -159,6 +161,7 @@ export async function addClientNote(formData: FormData) {
   revalidatePath(`/admin/clients/${clientId}/edit`);
   revalidatePath("/admin/clients");
   revalidatePath("/admin");
+  revalidatePath("/admin/calls");
 }
 
 export async function importClientsCsv(formData: FormData) {

@@ -218,6 +218,7 @@ export async function addCallLog(formData: FormData) {
   revalidatePath(`/admin/deals/${companyId}/edit`);
   revalidatePath("/admin/deals");
   revalidatePath("/admin");
+  revalidatePath("/admin/calls");
 }
 
 export async function importDealsCsv(formData: FormData) {

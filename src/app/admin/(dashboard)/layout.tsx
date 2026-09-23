@@ -3,6 +3,7 @@ import { logout } from "@/app/admin/login/actions";
 
 const NAV = [
   { href: "/admin", label: "Dashboard" },
+  { href: "/admin/calls", label: "Call Center" },
   { href: "/admin/calendar", label: "Calendar" },
   { href: "/admin/clients", label: "Clients" },
   { href: "/admin/leads", label: "Leads" },

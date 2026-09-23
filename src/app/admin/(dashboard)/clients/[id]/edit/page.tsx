@@ -205,10 +205,9 @@ export default async function EditClientPage({
             </p>
           </div>
           <div>
-            <label className={label}>Note</label>
+            <label className={label}>Note (optional)</label>
             <textarea
               name="body"
-              required
               rows={3}
               placeholder="Called — still deciding on a neighborhood, wants to see North County listings next week."
               className={textarea}
