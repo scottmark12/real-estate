@@ -4,20 +4,57 @@ export type MarketReadTheme =
   | "systems_codes"
   | "vision";
 
-// Hand-tested RSS feeds (no CBRE/JLL/CoStar — those return empty/403 with
-// no auth), ported from an earlier newsletter project's working_feeds.json.
-// The Real Deal feeds have since gone 403 and were dropped from this list.
+// Ported from an earlier newsletter project's two-layer feed schema:
+// working_feeds.json (hand-tested direct RSS) + google_news_feeds.json
+// (theme-grouped Google News search-RSS, including site:-restricted
+// queries against CBRE/JLL/Colliers/Brookfield/Prologis/NAR — the old
+// project's actual mechanism for "big firm insights," since none of
+// those firms expose a real public RSS/API feed). The Real Deal's own
+// feeds have since gone 403 and were dropped; everything else is kept
+// even where untested here — dead feeds fail silently in fetchMarketReads.
 export const FEED_SOURCES: { url: string; source: string; theme: MarketReadTheme }[] = [
+  // Direct RSS — tier 1 / real estate
   { url: "https://commercialobserver.com/feed/", source: "Commercial Observer", theme: "opportunities" },
-  { url: "https://www.constructiondive.com/feeds/news/", source: "Construction Dive", theme: "practices" },
-  { url: "https://www.dezeen.com/feed/", source: "Dezeen", theme: "vision" },
-  { url: "https://www.smartcitiesdive.com/feeds/news/", source: "Smart Cities Dive", theme: "vision" },
-  { url: "https://aecmag.com/feed/", source: "AEC Magazine", theme: "practices" },
-  { url: "https://www.archdaily.com/feed", source: "ArchDaily", theme: "vision" },
-  { url: "https://builtworlds.com/news/feed/", source: "BuiltWorlds", theme: "practices" },
-  { url: "https://www.greenbuildingadvisor.com/feed/", source: "Green Building Advisor", theme: "systems_codes" },
-  { url: "https://rmi.org/feed/", source: "RMI", theme: "systems_codes" },
   { url: "https://www.redfin.com/news/feed/", source: "Redfin News", theme: "opportunities" },
+  { url: "https://www.zillow.com/research/feed/", source: "Zillow Research", theme: "opportunities" },
+  { url: "https://www.yardimatrix.com/blog/feed/", source: "Yardi Matrix", theme: "opportunities" },
+  // Direct RSS — construction / engineering / practices
+  { url: "https://www.constructiondive.com/feeds/news/", source: "Construction Dive", theme: "practices" },
+  { url: "https://aecmag.com/feed/", source: "AEC Magazine", theme: "practices" },
+  { url: "https://builtworlds.com/news/feed/", source: "BuiltWorlds", theme: "practices" },
+  { url: "https://www.engineering.com/feed/", source: "Engineering.com", theme: "practices" },
+  { url: "https://www.construction.com/feed/", source: "Construction.com", theme: "practices" },
+  // Direct RSS — design / architecture / vision
+  { url: "https://www.dezeen.com/feed/", source: "Dezeen", theme: "vision" },
+  { url: "https://www.dezeen.com/technology/feed/", source: "Dezeen Technology", theme: "vision" },
+  { url: "https://www.archdaily.com/feed", source: "ArchDaily", theme: "vision" },
+  { url: "https://www.smartcitiesdive.com/feeds/news/", source: "Smart Cities Dive", theme: "vision" },
+  // Direct RSS — sustainability / systems & codes
+  { url: "https://www.greenbuildingadvisor.com/feed/", source: "Green Building Advisor", theme: "systems_codes" },
+  { url: "https://www.buildinggreen.com/feed/", source: "BuildingGreen", theme: "systems_codes" },
+  { url: "https://rmi.org/feed/", source: "RMI", theme: "systems_codes" },
+  { url: "https://architecture2030.org/feed/", source: "Architecture 2030", theme: "systems_codes" },
+  { url: "https://carbonleadershipforum.org/feed/", source: "Carbon Leadership Forum", theme: "systems_codes" },
+  { url: "https://www.woodworks.org/feed/", source: "WoodWorks", theme: "systems_codes" },
+  { url: "https://www.thinkwood.com/feed/", source: "Think Wood", theme: "systems_codes" },
+  // Google News search-RSS, theme-grouped (your original google_news_feeds.json)
+  { url: "https://news.google.com/rss/search?q=real+estate+development+case+study+OR+success+story", source: "Google News", theme: "opportunities" },
+  { url: "https://news.google.com/rss/search?q=multifamily+investment+ROI+OR+returns", source: "Google News", theme: "opportunities" },
+  { url: "https://news.google.com/rss/search?q=adaptive+reuse+commercial+real+estate", source: "Google News", theme: "opportunities" },
+  { url: "https://news.google.com/rss/search?q=modular+construction+OR+prefab+construction", source: "Google News", theme: "practices" },
+  { url: "https://news.google.com/rss/search?q=mass+timber+construction", source: "Google News", theme: "practices" },
+  { url: "https://news.google.com/rss/search?q=construction+productivity+study+OR+research", source: "Google News", theme: "practices" },
+  { url: "https://news.google.com/rss/search?q=zoning+reform+real+estate", source: "Google News", theme: "systems_codes" },
+  { url: "https://news.google.com/rss/search?q=opportunity+zone+OR+development+incentives", source: "Google News", theme: "systems_codes" },
+  { url: "https://news.google.com/rss/search?q=green+building+policy+OR+sustainable+building+code", source: "Google News", theme: "systems_codes" },
+  { url: "https://news.google.com/rss/search?q=future+of+real+estate+OR+future+of+cities", source: "Google News", theme: "vision" },
+  { url: "https://news.google.com/rss/search?q=urban+planning+insights+OR+innovation", source: "Google News", theme: "vision" },
+  // Google News, site-restricted — your "big firm insights" workaround (no firm exposes real public RSS)
+  { url: "https://news.google.com/rss/search?q=CBRE+insights+site:cbre.com", source: "CBRE (via Google News)", theme: "opportunities" },
+  { url: "https://news.google.com/rss/search?q=JLL+research+site:jll.com", source: "JLL (via Google News)", theme: "opportunities" },
+  { url: "https://news.google.com/rss/search?q=Colliers+research+OR+insights+site:colliers.com", source: "Colliers (via Google News)", theme: "opportunities" },
+  { url: "https://news.google.com/rss/search?q=Brookfield+insights+site:brookfield.com", source: "Brookfield (via Google News)", theme: "opportunities" },
+  { url: "https://news.google.com/rss/search?q=market+insights+site:nar.realtor", source: "NAR (via Google News)", theme: "opportunities" },
 ];
 
 type RawFeedItem = {
@@ -115,6 +152,14 @@ export type FetchedMarketRead = {
   published_at: string | null;
 };
 
+// Google News RSS titles are formatted "Headline - Publisher"; split that
+// out so the reading list shows the real publisher instead of "Google News".
+function splitGoogleNewsTitle(title: string): { title: string; publisher: string | null } {
+  const match = title.match(/^(.*)\s-\s([^-]+)$/);
+  if (!match) return { title, publisher: null };
+  return { title: match[1].trim(), publisher: match[2].trim() };
+}
+
 export async function fetchMarketReads(): Promise<FetchedMarketRead[]> {
   const results = await Promise.allSettled(
     FEED_SOURCES.map(async ({ url, source, theme }) => {
@@ -124,16 +169,22 @@ export async function fetchMarketReads(): Promise<FetchedMarketRead[]> {
       });
       if (!res.ok) throw new Error(`${source}: ${res.status}`);
       const xml = await res.text();
+      const isGoogleNews = url.startsWith("https://news.google.com/");
       return parseFeed(xml)
         .slice(0, 8)
-        .map((item) => ({
-          title: item.title,
-          url: item.url,
-          source,
-          summary: item.summary || null,
-          theme: detectTheme(item.title, item.summary, theme),
-          published_at: parseFeedDate(item.publishedAt),
-        }));
+        .map((item) => {
+          const split = isGoogleNews ? splitGoogleNewsTitle(item.title) : null;
+          const title = split?.title ?? item.title;
+          const resolvedSource = source === "Google News" && split?.publisher ? split.publisher : source;
+          return {
+            title,
+            url: item.url,
+            source: resolvedSource,
+            summary: item.summary || null,
+            theme: detectTheme(title, item.summary, theme),
+            published_at: parseFeedDate(item.publishedAt),
+          };
+        });
     })
   );
 
