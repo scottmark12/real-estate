@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { btnPrimary, tag } from "@/components/admin/ui";
+import { btnPrimary, btnSecondary, tag } from "@/components/admin/ui";
 import { deleteClient } from "./actions";
 import type { Client, ClientStatus } from "@/lib/types";
 
@@ -34,6 +34,8 @@ export default async function AdminClientsPage({
   const params = await searchParams;
   const statusFilter =
     typeof params.status === "string" ? (params.status as ClientStatus) : undefined;
+  const imported = typeof params.imported === "string" ? params.imported : undefined;
+  const skipped = typeof params.skipped === "string" ? params.skipped : undefined;
 
   const supabase = await createClient();
   let query = supabase
@@ -59,10 +61,24 @@ export default async function AdminClientsPage({
             All Clients
           </h1>
         </div>
-        <Link href="/admin/clients/new" className={btnPrimary}>
-          + New Client
-        </Link>
+        <div className="flex gap-3">
+          <Link href="/admin/clients/import" className={btnSecondary}>
+            Import CSV
+          </Link>
+          <Link href="/admin/clients/new" className={btnPrimary}>
+            + New Client
+          </Link>
+        </div>
       </div>
+
+      {imported !== undefined && (
+        <p className="mt-4 border border-sand bg-white/60 px-4 py-3 text-sm text-navy">
+          Imported {imported} client{imported === "1" ? "" : "s"}.
+          {skipped && skipped !== "0"
+            ? ` Skipped ${skipped} row${skipped === "1" ? "" : "s"} with no name.`
+            : ""}
+        </p>
+      )}
 
       <div className="mt-6 flex flex-wrap gap-2">
         {TABS.map((t) => (

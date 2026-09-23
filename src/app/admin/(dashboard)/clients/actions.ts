@@ -3,6 +3,18 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { parseCsvToRecords } from "@/lib/csv";
+import type { ClientStatus, ClientType } from "@/lib/types";
+
+const CLIENT_STATUSES: ClientStatus[] = [
+  "lead",
+  "active",
+  "under_contract",
+  "past_client",
+  "lost",
+];
+const CLIENT_TYPES: ClientType[] = ["buyer", "seller", "investor", "other"];
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 
 function num(formData: FormData, key: string): number | null {
   const raw = formData.get(key);
@@ -146,4 +158,54 @@ export async function addClientNote(formData: FormData) {
   revalidatePath(`/admin/clients/${clientId}/edit`);
   revalidatePath("/admin/clients");
   revalidatePath("/admin");
+}
+
+export async function importClientsCsv(formData: FormData) {
+  const file = formData.get("csv_file") as File | null;
+  if (!file || file.size === 0) {
+    redirect("/admin/clients/import?error=No file selected");
+  }
+
+  const text = await file.text();
+  const rows = parseCsvToRecords(text);
+
+  const payloads = rows
+    .map((row) => {
+      const name = (row.name || "").trim();
+      if (!name) return null;
+
+      const status = CLIENT_STATUSES.includes(row.status as ClientStatus)
+        ? (row.status as ClientStatus)
+        : "lead";
+      const clientType = CLIENT_TYPES.includes(row.client_type as ClientType)
+        ? (row.client_type as ClientType)
+        : "buyer";
+      const nextFollowUpDate = DATE_RE.test(row.next_follow_up_date)
+        ? row.next_follow_up_date
+        : null;
+
+      return {
+        name,
+        email: row.email || null,
+        phone: row.phone || null,
+        status,
+        client_type: clientType,
+        timeline: row.timeline || null,
+        next_follow_up_date: nextFollowUpDate,
+        notes: row.notes || null,
+        source: "csv-import",
+      };
+    })
+    .filter((p): p is NonNullable<typeof p> => p !== null);
+
+  const skipped = rows.length - payloads.length;
+
+  if (payloads.length > 0) {
+    const supabase = await createClient();
+    await supabase.from("clients").insert(payloads);
+  }
+
+  revalidatePath("/admin/clients");
+  revalidatePath("/admin");
+  redirect(`/admin/clients?imported=${payloads.length}&skipped=${skipped}`);
 }

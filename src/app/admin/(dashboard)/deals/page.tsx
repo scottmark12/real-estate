@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { btnPrimary, tag } from "@/components/admin/ui";
+import { btnPrimary, btnSecondary, tag } from "@/components/admin/ui";
 import { propertyTypeCategory, type PropertyTypeCategory } from "@/lib/format";
 import { deleteCompany } from "./actions";
 import type { DealCompany, PipelineStage } from "@/lib/types";
@@ -49,6 +49,8 @@ export default async function AdminDealsPage({
     typeof params.category === "string"
       ? (params.category as PropertyTypeCategory)
       : undefined;
+  const imported = typeof params.imported === "string" ? params.imported : undefined;
+  const skipped = typeof params.skipped === "string" ? params.skipped : undefined;
 
   const supabase = await createClient();
   let query = supabase
@@ -106,10 +108,24 @@ export default async function AdminDealsPage({
             Acquisition Targets
           </h1>
         </div>
-        <Link href="/admin/deals/new" className={btnPrimary}>
-          + New Company
-        </Link>
+        <div className="flex gap-3">
+          <Link href="/admin/deals/import" className={btnSecondary}>
+            Import CSV
+          </Link>
+          <Link href="/admin/deals/new" className={btnPrimary}>
+            + New Company
+          </Link>
+        </div>
       </div>
+
+      {imported !== undefined && (
+        <p className="mt-4 border border-sand bg-white/60 px-4 py-3 text-sm text-navy">
+          Imported {imported} propert{imported === "1" ? "y" : "ies"}.
+          {skipped && skipped !== "0"
+            ? ` Skipped ${skipped} row${skipped === "1" ? "" : "s"} with no company or property name.`
+            : ""}
+        </p>
+      )}
 
       <div className="mt-6 flex flex-wrap gap-2">
         {CATEGORY_TABS.map((t) => (
