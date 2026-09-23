@@ -22,7 +22,7 @@ export async function addTodo(formData: FormData) {
     scheduled_date: str(formData, "scheduled_date"),
   });
 
-  revalidatePath("/admin/brief");
+  revalidatePath("/admin");
 }
 
 export async function toggleTodo(formData: FormData) {
@@ -39,7 +39,7 @@ export async function toggleTodo(formData: FormData) {
     })
     .eq("id", id);
 
-  revalidatePath("/admin/brief");
+  revalidatePath("/admin");
 }
 
 export async function assignTodo(formData: FormData) {
@@ -56,7 +56,7 @@ export async function assignTodo(formData: FormData) {
     })
     .eq("id", id);
 
-  revalidatePath("/admin/brief");
+  revalidatePath("/admin");
 }
 
 export async function deleteTodo(formData: FormData) {
@@ -65,7 +65,7 @@ export async function deleteTodo(formData: FormData) {
   const supabase = await createClient();
   await supabase.from("todos").delete().eq("id", id);
 
-  revalidatePath("/admin/brief");
+  revalidatePath("/admin");
 }
 
 export async function upsertScheduleBlock(formData: FormData) {
@@ -91,7 +91,7 @@ export async function upsertScheduleBlock(formData: FormData) {
     await supabase.from("schedule_blocks").insert(payload);
   }
 
-  revalidatePath("/admin/brief");
+  revalidatePath("/admin");
 }
 
 export async function deleteScheduleBlock(formData: FormData) {
@@ -100,7 +100,7 @@ export async function deleteScheduleBlock(formData: FormData) {
   const supabase = await createClient();
   await supabase.from("schedule_blocks").delete().eq("id", id);
 
-  revalidatePath("/admin/brief");
+  revalidatePath("/admin");
 }
 
 export async function refreshMarketReads() {
@@ -122,5 +122,5 @@ export async function refreshMarketReads() {
       { onConflict: "url", ignoreDuplicates: true }
     );
 
-  revalidatePath("/admin/brief");
+  revalidatePath("/admin");
 }
