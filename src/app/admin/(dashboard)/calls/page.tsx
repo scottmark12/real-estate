@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnSecondary, input, textarea } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
 import { addClientNote } from "../clients/actions";
 import { addCallLog, upsertContact } from "../deals/actions";
@@ -212,9 +213,9 @@ export default async function AdminCallsPage({
                 className={`${input} w-44`}
               />
             </div>
-            <button type="submit" className={btnSecondary}>
+            <SubmitButton className={btnSecondary} pendingLabel="Saving…">
               Save &amp; Show Number
-            </button>
+            </SubmitButton>
           </form>
         )}
 
@@ -259,15 +260,14 @@ export default async function AdminCallsPage({
           </p>
           <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {CALL_OUTCOMES.map((o) => (
-              <button
+              <SubmitButton
                 key={o.value}
-                type="submit"
                 name="outcome"
                 value={o.value}
                 className={o.terminal ? terminalButton : outcomeButton}
               >
                 {o.label}
-              </button>
+              </SubmitButton>
             ))}
           </div>
         </form>

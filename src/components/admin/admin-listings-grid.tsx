@@ -20,6 +20,15 @@ export default function AdminListingsGrid({
   const [listings, setListings] = useState(initial);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [dragOverId, setDragOverId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+
+  const isFiltering = query.trim().length > 0;
+  const visible = isFiltering
+    ? listings.filter((l) => {
+        const q = query.trim().toLowerCase();
+        return l.title.toLowerCase().includes(q) || l.location.toLowerCase().includes(q);
+      })
+    : listings;
 
   function persist(next: Listing[]) {
     setListings(next);
@@ -57,8 +66,24 @@ export default function AdminListingsGrid({
   }
 
   return (
-    <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {listings.map((listing, i) => (
+    <div>
+      <input
+        type="search"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search by title or location…"
+        className="mt-6 w-full max-w-xs border border-navy/15 bg-white px-3 py-2 text-sm text-navy placeholder:text-navy/30 focus:border-navy focus:outline-none"
+      />
+      {isFiltering && (
+        <p className="mt-2 text-xs text-navy/40">
+          Reordering is disabled while searching — clear the search to drag or use the arrows.
+        </p>
+      )}
+
+      <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {visible.map((listing) => {
+        const i = listings.findIndex((l) => l.id === listing.id);
+        return (
         <div
           key={listing.id}
           onDragOver={(e) => {
@@ -117,39 +142,43 @@ export default function AdminListingsGrid({
 
           <div className="flex items-center justify-between border-t border-sand px-4 py-3">
             <div className="flex items-center gap-3 text-navy/40">
-              <span
-                draggable
-                onDragStart={(e) => {
-                  e.dataTransfer.effectAllowed = "move";
-                  setDraggingId(listing.id);
-                }}
-                onDragEnd={() => {
-                  setDraggingId(null);
-                  setDragOverId(null);
-                }}
-                title="Drag to reorder"
-                className="cursor-grab select-none text-sm leading-none hover:text-navy active:cursor-grabbing"
-              >
-                ⠿
-              </span>
-              <button
-                type="button"
-                onClick={() => move(listing.id, -1)}
-                disabled={i === 0}
-                title="Move earlier"
-                className="hover:text-navy disabled:opacity-30"
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                onClick={() => move(listing.id, 1)}
-                disabled={i === listings.length - 1}
-                title="Move later"
-                className="hover:text-navy disabled:opacity-30"
-              >
-                →
-              </button>
+              {!isFiltering && (
+                <>
+                  <span
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.effectAllowed = "move";
+                      setDraggingId(listing.id);
+                    }}
+                    onDragEnd={() => {
+                      setDraggingId(null);
+                      setDragOverId(null);
+                    }}
+                    title="Drag to reorder"
+                    className="cursor-grab select-none text-sm leading-none hover:text-navy active:cursor-grabbing"
+                  >
+                    ⠿
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => move(listing.id, -1)}
+                    disabled={i === 0}
+                    title="Move earlier"
+                    className="hover:text-navy disabled:opacity-30"
+                  >
+                    ←
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => move(listing.id, 1)}
+                    disabled={i === listings.length - 1}
+                    title="Move later"
+                    className="hover:text-navy disabled:opacity-30"
+                  >
+                    →
+                  </button>
+                </>
+              )}
             </div>
             <div className="flex items-center gap-4 text-sm">
               <Link
@@ -170,22 +199,30 @@ export default function AdminListingsGrid({
             </div>
           </div>
         </div>
-      ))}
+        );
+      })}
 
-      <div
-        onDragOver={(e) => {
-          e.preventDefault();
-          if (draggingId) setDragOverId("__end__");
-        }}
-        onDragLeave={() => setDragOverId((cur) => (cur === "__end__" ? null : cur))}
-        onDrop={(e) => {
-          e.preventDefault();
-          reorderTo(null);
-        }}
-        className={`col-span-full h-4 border-t-2 ${
-          dragOverId === "__end__" && draggingId ? "border-blue" : "border-transparent"
-        }`}
-      />
+      {!isFiltering && (
+        <div
+          onDragOver={(e) => {
+            e.preventDefault();
+            if (draggingId) setDragOverId("__end__");
+          }}
+          onDragLeave={() => setDragOverId((cur) => (cur === "__end__" ? null : cur))}
+          onDrop={(e) => {
+            e.preventDefault();
+            reorderTo(null);
+          }}
+          className={`col-span-full h-4 border-t-2 ${
+            dragOverId === "__end__" && draggingId ? "border-blue" : "border-transparent"
+          }`}
+        />
+      )}
+      </div>
+
+      {isFiltering && visible.length === 0 && (
+        <p className="mt-8 text-navy/50">No listings match &quot;{query}&quot;.</p>
+      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { btnPrimary, input, label, select, textarea } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { upsertCompany } from "@/app/admin/(dashboard)/deals/actions";
 import type { DealCompany } from "@/lib/types";
 
@@ -95,9 +96,9 @@ export default function CompanyForm({ company }: { company?: Partial<DealCompany
         />
       </div>
 
-      <button type="submit" className={`self-start ${btnPrimary}`}>
+      <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Saving…">
         {company ? "Save Changes" : "Create Company"}
-      </button>
+      </SubmitButton>
     </form>
   );
 }

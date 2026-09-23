@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import GoalForm from "@/components/admin/goal-form";
 import { btnPrimary, input } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { currentWeekNumber } from "@/lib/format";
 import type { Goal, GoalDailyCheck, GoalWeeklyTarget } from "@/lib/types";
 import { toggleDailyCheck, upsertWeeklyTargets } from "../../actions";
@@ -106,9 +107,9 @@ export default async function EditGoalPage({
               />
             </div>
           ))}
-          <button type="submit" className={`mt-2 self-start ${btnPrimary}`}>
+          <SubmitButton className={`mt-2 self-start ${btnPrimary}`} pendingLabel="Saving…">
             Save Weekly Targets
-          </button>
+          </SubmitButton>
         </form>
       </div>
     </div>

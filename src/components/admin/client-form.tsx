@@ -1,4 +1,5 @@
 import { btnPrimary, input, label, select, textarea } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { upsertClient } from "@/app/admin/(dashboard)/clients/actions";
 import type { Client } from "@/lib/types";
 
@@ -85,9 +86,9 @@ export default function ClientForm({ client }: { client?: Partial<Client> }) {
         />
       </div>
 
-      <button type="submit" className={`self-start ${btnPrimary}`}>
+      <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Saving…">
         {client ? "Save Changes" : "Create Client"}
-      </button>
+      </SubmitButton>
     </form>
   );
 }

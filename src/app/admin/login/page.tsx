@@ -1,5 +1,6 @@
 import { login } from "./actions";
 import { btnPrimary, input, label } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 
 export default async function AdminLoginPage({
   searchParams,
@@ -30,9 +31,9 @@ export default async function AdminLoginPage({
             <input type="password" name="password" required className={input} />
           </div>
           {error && <p className="text-sm text-red-600">{error}</p>}
-          <button type="submit" className={`mt-2 self-start ${btnPrimary}`}>
+          <SubmitButton className={`mt-2 self-start ${btnPrimary}`} pendingLabel="Signing in…">
             Sign In
-          </button>
+          </SubmitButton>
         </form>
       </div>
     </div>

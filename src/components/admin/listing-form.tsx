@@ -1,5 +1,6 @@
 import { PrimaryGalleryUploader } from "@/components/admin/image-uploader";
 import { btnPrimary, input, label, select, textarea } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { upsertListing } from "@/app/admin/(dashboard)/listings/actions";
 import type { Listing } from "@/lib/types";
 
@@ -218,9 +219,9 @@ export default function ListingForm({ listing }: { listing?: Partial<Listing> })
         </div>
       </div>
 
-      <button type="submit" className={`self-start ${btnPrimary}`}>
+      <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Saving…">
         {listing ? "Save Changes" : "Create Listing"}
-      </button>
+      </SubmitButton>
     </form>
   );
 }

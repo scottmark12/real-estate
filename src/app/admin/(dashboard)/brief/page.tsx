@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Fraunces } from "next/font/google";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { Bolded, ResearchList, groupIntoSections } from "@/components/admin/morning-brief-content";
 import { MarkMorningBriefRead } from "@/components/admin/mark-morning-brief-read";
 import { currentWeekNumber } from "@/lib/format";
@@ -201,9 +202,13 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
           )}
 
           <form action={refreshMarketReads} className="mt-6">
-            <button type="submit" className="text-[13px] underline decoration-[#B4B3A8] underline-offset-2" style={{ color: SOFT }}>
+            <SubmitButton
+              className="text-[13px] underline decoration-[#B4B3A8] underline-offset-2"
+              style={{ color: SOFT }}
+              pendingLabel="Refreshing…"
+            >
               Refresh Articles
-            </button>
+            </SubmitButton>
           </form>
         </div>
       </div>
@@ -245,9 +250,9 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
               <div className="border border-dashed p-8 text-center" style={{ borderColor: HAIR }}>
                 <p style={{ color: SOFT }}>No brief pulled yet today.</p>
                 <form action={refreshMarketReads} className="mt-4">
-                  <button type="submit" className={btnPrimary}>
+                  <SubmitButton className={btnPrimary} pendingLabel="Refreshing…">
                     Refresh Articles
-                  </button>
+                  </SubmitButton>
                 </form>
               </div>
             ) : (

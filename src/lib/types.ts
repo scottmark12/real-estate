@@ -473,3 +473,49 @@ export interface MarketRead {
   key_points: string[] | null;
   why_it_matters: string | null;
 }
+
+// Rhythm — daily activity logging against the 12-week goals.
+export type MetricKey =
+  | "dials"
+  | "conversations"
+  | "offers"
+  | "listing_agent_calls"
+  | "appointments"
+  | "open_houses"
+  | "sphere_touches"
+  | "reels"
+  | "shop_pitches"
+  | "workouts"
+  | "protein_day"
+  | "hats_sold"
+  | "weight_lbs"
+  | "pushups_max"
+  | "pullups_max"
+  | "run_5k_seconds"
+  | "dollars_under_contract"
+  | "dollars_closed";
+
+export interface LeadLog {
+  id: string;
+  log_date: string;
+  metric: MetricKey;
+  amount: number;
+  goal_id: string | null;
+  note: string | null;
+  created_at: string;
+}
+
+export interface WeeklyTargetNumeric {
+  id: string;
+  week_number: number;
+  metric: MetricKey;
+  target: number;
+}
+
+export interface WeeklyScore {
+  id: string;
+  week_number: number;
+  execution_pct: number;
+  notes: string | null;
+  created_at: string;
+}

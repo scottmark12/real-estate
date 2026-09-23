@@ -29,12 +29,19 @@ function isOverdue(dateStr: string) {
   return dateStr <= today;
 }
 
+// `,` `(` `)` are syntactically significant in a PostgREST .or() filter
+// string — strip them so a search term can't break out of the filter.
+function sanitizeSearch(q: string) {
+  return q.replace(/[,()]/g, " ").trim();
+}
+
 export default async function AdminClientsPage({
   searchParams,
 }: PageProps<"/admin/clients">) {
   const params = await searchParams;
   const statusFilter =
     typeof params.status === "string" ? (params.status as ClientStatus) : undefined;
+  const q = typeof params.q === "string" ? params.q.trim() : "";
   const imported = typeof params.imported === "string" ? params.imported : undefined;
   const skipped = typeof params.skipped === "string" ? params.skipped : undefined;
 
@@ -45,12 +52,18 @@ export default async function AdminClientsPage({
     .order("next_follow_up_date", { ascending: true, nullsFirst: false });
 
   if (statusFilter) query = query.eq("status", statusFilter);
+  const cleanQ = sanitizeSearch(q);
+  if (cleanQ) query = query.or(`name.ilike.%${cleanQ}%,email.ilike.%${cleanQ}%`);
 
   const { data } = await query;
   const clients = (data as Client[]) ?? [];
 
   function hrefFor(status: ClientStatus | "all") {
-    return status === "all" ? "/admin/clients" : `/admin/clients?status=${status}`;
+    const qs = new URLSearchParams();
+    if (status !== "all") qs.set("status", status);
+    if (q) qs.set("q", q);
+    const s = qs.toString();
+    return s ? `/admin/clients?${s}` : "/admin/clients";
   }
 
   return (
@@ -81,7 +94,29 @@ export default async function AdminClientsPage({
         </p>
       )}
 
-      <div className="mt-6 flex flex-wrap gap-2">
+      <form method="get" className="mt-6 flex gap-2">
+        {statusFilter && <input type="hidden" name="status" value={statusFilter} />}
+        <input
+          type="search"
+          name="q"
+          defaultValue={q}
+          placeholder="Search by name or email…"
+          className="w-full max-w-xs border border-navy/15 bg-white px-3 py-2 text-sm text-navy placeholder:text-navy/30 focus:border-navy focus:outline-none"
+        />
+        <button type="submit" className={btnSecondary}>
+          Search
+        </button>
+        {q && (
+          <Link
+            href={statusFilter ? `/admin/clients?status=${statusFilter}` : "/admin/clients"}
+            className="self-center text-xs text-navy/40 underline decoration-gold decoration-2 underline-offset-4"
+          >
+            Clear
+          </Link>
+        )}
+      </form>
+
+      <div className="mt-4 flex flex-wrap gap-2">
         {TABS.map((t) => (
           <Link
             key={t.value}

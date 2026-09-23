@@ -1,4 +1,5 @@
 import { btnPrimary, input, label, select } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { upsertGoal } from "@/app/admin/(dashboard)/goals/actions";
 import type { Goal } from "@/lib/types";
 
@@ -53,9 +54,9 @@ export default function GoalForm({ goal }: { goal?: Partial<Goal> }) {
         </div>
       </div>
 
-      <button type="submit" className={`self-start ${btnPrimary}`}>
+      <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Saving…">
         {goal ? "Save Changes" : "Create Goal"}
-      </button>
+      </SubmitButton>
     </form>
   );
 }

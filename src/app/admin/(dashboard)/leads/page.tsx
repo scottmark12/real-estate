@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { formatDate } from "@/lib/format";
+import { SubmitButton } from "@/components/admin/submit-button";
 import type { ContactMessage } from "@/lib/types";
 import { convertLead } from "./actions";
 
@@ -76,12 +77,12 @@ export default async function AdminLeadsPage() {
                     ) : (
                       <form action={convertLead}>
                         <input type="hidden" name="id" value={m.id} />
-                        <button
-                          type="submit"
+                        <SubmitButton
                           className="border border-blue px-3 py-1.5 text-xs font-medium text-blue transition-colors hover:bg-blue hover:text-cream"
+                          pendingLabel="Converting…"
                         >
                           Convert to Client
-                        </button>
+                        </SubmitButton>
                       </form>
                     )}
                   </td>

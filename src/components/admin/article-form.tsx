@@ -1,6 +1,7 @@
 import { SingleImageUploader } from "@/components/admin/image-uploader";
 import BlockEditor from "@/components/admin/block-editor";
 import { btnPrimary, input, label, select, textarea } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { upsertArticle } from "@/app/admin/(dashboard)/articles/actions";
 import type { Article } from "@/lib/types";
 
@@ -250,9 +251,9 @@ export default function ArticleForm({ article }: { article?: Article }) {
         </div>
       </div>
 
-      <button type="submit" className={`self-start ${btnPrimary}`}>
+      <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Saving…">
         {article ? "Save Changes" : "Create Article"}
-      </button>
+      </SubmitButton>
     </form>
   );
 }

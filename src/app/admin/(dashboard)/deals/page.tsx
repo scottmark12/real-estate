@@ -34,6 +34,12 @@ function isOverdue(dateStr: string) {
   return dateStr <= today;
 }
 
+// `,` `(` `)` are syntactically significant in a PostgREST .or() filter
+// string — strip them so a search term can't break out of the filter.
+function sanitizeSearch(q: string) {
+  return q.replace(/[,()]/g, " ").trim();
+}
+
 const CATEGORY_TABS: { value: PropertyTypeCategory | "all"; label: string }[] = [
   { value: "all", label: "All" },
   { value: "commercial", label: "Commercial" },
@@ -50,6 +56,7 @@ export default async function AdminDealsPage({
     typeof params.category === "string"
       ? (params.category as PropertyTypeCategory)
       : undefined;
+  const q = typeof params.q === "string" ? params.q.trim() : "";
   const imported = typeof params.imported === "string" ? params.imported : undefined;
   const skipped = typeof params.skipped === "string" ? params.skipped : undefined;
 
@@ -60,6 +67,8 @@ export default async function AdminDealsPage({
     .order("next_action_date", { ascending: true, nullsFirst: false });
 
   if (stageFilter) query = query.eq("pipeline_stage", stageFilter);
+  const cleanQ = sanitizeSearch(q);
+  if (cleanQ) query = query.ilike("name", `%${cleanQ}%`);
 
   const [{ data }, { data: propertyData }] = await Promise.all([
     query,
@@ -88,6 +97,7 @@ export default async function AdminDealsPage({
     const qs = new URLSearchParams();
     if (stage !== "all") qs.set("stage", stage);
     if (categoryFilter) qs.set("category", categoryFilter);
+    if (q) qs.set("q", q);
     const s = qs.toString();
     return s ? `/admin/deals?${s}` : "/admin/deals";
   }
@@ -96,6 +106,15 @@ export default async function AdminDealsPage({
     const qs = new URLSearchParams();
     if (stageFilter) qs.set("stage", stageFilter);
     if (category !== "all") qs.set("category", category);
+    if (q) qs.set("q", q);
+    const s = qs.toString();
+    return s ? `/admin/deals?${s}` : "/admin/deals";
+  }
+
+  function clearSearchHref() {
+    const qs = new URLSearchParams();
+    if (stageFilter) qs.set("stage", stageFilter);
+    if (categoryFilter) qs.set("category", categoryFilter);
     const s = qs.toString();
     return s ? `/admin/deals?${s}` : "/admin/deals";
   }
@@ -128,7 +147,30 @@ export default async function AdminDealsPage({
         </p>
       )}
 
-      <div className="mt-6 flex flex-wrap gap-2">
+      <form method="get" className="mt-6 flex gap-2">
+        {stageFilter && <input type="hidden" name="stage" value={stageFilter} />}
+        {categoryFilter && <input type="hidden" name="category" value={categoryFilter} />}
+        <input
+          type="search"
+          name="q"
+          defaultValue={q}
+          placeholder="Search by company name…"
+          className="w-full max-w-xs border border-navy/15 bg-white px-3 py-2 text-sm text-navy placeholder:text-navy/30 focus:border-navy focus:outline-none"
+        />
+        <button type="submit" className={btnSecondary}>
+          Search
+        </button>
+        {q && (
+          <Link
+            href={clearSearchHref()}
+            className="self-center text-xs text-navy/40 underline decoration-gold decoration-2 underline-offset-4"
+          >
+            Clear
+          </Link>
+        )}
+      </form>
+
+      <div className="mt-4 flex flex-wrap gap-2">
         {CATEGORY_TABS.map((t) => (
           <Link
             key={t.value}

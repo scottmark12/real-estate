@@ -1,4 +1,5 @@
 import { btnPrimary } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { importDealsCsv } from "../actions";
 
 export default async function ImportDealsPage({
@@ -112,9 +113,9 @@ export default async function ImportDealsPage({
           required
           className="text-sm text-navy"
         />
-        <button type="submit" className={`self-start ${btnPrimary}`}>
+        <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Importing…">
           Import CSV
-        </button>
+        </SubmitButton>
       </form>
     </div>
   );

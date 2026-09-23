@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import CompanyForm from "@/components/admin/company-form";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { btnPrimary, btnSecondary, input, label, select, textarea } from "@/components/admin/ui";
 import { formatDate, PROPERTY_TYPE_OPTIONS } from "@/lib/format";
 import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
@@ -143,9 +144,9 @@ function PropertyCard({
         </div>
 
         <div className="flex items-center gap-4 sm:col-span-2">
-          <button type="submit" className={btnSecondary}>
+          <SubmitButton className={btnSecondary} pendingLabel="Saving…">
             {property ? "Save Property" : "Add Property"}
-          </button>
+          </SubmitButton>
           {property?.id && (
             <form action={deleteProperty}>
               <input type="hidden" name="id" value={property.id} />
@@ -225,9 +226,9 @@ function PropertyCard({
               className={textarea}
             />
           </div>
-          <button type="submit" className={`self-start ${btnSecondary} sm:col-span-3`}>
+          <SubmitButton className={`self-start ${btnSecondary} sm:col-span-3`} pendingLabel="Saving…">
             Save Financials
-          </button>
+          </SubmitButton>
         </form>
       )}
     </div>
@@ -287,9 +288,9 @@ function ContactCard({ companyId, contact }: { companyId: string; contact?: Deal
           />
           Decision maker
         </label>
-        <button type="submit" className={btnSecondary}>
+        <SubmitButton className={btnSecondary} pendingLabel="Saving…">
           {contact ? "Save Contact" : "Add Contact"}
-        </button>
+        </SubmitButton>
         {contact?.id && (
           <form action={deleteContact}>
             <input type="hidden" name="id" value={contact.id} />
@@ -470,9 +471,9 @@ export default async function EditDealCompanyPage({
               <label className={label}>Override Next Action Date (optional)</label>
               <input type="date" name="next_action_date" className={input} />
             </div>
-            <button type="submit" className={`self-start ${btnPrimary}`}>
+            <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Logging…">
               Log Call
-            </button>
+            </SubmitButton>
           </div>
         </form>
 

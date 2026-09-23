@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnSecondary, input, label, textarea } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { advanceResearch, upsertProperty } from "../deals/actions";
 import type { DealCompany, DealProperty } from "@/lib/types";
 
@@ -159,9 +160,9 @@ export default async function AdminResearchPage({ searchParams }: PageProps<"/ad
                     <label className={label}>Findings</label>
                     <textarea name="notes" defaultValue={p.notes ?? ""} rows={2} className={textarea} placeholder="What you found while researching…" />
                   </div>
-                  <button type="submit" className={`${btnSecondary} self-start sm:col-span-3`}>
+                  <SubmitButton className={`${btnSecondary} self-start sm:col-span-3`} pendingLabel="Saving…">
                     Save Findings
-                  </button>
+                  </SubmitButton>
                 </form>
               </div>
             );
@@ -182,9 +183,9 @@ export default async function AdminResearchPage({ searchParams }: PageProps<"/ad
                   <label className={label}>Address</label>
                   <input name="address" className={input} />
                 </div>
-                <button type="submit" className={`${btnSecondary} sm:col-span-2`}>
+                <SubmitButton className={`${btnSecondary} sm:col-span-2`} pendingLabel="Adding…">
                   Add Property
-                </button>
+                </SubmitButton>
               </form>
             </div>
           )}
@@ -193,12 +194,12 @@ export default async function AdminResearchPage({ searchParams }: PageProps<"/ad
         <form action={advanceResearch} className="mt-8 grid grid-cols-2 gap-3 border-t border-sand pt-6">
           <input type="hidden" name="company_id" value={current.id} />
           <input type="hidden" name="record_name" value={current.name} />
-          <button type="submit" name="stage" value="contacted" className={outcomeButton}>
+          <SubmitButton name="stage" value="contacted" className={outcomeButton}>
             Researched &mdash; Ready to Contact
-          </button>
-          <button type="submit" name="stage" value="dead" className={terminalButton}>
+          </SubmitButton>
+          <SubmitButton name="stage" value="dead" className={terminalButton}>
             Pass &mdash; Not a Fit
-          </button>
+          </SubmitButton>
         </form>
       </div>
     </div>

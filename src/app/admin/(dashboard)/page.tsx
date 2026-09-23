@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, input } from "@/components/admin/ui";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { currentWeekNumber } from "@/lib/format";
 import type {
   Client,
@@ -175,7 +176,15 @@ export default async function AdminHomePage() {
       <h1 className="mt-2 font-display text-4xl font-semibold text-navy">Good morning, Mark.</h1>
 
       <div className="mt-10">
-        <p className="eyebrow text-gold">This Week&apos;s Goals</p>
+        <div className="flex items-baseline justify-between">
+          <p className="eyebrow text-gold">This Week&apos;s Goals</p>
+          <Link
+            href="/admin/goals/new"
+            className="eyebrow text-navy/40 underline decoration-gold decoration-2 underline-offset-4 hover:text-navy"
+          >
+            + New Goal
+          </Link>
+        </div>
         {goals.length === 0 ? (
           <p className="mt-3 text-navy/50">
             No active goals right now.{" "}
@@ -258,9 +267,9 @@ export default async function AdminHomePage() {
         <form action={addTodo} className="mt-4 flex gap-2">
           <input type="hidden" name="scheduled_date" value={todayIso} />
           <input name="title" placeholder="Add something else to today&hellip;" className={`${input} mt-0 flex-1`} />
-          <button type="submit" className={btnPrimary}>
+          <SubmitButton className={btnPrimary} pendingLabel="Adding…">
             Add
-          </button>
+          </SubmitButton>
         </form>
       </div>
 

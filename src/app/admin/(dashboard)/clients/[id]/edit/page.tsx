@@ -7,6 +7,7 @@ import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
 import type { BuyBox, Client, ClientNote } from "@/lib/types";
 import { addClientNote, deleteBuyBox, upsertBuyBox } from "../../actions";
 import { DeleteButton } from "@/components/admin/delete-button";
+import { SubmitButton } from "@/components/admin/submit-button";
 
 export const revalidate = 0;
 
@@ -107,9 +108,9 @@ function BuyBoxCard({ clientId, box }: { clientId: string; box?: BuyBox }) {
       </div>
 
       <div className="flex items-center gap-4 sm:col-span-2">
-        <button type="submit" className={btnSecondary}>
+        <SubmitButton className={btnSecondary} pendingLabel="Saving…">
           {box ? "Save Buy Box" : "Add Buy Box"}
-        </button>
+        </SubmitButton>
         {box?.id && (
           <form action={deleteBuyBox}>
             <input type="hidden" name="id" value={box.id} />
@@ -249,9 +250,9 @@ export default async function EditClientPage({
               <label className={label}>Override Next Follow-up (optional)</label>
               <input type="date" name="next_follow_up_date" className={input} />
             </div>
-            <button type="submit" className={`self-start ${btnPrimary}`}>
+            <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Saving…">
               Add Note
-            </button>
+            </SubmitButton>
           </div>
         </form>
 

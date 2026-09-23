@@ -1,4 +1,5 @@
 import { SingleImageUploader } from "@/components/admin/image-uploader";
+import { SubmitButton } from "@/components/admin/submit-button";
 import { btnPrimary, input, label, textarea } from "@/components/admin/ui";
 import {
   DEFAULT_ABOUT,
@@ -79,9 +80,9 @@ function Field({
 function SaveButton({ saved }: { saved?: boolean }) {
   return (
     <div className="mt-5 flex items-center gap-3">
-      <button type="submit" className={`self-start ${btnPrimary}`}>
+      <SubmitButton className={`self-start ${btnPrimary}`} pendingLabel="Saving…">
         Save
-      </button>
+      </SubmitButton>
       {saved && <span className="text-sm font-medium text-green-700">&#10003; Saved</span>}
     </div>
   );
@@ -118,6 +119,21 @@ export default async function AdminSettingsPage({
         These sections control the homepage and site-wide copy. Changes go
         live immediately.
       </p>
+
+      <nav className="sticky top-0 z-10 -mx-6 mt-6 flex flex-wrap gap-x-5 gap-y-2 border-y border-sand bg-cream/95 px-6 py-3 backdrop-blur sm:-mx-10 sm:px-10">
+        {[
+          ["hero", "Hero"],
+          ["market_chart", "Market Chart"],
+          ["services", "Services"],
+          ["about", "About"],
+          ["newsletter", "Newsletter"],
+          ["contact", "Contact"],
+        ].map(([id, jumpLabel]) => (
+          <a key={id} href={`#${id}`} className="text-xs font-medium text-navy/50 underline decoration-gold decoration-2 underline-offset-4 hover:text-navy">
+            {jumpLabel}
+          </a>
+        ))}
+      </nav>
 
       <div className="mt-10 flex flex-col gap-10">
         <Section id="hero" title="Hero">
