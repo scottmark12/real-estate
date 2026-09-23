@@ -407,3 +407,41 @@ export interface DailyBrief {
   call_summary: string | null;
   created_at: string;
 }
+
+export interface ScheduleBlock {
+  id: string;
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  label: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export type TodoStatus = "pending" | "done";
+
+export interface Todo {
+  id: string;
+  title: string;
+  notes: string | null;
+  status: TodoStatus;
+  goal_id: string | null;
+  assigned_block_id: string | null;
+  scheduled_date: string | null;
+  completed_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface MarketRead {
+  id: string;
+  title: string;
+  url: string;
+  source: string;
+  summary: string | null;
+  image_url: string | null;
+  theme: string | null;
+  published_at: string | null;
+  fetched_at: string;
+}

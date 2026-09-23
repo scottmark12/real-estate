@@ -51,10 +51,9 @@ export async function upsertGoal(formData: FormData) {
     goalId = data?.id ?? "";
   }
 
-  revalidatePath("/admin/goals");
   if (goalId) revalidatePath(`/admin/goals/${goalId}/edit`);
   revalidatePath("/admin/brief");
-  redirect(goalId ? `/admin/goals/${goalId}/edit` : "/admin/goals");
+  redirect(goalId ? `/admin/goals/${goalId}/edit` : "/admin/brief");
 }
 
 export async function deleteGoal(formData: FormData) {
@@ -63,9 +62,8 @@ export async function deleteGoal(formData: FormData) {
   const supabase = await createClient();
   await supabase.from("goals").delete().eq("id", id);
 
-  revalidatePath("/admin/goals");
   revalidatePath("/admin/brief");
-  redirect("/admin/goals");
+  redirect("/admin/brief");
 }
 
 export async function upsertWeeklyTargets(formData: FormData) {
