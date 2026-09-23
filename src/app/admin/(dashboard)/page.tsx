@@ -64,6 +64,7 @@ export default async function AdminHomePage() {
     { data: goalsData },
     { data: dueClientsData },
     { data: dueDealsData },
+    { data: researchQueueData },
     { count: listingCount },
     { count: articleCount },
     { count: subCount },
@@ -98,6 +99,13 @@ export default async function AdminHomePage() {
       .lte("next_action_date", todayIso)
       .order("next_action_date", { ascending: true })
       .limit(8),
+    supabase
+      .from("deal_companies")
+      .select("*")
+      .in("pipeline_stage", ["sourced", "researching"])
+      .order("heat_score", { ascending: false, nullsFirst: false })
+      .order("created_at", { ascending: true })
+      .limit(8),
     supabase.from("listings").select("*", { count: "exact", head: true }),
     supabase.from("articles").select("*", { count: "exact", head: true }),
     supabase.from("subscribers").select("*", { count: "exact", head: true }),
@@ -114,6 +122,7 @@ export default async function AdminHomePage() {
 
   const dueClients = (dueClientsData as Client[]) ?? [];
   const dueDeals = (dueDealsData as DealCompany[]) ?? [];
+  const researchQueue = (researchQueueData as DealCompany[]) ?? [];
   const callQueue: CallQueueItem[] = [
     ...dueClients.map((c) => ({
       id: c.id,
@@ -289,46 +298,64 @@ export default async function AdminHomePage() {
         </div>
       </div>
 
-      {/* Calls — the first action of the day. */}
+      {/* Focus — click into one job at a time. Each card is a queue front
+          door: a short preview here, the full tunnel-vision, one-record
+          flow at its own route. */}
       <div className="mt-10 border-t border-sand pt-8">
-        <div className="flex items-baseline justify-between">
-          <p className="eyebrow text-gold">Call Today</p>
-          <Link
-            href="/admin/calls"
-            className="eyebrow text-navy/40 underline decoration-gold decoration-2 underline-offset-4 hover:text-navy"
-          >
-            Start the Call Center &rarr;
-          </Link>
-        </div>
+        <p className="eyebrow text-gold">Focus</p>
         <p className="mt-2 text-xs text-navy/50">
-          Clients and deal companies whose next follow-up/action is due today or overdue.
+          Pick a job and go tunnel vision — one record at a time, with what you need to log it.
         </p>
-        <div className="mt-4 flex flex-col divide-y divide-sand border-t border-sand">
-          {callQueue.map((item) => (
-            <Link
-              key={`${item.kind}-${item.id}`}
-              href={item.href}
-              className="flex items-center justify-between gap-4 py-4 hover:bg-sand/20"
-            >
-              <div>
-                <div className="flex items-center gap-2">
-                  <p className="font-medium text-navy">{item.name}</p>
-                  <span
-                    className={`border px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide ${
-                      item.kind === "client" ? "border-blue/40 text-blue" : "border-gold/40 text-gold"
-                    }`}
-                  >
-                    {item.kind === "client" ? "Client" : "Deal"}
-                  </span>
+        <div className="mt-4 grid gap-6 sm:grid-cols-2">
+          <div className="border border-sand bg-white/60 p-5">
+            <div className="flex items-baseline justify-between">
+              <p className="font-medium text-navy">Call Queue</p>
+              <span className="eyebrow text-navy/40">{callQueue.length}</span>
+            </div>
+            <p className="mt-1 text-xs text-navy/50">Due or overdue follow-ups.</p>
+            <div className="mt-3 flex flex-col divide-y divide-sand">
+              {callQueue.slice(0, 4).map((item) => (
+                <div key={`${item.kind}-${item.id}`} className="py-2">
+                  <p className="text-sm text-navy">{item.name}</p>
+                  <p className="text-xs text-navy/50">{item.sub}</p>
                 </div>
-                <p className="text-sm text-navy/50">{item.sub}</p>
-              </div>
-              <p className="font-semibold text-red-600">{item.date}</p>
+              ))}
+              {callQueue.length === 0 && (
+                <p className="py-2 text-sm text-navy/40">Nothing due — you&apos;re caught up.</p>
+              )}
+            </div>
+            <Link
+              href="/admin/calls"
+              className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4"
+            >
+              Start Calling &rarr;
             </Link>
-          ))}
-          {callQueue.length === 0 && (
-            <p className="py-8 text-center text-sm text-navy/50">Nothing due — you&apos;re caught up.</p>
-          )}
+          </div>
+
+          <div className="border border-sand bg-white/60 p-5">
+            <div className="flex items-baseline justify-between">
+              <p className="font-medium text-navy">Research Queue</p>
+              <span className="eyebrow text-navy/40">{researchQueue.length}</span>
+            </div>
+            <p className="mt-1 text-xs text-navy/50">Deals still Sourced or Researching.</p>
+            <div className="mt-3 flex flex-col divide-y divide-sand">
+              {researchQueue.slice(0, 4).map((c) => (
+                <div key={c.id} className="py-2">
+                  <p className="text-sm text-navy">{c.name}</p>
+                  <p className="text-xs capitalize text-navy/50">{c.pipeline_stage.replace("_", " ")}</p>
+                </div>
+              ))}
+              {researchQueue.length === 0 && (
+                <p className="py-2 text-sm text-navy/40">Nothing to research right now.</p>
+              )}
+            </div>
+            <Link
+              href="/admin/research"
+              className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4"
+            >
+              Start Researching &rarr;
+            </Link>
+          </div>
         </div>
       </div>
 

@@ -275,6 +275,27 @@ export async function addCallLog(formData: FormData) {
   );
 }
 
+export async function advanceResearch(formData: FormData) {
+  const supabase = await createClient();
+
+  const companyId = String(formData.get("company_id") ?? "");
+  const stage = String(formData.get("stage") ?? "");
+  const recordName = str(formData, "record_name");
+  if (!companyId || !stage) return;
+
+  await supabase
+    .from("deal_companies")
+    .update({ pipeline_stage: stage, updated_at: new Date().toISOString() })
+    .eq("id", companyId);
+
+  revalidatePath("/admin/research");
+  revalidatePath("/admin/deals");
+  revalidatePath(`/admin/deals/${companyId}/edit`);
+  revalidatePath("/admin");
+
+  redirect(`/admin/research?logged=${encodeURIComponent(recordName || "")}`);
+}
+
 export async function importDealsCsv(formData: FormData) {
   const file = formData.get("csv_file") as File | null;
   if (!file || file.size === 0) {
