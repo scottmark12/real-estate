@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, input, label } from "@/components/admin/ui";
 import { SubmitButton } from "@/components/admin/submit-button";
+import { Bolded } from "@/components/admin/morning-brief-content";
 import { METRIC_LABELS, metricsForBlock } from "@/lib/metrics";
 import { toggleTodo } from "../actions";
 import { logCheckpoint, logMetric, undoLastMetric } from "./actions";
@@ -95,7 +96,11 @@ export default async function AdminTodayPage() {
         {now.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric" })}
       </p>
       <h1 className="mt-2 font-display text-4xl font-semibold text-navy">Today</h1>
-      {dayPlan && <p className="mt-3 max-w-[65ch] text-sm leading-relaxed text-navy/70">{dayPlan}</p>}
+      {dayPlan && (
+        <p className="mt-3 max-w-[65ch] text-sm leading-relaxed text-navy/70">
+          <Bolded text={dayPlan} />
+        </p>
+      )}
 
       <div className="mt-10 flex flex-col gap-4">
         {blocks.map((b) => {

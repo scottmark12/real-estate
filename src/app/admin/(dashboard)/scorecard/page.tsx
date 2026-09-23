@@ -8,12 +8,6 @@ import type { Goal, GoalWeeklyTarget, LeadLog, MetricKey, WeeklyScore, WeeklyTar
 
 export const revalidate = 0;
 
-// Confirmed with Mark: the 12-week season is Sept 28 – Dec 20, 2026,
-// matching goals.period_start/period_end (not the Sept 21 date a later
-// spec proposed). Week numbering here must stay in lockstep with that or
-// the scorecard and the Goals section will disagree about what week it is.
-const SEASON_START = "2026-09-28";
-
 // Season checkpoints from the build spec — not stored anywhere, just the
 // reference line for the lag panel.
 const CHECKPOINTS = [
@@ -22,9 +16,9 @@ const CHECKPOINTS = [
   { week: 12, weight: 175, pushups: 50, pullups: 15, run5k: 22 * 60 },
 ];
 
-function weekNumberForDate(dateIso: string): number {
+function weekNumberForDate(dateIso: string, seasonStart: string): number {
   const diffDays = Math.floor(
-    (new Date(`${dateIso}T00:00:00Z`).getTime() - new Date(`${SEASON_START}T00:00:00Z`).getTime()) / 86400000
+    (new Date(`${dateIso}T00:00:00Z`).getTime() - new Date(`${seasonStart}T00:00:00Z`).getTime()) / 86400000
   );
   return Math.min(12, Math.max(1, Math.floor(diffDays / 7) + 1));
 }
@@ -33,8 +27,21 @@ export default async function ScorecardPage() {
   const supabase = await createClient();
   const now = new Date();
   const todayIso = now.toISOString().slice(0, 10);
-  const currentWeek = currentWeekNumber(SEASON_START);
   const isFriday = now.getDay() === 5;
+
+  // The season anchor is read live from goals.period_start rather than
+  // hardcoded — it's moved at least once already this week, and a fixed
+  // constant here would silently drift out of sync with the Goals section
+  // and Daily To-Do (which both already derive their week number from the
+  // live column) the moment someone changes it again.
+  const { data: earliestGoalData } = await supabase
+    .from("goals")
+    .select("period_start")
+    .order("period_start", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  const seasonStart = (earliestGoalData as { period_start: string } | null)?.period_start ?? todayIso;
+  const currentWeek = currentWeekNumber(seasonStart);
 
   const [
     { data: allTargetsData },
@@ -43,7 +50,7 @@ export default async function ScorecardPage() {
     { data: weeklyScoresData },
   ] = await Promise.all([
     supabase.from("weekly_targets_numeric").select("*"),
-    supabase.from("lead_logs").select("*").gte("log_date", SEASON_START).lte("log_date", todayIso),
+    supabase.from("lead_logs").select("*").gte("log_date", seasonStart).lte("log_date", todayIso),
     supabase.from("goals").select("*").lte("period_start", todayIso).gte("period_end", todayIso).order("sort_order"),
     supabase.from("weekly_scores").select("*").order("week_number"),
   ]);
@@ -63,7 +70,7 @@ export default async function ScorecardPage() {
 
   const logsByWeek = new Map<number, LeadLog[]>();
   for (const l of allLogs) {
-    const wk = weekNumberForDate(l.log_date);
+    const wk = weekNumberForDate(l.log_date, seasonStart);
     const list = logsByWeek.get(wk) ?? [];
     list.push(l);
     logsByWeek.set(wk, list);
