@@ -191,6 +191,32 @@ function splitGoogleNewsTitle(title: string): { title: string; publisher: string
   return { title: match[1].trim(), publisher: match[2].trim() };
 }
 
+// For a manually-submitted research URL: grab just the page title and
+// domain synchronously (no AI involved) so it shows up immediately in the
+// UI. Full reading + key points happen later, in the scheduled sweep.
+export async function fetchPageTitle(url: string): Promise<{ title: string; source: string }> {
+  const fallbackSource = (() => {
+    try {
+      return new URL(url).hostname.replace(/^www\./, "");
+    } catch {
+      return "Research";
+    }
+  })();
+
+  try {
+    const res = await fetch(url, {
+      headers: { "User-Agent": "Mozilla/5.0 (compatible; MarkScottRE/1.0)" },
+      signal: AbortSignal.timeout(8000),
+    });
+    if (!res.ok) return { title: url, source: fallbackSource };
+    const html = await res.text();
+    const title = extractTag(html, "title");
+    return { title: title || url, source: fallbackSource };
+  } catch {
+    return { title: url, source: fallbackSource };
+  }
+}
+
 export async function fetchMarketReads(): Promise<FetchedMarketRead[]> {
   const results = await Promise.allSettled(
     FEED_SOURCES.map(async ({ url, source, theme }) => {

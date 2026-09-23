@@ -434,6 +434,8 @@ export interface Todo {
   updated_at: string;
 }
 
+export type MarketReadSourceType = "feed" | "manual";
+
 export interface MarketRead {
   id: string;
   title: string;
@@ -445,4 +447,7 @@ export interface MarketRead {
   published_at: string | null;
   fetched_at: string;
   kept: boolean;
+  key_points: string[] | null;
+  why_it_matters: string | null;
+  source_type: MarketReadSourceType;
 }
