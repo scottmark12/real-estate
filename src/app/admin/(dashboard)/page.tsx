@@ -2,6 +2,10 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnSecondary, input, label, select } from "@/components/admin/ui";
 import { currentWeekNumber } from "@/lib/format";
+import { groupIntoSections } from "@/components/admin/morning-brief-content";
+import { MorningBriefProvider } from "@/components/admin/morning-brief-context";
+import { MorningBriefTeaser } from "@/components/admin/morning-brief-teaser";
+import { MorningBriefPanel } from "@/components/admin/morning-brief-panel";
 import type {
   Client,
   DealCompany,
@@ -125,6 +129,7 @@ export default async function AdminHomePage() {
   );
   const topStory = allMarketReads[0] ?? null;
   const totalBriefCount = allMarketReads.length;
+  const briefSections = groupIntoSections(allMarketReads);
 
   const dueClients = (dueClientsData as Client[]) ?? [];
   const dueDeals = (dueDealsData as DealCompany[]) ?? [];
@@ -208,37 +213,19 @@ export default async function AdminHomePage() {
   }
 
   return (
+    <MorningBriefProvider>
     <div className="mx-auto max-w-2xl">
       <p className="eyebrow text-gold">{formatToday()}</p>
       <h1 className="mt-2 font-display text-4xl font-semibold text-navy">Dashboard</h1>
 
-      {/* Morning brief teaser — click through to the full reading experience
-          rather than dumping every headline into the dashboard. */}
-      <Link
-        href="/admin/brief"
-        className="mt-8 block border border-navy bg-navy p-7 text-cream transition-colors hover:bg-ink"
-      >
-        <p className="eyebrow text-gold">The Morning Brief</p>
-        {topStory ? (
-          <>
-            <p className="mt-3 font-display text-2xl font-semibold leading-snug">
-              {topStory.title}
-            </p>
-            <p className="mt-3 text-sm text-cream/70">
-              {totalBriefCount} {totalBriefCount === 1 ? "story" : "stories"} today
-              {spotlightReads.length > 0
-                ? ` — ${spotlightReads.length} on rates & San Diego`
-                : ""}
-              .
-            </p>
-          </>
-        ) : (
-          <p className="mt-3 text-cream/70">No brief pulled yet today.</p>
-        )}
-        <span className="eyebrow mt-5 inline-block text-gold underline decoration-gold decoration-2 underline-offset-4">
-          Read the Brief &rarr;
-        </span>
-      </Link>
+      {/* Morning brief teaser — clicking it reveals the full brief further
+          down this same page (MorningBriefPanel), rather than navigating
+          away. State is shared via MorningBriefProvider's context. */}
+      <MorningBriefTeaser
+        topStory={topStory}
+        totalBriefCount={totalBriefCount}
+        spotlightCount={spotlightReads.length}
+      />
 
       {/* Calls — the first action of the day. */}
       <div className="mt-10 border-t border-sand pt-8">
@@ -583,6 +570,9 @@ export default async function AdminHomePage() {
           </button>
         </form>
       </div>
+
+      <MorningBriefPanel sections={briefSections} />
     </div>
+    </MorningBriefProvider>
   );
 }
