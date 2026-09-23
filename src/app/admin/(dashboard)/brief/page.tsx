@@ -34,6 +34,10 @@ const KEY_BLOCK_NAMES = new Set(["Build the Pipeline", "MLS scan + offers", "Wor
 function blockName(label: string) {
   return label.split(":")[0].trim();
 }
+function blockDetail(label: string) {
+  const idx = label.indexOf(":");
+  return idx === -1 ? null : label.slice(idx + 1).trim();
+}
 function isKeyBlock(label: string) {
   return KEY_BLOCK_NAMES.has(blockName(label));
 }
@@ -275,19 +279,25 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
                   const blockTodos = todosByBlock.get(b.id) ?? [];
                   const key = isKeyBlock(b.label);
                   const current = isToday && isBlockNow(b, nowHHMM);
+                  const detail = blockDetail(b.label);
                   return (
                     <li
                       key={b.id}
-                      className="grid grid-cols-[84px_1fr] gap-3 border-b py-2.5"
+                      className="grid grid-cols-[64px_1fr] gap-3 border-b py-2"
                       style={{ borderColor: HAIR, background: current ? "#F3EFE3" : undefined }}
                     >
-                      <span className="pt-0.5 text-[13px] tabular-nums" style={{ color: SOFT }}>
+                      <span className="pt-0.5 text-[12px] tabular-nums" style={{ color: SOFT }}>
                         {formatTime(b.start_time)}
                       </span>
                       <div>
-                        <span className={`text-[14px] ${key ? "font-bold" : "font-medium"}`} style={{ color: INK }}>
-                          {b.label}
+                        <span className={`text-[14px] leading-snug ${key ? "font-bold" : "font-medium"}`} style={{ color: INK }}>
+                          {blockName(b.label)}
                         </span>
+                        {detail && (
+                          <p className="m-0 mt-0.5 text-[13px] leading-snug" style={{ color: SOFT }}>
+                            {detail}
+                          </p>
+                        )}
                         {blockTodos.length > 0 && (
                           <div className="mt-1 flex flex-col gap-1">
                             {blockTodos.map((t) => (
