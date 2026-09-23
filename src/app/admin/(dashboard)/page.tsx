@@ -2,17 +2,12 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnSecondary, input, label, select } from "@/components/admin/ui";
 import { currentWeekNumber } from "@/lib/format";
-import { Bolded, groupIntoSections } from "@/components/admin/morning-brief-content";
-import { MorningBriefTeaser } from "@/components/admin/morning-brief-teaser";
-import { MorningBriefPreview } from "@/components/admin/morning-brief-preview";
 import type {
   Client,
-  DailyBrief,
   DealCompany,
   Goal,
   GoalDailyCheck,
   GoalWeeklyTarget,
-  MarketRead,
   ScheduleBlock,
   Todo,
 } from "@/lib/types";
@@ -67,7 +62,6 @@ export default async function AdminHomePage() {
     { data: todayTodosData },
     { data: backlogTodosData },
     { data: goalsData },
-    { data: marketReadsData },
     { data: dueClientsData },
     { data: dueDealsData },
     { count: listingCount },
@@ -76,7 +70,6 @@ export default async function AdminHomePage() {
     { count: clientCount },
     { count: leadCount },
     { count: dealCount },
-    { data: dailyBriefData },
   ] = await Promise.all([
     supabase.from("schedule_blocks").select("*").order("day_of_week").order("start_time"),
     supabase.from("todos").select("*").eq("scheduled_date", todayIso),
@@ -93,12 +86,6 @@ export default async function AdminHomePage() {
       .lte("period_start", todayIso)
       .gte("period_end", todayIso)
       .order("sort_order", { ascending: true }),
-    supabase
-      .from("market_reads")
-      .select("*")
-      .eq("kept", true)
-      .order("published_at", { ascending: false })
-      .limit(30),
     supabase
       .from("clients")
       .select("*")
@@ -117,22 +104,13 @@ export default async function AdminHomePage() {
     supabase.from("clients").select("*", { count: "exact", head: true }),
     supabase.from("contact_messages").select("*", { count: "exact", head: true }),
     supabase.from("deal_companies").select("*", { count: "exact", head: true }),
-    supabase.from("daily_briefs").select("*").eq("brief_date", todayIso).maybeSingle(),
   ]);
 
-  const dayPlan = (dailyBriefData as DailyBrief | null)?.day_plan ?? null;
   const allBlocks = (allBlocksData as ScheduleBlock[]) ?? [];
   const todayBlocks = allBlocks.filter((b) => b.day_of_week === dayOfWeek);
   const todayTodos = (todayTodosData as Todo[]) ?? [];
   const backlogTodos = (backlogTodosData as Todo[]) ?? [];
   const goals = (goalsData as Goal[]) ?? [];
-  const allMarketReads = (marketReadsData as MarketRead[]) ?? [];
-  const spotlightReads = allMarketReads.filter(
-    (a) => a.theme === "rates" || a.theme === "san_diego"
-  );
-  const topStory = allMarketReads[0] ?? null;
-  const totalBriefCount = allMarketReads.length;
-  const briefSections = groupIntoSections(allMarketReads);
 
   const dueClients = (dueClientsData as Client[]) ?? [];
   const dueDeals = (dueDealsData as DealCompany[]) ?? [];
@@ -219,24 +197,6 @@ export default async function AdminHomePage() {
     <div className="mx-auto max-w-2xl">
       <p className="eyebrow text-gold">{formatToday()}</p>
       <h1 className="mt-2 font-display text-4xl font-semibold text-navy">Good morning, Mark.</h1>
-
-      {dayPlan && (
-        <div className="mt-4 border-l-2 border-gold/50 pl-4">
-          <p className="eyebrow-sm text-navy/40">Today, Optimized</p>
-          <p className="mt-1.5 text-[15px] leading-[1.7] text-navy/80">
-            <Bolded text={dayPlan} />
-          </p>
-        </div>
-      )}
-
-      {/* Morning brief teaser — its own page (/admin/brief), not rendered
-          inline. Shrinks to a thin line once read today (localStorage,
-          resets at 3am Pacific — see lib/morning-brief-read-state.ts). */}
-      <MorningBriefTeaser
-        topStory={topStory}
-        totalBriefCount={totalBriefCount}
-        spotlightCount={spotlightReads.length}
-      />
 
       <div className="mt-10">
         <p className="eyebrow text-gold">This Week&apos;s Goals</p>
@@ -581,8 +541,6 @@ export default async function AdminHomePage() {
           </button>
         </form>
       </div>
-
-      <MorningBriefPreview sections={briefSections} />
     </div>
   );
 }
