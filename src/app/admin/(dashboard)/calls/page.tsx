@@ -1,9 +1,9 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { input, textarea } from "@/components/admin/ui";
+import { btnSecondary, input, textarea } from "@/components/admin/ui";
 import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
 import { addClientNote } from "../clients/actions";
-import { addCallLog } from "../deals/actions";
+import { addCallLog, upsertContact } from "../deals/actions";
 import type {
   Client,
   ClientNote,
@@ -187,6 +187,36 @@ export default async function AdminCallsPage({
           )}
           {email && <span className="text-navy/60">{email}</span>}
         </div>
+
+        {!phone && current.kind === "deal" && (
+          <form
+            action={upsertContact}
+            className="mt-3 flex flex-wrap items-end gap-3 border border-dashed border-navy/20 p-3"
+          >
+            <input type="hidden" name="company_id" value={current.record.id} />
+            <div>
+              <label className="eyebrow text-navy/40">Contact Name</label>
+              <input
+                name="name"
+                required
+                placeholder="Who am I calling?"
+                className={`${input} w-48`}
+              />
+            </div>
+            <div>
+              <label className="eyebrow text-navy/40">Phone</label>
+              <input
+                name="phone"
+                required
+                placeholder="(619) 555-0100"
+                className={`${input} w-44`}
+              />
+            </div>
+            <button type="submit" className={btnSecondary}>
+              Save &amp; Show Number
+            </button>
+          </form>
+        )}
 
         {contextLine && <p className="mt-4 text-sm text-navy/70">{contextLine}</p>}
 

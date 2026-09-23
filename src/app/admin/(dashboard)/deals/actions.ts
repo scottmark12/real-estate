@@ -171,6 +171,7 @@ export async function upsertContact(formData: FormData) {
   }
 
   revalidatePath(`/admin/deals/${companyId}/edit`);
+  revalidatePath("/admin/calls");
 }
 
 export async function deleteContact(formData: FormData) {
