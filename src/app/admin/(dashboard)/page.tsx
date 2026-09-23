@@ -17,7 +17,6 @@ import {
   assignTodo,
   deleteScheduleBlock,
   deleteTodo,
-  refreshMarketReads,
   toggleTodo,
   upsertScheduleBlock,
 } from "./actions";
@@ -121,12 +120,11 @@ export default async function AdminHomePage() {
   const backlogTodos = (backlogTodosData as Todo[]) ?? [];
   const goals = (goalsData as Goal[]) ?? [];
   const allMarketReads = (marketReadsData as MarketRead[]) ?? [];
-  const spotlightReads = allMarketReads
-    .filter((a) => a.theme === "rates" || a.theme === "san_diego")
-    .slice(0, 4);
-  const marketReads = allMarketReads
-    .filter((a) => a.theme !== "rates" && a.theme !== "san_diego")
-    .slice(0, 6);
+  const spotlightReads = allMarketReads.filter(
+    (a) => a.theme === "rates" || a.theme === "san_diego"
+  );
+  const topStory = allMarketReads[0] ?? null;
+  const totalBriefCount = allMarketReads.length;
 
   const dueClients = (dueClientsData as Client[]) ?? [];
   const dueDeals = (dueDealsData as DealCompany[]) ?? [];
@@ -214,68 +212,33 @@ export default async function AdminHomePage() {
       <p className="eyebrow text-gold">{formatToday()}</p>
       <h1 className="mt-2 font-display text-4xl font-semibold text-navy">Dashboard</h1>
 
-      {/* Morning brief — reading first, so the day starts with market context. */}
-      {spotlightReads.length > 0 && (
-        <div className="mt-8 border border-blue/20 bg-blue/5 p-6">
-          <p className="eyebrow text-blue">Rates &amp; San Diego</p>
-          <div className="mt-3 flex flex-col divide-y divide-blue/10">
-            {spotlightReads.map((a) => (
-              <a
-                key={a.id}
-                href={a.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block py-3 hover:bg-white/40"
-              >
-                <p className="eyebrow text-navy/40">
-                  {a.source} {a.theme === "rates" ? "· Rates" : "· San Diego"}
-                </p>
-                <p className="mt-1 font-medium text-navy">{a.title}</p>
-                {a.summary && <p className="mt-1 text-sm text-navy/60">{a.summary}</p>}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {marketReads.length > 0 && (
-        <div className="mt-8">
-          <div className="flex items-center justify-between">
-            <p className="eyebrow text-gold">Reading</p>
-            <form action={refreshMarketReads}>
-              <button type="submit" className="eyebrow text-navy/40 underline decoration-gold decoration-2 underline-offset-4 hover:text-navy">
-                Refresh Articles
-              </button>
-            </form>
-          </div>
-          <div className="mt-4 flex flex-col divide-y divide-sand border-t border-sand">
-            {marketReads.map((a) => (
-              <a
-                key={a.id}
-                href={a.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block py-4 hover:bg-sand/20"
-              >
-                <p className="eyebrow text-navy/40">{a.source}</p>
-                <p className="mt-1 font-medium text-navy">{a.title}</p>
-                {a.summary && <p className="mt-1 text-sm text-navy/60">{a.summary}</p>}
-              </a>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {marketReads.length === 0 && spotlightReads.length === 0 && (
-        <div className="mt-8 border border-dashed border-navy/20 p-6 text-center">
-          <p className="text-navy/50">No articles pulled yet.</p>
-          <form action={refreshMarketReads} className="mt-3">
-            <button type="submit" className={btnSecondary}>
-              Refresh Articles
-            </button>
-          </form>
-        </div>
-      )}
+      {/* Morning brief teaser — click through to the full reading experience
+          rather than dumping every headline into the dashboard. */}
+      <Link
+        href="/admin/brief"
+        className="mt-8 block border border-navy bg-navy p-7 text-cream transition-colors hover:bg-ink"
+      >
+        <p className="eyebrow text-gold">The Morning Brief</p>
+        {topStory ? (
+          <>
+            <p className="mt-3 font-display text-2xl font-semibold leading-snug">
+              {topStory.title}
+            </p>
+            <p className="mt-3 text-sm text-cream/70">
+              {totalBriefCount} {totalBriefCount === 1 ? "story" : "stories"} today
+              {spotlightReads.length > 0
+                ? ` — ${spotlightReads.length} on rates & San Diego`
+                : ""}
+              .
+            </p>
+          </>
+        ) : (
+          <p className="mt-3 text-cream/70">No brief pulled yet today.</p>
+        )}
+        <span className="eyebrow mt-5 inline-block text-gold underline decoration-gold decoration-2 underline-offset-4">
+          Read the Brief &rarr;
+        </span>
+      </Link>
 
       {/* Calls — the first action of the day. */}
       <div className="mt-10 border-t border-sand pt-8">
