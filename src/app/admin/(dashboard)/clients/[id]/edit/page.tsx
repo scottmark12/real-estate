@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import ClientForm from "@/components/admin/client-form";
 import { btnPrimary, btnSecondary, input, label, select, textarea } from "@/components/admin/ui";
 import { formatDate } from "@/lib/format";
-import { CALL_OUTCOMES } from "@/lib/call-outcomes";
+import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
 import type { BuyBox, Client, ClientNote } from "@/lib/types";
 import { addClientNote, deleteBuyBox, upsertBuyBox } from "../../actions";
 
@@ -130,6 +130,8 @@ export default async function EditClientPage({
   const { id } = await params;
   const sp = await searchParams;
   const error = typeof sp.error === "string" ? sp.error : undefined;
+  const logged = typeof sp.logged === "string" ? sp.logged : undefined;
+  const loggedOutcome = typeof sp.outcome === "string" ? sp.outcome : undefined;
   const supabase = await createClient();
 
   const [{ data: clientData }, { data: buyBoxData }, { data: notesData }] =
@@ -165,6 +167,11 @@ export default async function EditClientPage({
           {error}
         </p>
       )}
+      {!error && logged && (
+        <p className="mt-4 border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-800">
+          &#10003; Logged{loggedOutcome ? ` — ${loggedOutcome}` : ""}.
+        </p>
+      )}
 
       <div className="mt-8">
         <ClientForm client={client} />
@@ -196,6 +203,12 @@ export default async function EditClientPage({
 
         <form action={addClientNote} className="mt-4 flex flex-col gap-4">
           <input type="hidden" name="client_id" value={client.id} />
+          <input type="hidden" name="record_name" value={client.name} />
+          <input
+            type="hidden"
+            name="expected_date"
+            value={client.next_follow_up_date ?? ""}
+          />
           <input
             type="hidden"
             name="return_to"
@@ -243,8 +256,7 @@ export default async function EditClientPage({
             <div key={note.id} className="py-4">
               {note.outcome && (
                 <p className="text-sm font-medium text-navy">
-                  {CALL_OUTCOMES.find((o) => o.value === note.outcome)?.label ??
-                    note.outcome}
+                  {outcomeLabel(note.outcome)}
                 </p>
               )}
               <p className="mt-1 whitespace-pre-line text-sm text-navy/80">{note.body}</p>

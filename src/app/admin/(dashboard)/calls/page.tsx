@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { input, textarea } from "@/components/admin/ui";
-import { CALL_OUTCOMES } from "@/lib/call-outcomes";
+import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
 import { addClientNote } from "../clients/actions";
 import { addCallLog } from "../deals/actions";
 import type {
@@ -25,6 +25,9 @@ export default async function AdminCallsPage({
 }: PageProps<"/admin/calls">) {
   const params = await searchParams;
   const error = typeof params.error === "string" ? params.error : undefined;
+  const logged = typeof params.logged === "string" ? params.logged : undefined;
+  const loggedOutcome =
+    typeof params.outcome === "string" ? params.outcome : undefined;
 
   const supabase = await createClient();
   const today = new Date().toISOString().slice(0, 10);
@@ -129,7 +132,9 @@ export default async function AdminCallsPage({
       properties.length > 0
         ? properties.map((p) => p.name).filter(Boolean).join(", ")
         : null,
-      lastLog ? `Last: ${lastLog.outcome ?? lastLog.notes ?? "logged"}` : "No prior calls logged",
+      lastLog
+        ? `Last: ${lastLog.outcome ? outcomeLabel(lastLog.outcome) : lastLog.notes ?? "logged"}`
+        : "No prior calls logged",
     ]
       .filter(Boolean)
       .join(" — ");
@@ -150,6 +155,12 @@ export default async function AdminCallsPage({
       {error && (
         <p className="mt-4 border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}
+        </p>
+      )}
+      {!error && logged && (
+        <p className="mt-4 border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-800">
+          &#10003; Logged {logged || "that call"}
+          {loggedOutcome ? ` — ${loggedOutcome}` : ""}.
         </p>
       )}
 
@@ -191,6 +202,8 @@ export default async function AdminCallsPage({
           className="mt-8 flex flex-col gap-3 border-t border-sand pt-6"
         >
           <input type="hidden" name="return_to" value="/admin/calls" />
+          <input type="hidden" name="record_name" value={name} />
+          <input type="hidden" name="expected_date" value={current.date} />
           <input
             type="hidden"
             name={current.kind === "client" ? "client_id" : "company_id"}

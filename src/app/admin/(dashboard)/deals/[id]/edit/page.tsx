@@ -3,7 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import CompanyForm from "@/components/admin/company-form";
 import { btnPrimary, btnSecondary, input, label, select, textarea } from "@/components/admin/ui";
 import { formatDate, PROPERTY_TYPE_OPTIONS } from "@/lib/format";
-import { CALL_OUTCOMES } from "@/lib/call-outcomes";
+import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
 import type {
   DealCallLog,
   DealCompany,
@@ -307,6 +307,8 @@ export default async function EditDealCompanyPage({
   const { id } = await params;
   const sp = await searchParams;
   const error = typeof sp.error === "string" ? sp.error : undefined;
+  const logged = typeof sp.logged === "string" ? sp.logged : undefined;
+  const loggedOutcome = typeof sp.outcome === "string" ? sp.outcome : undefined;
   const supabase = await createClient();
 
   const [
@@ -361,6 +363,11 @@ export default async function EditDealCompanyPage({
           {error}
         </p>
       )}
+      {!error && logged && (
+        <p className="mt-4 border border-green-300 bg-green-50 px-4 py-3 text-sm text-green-800">
+          &#10003; Logged{loggedOutcome ? ` — ${loggedOutcome}` : ""}.
+        </p>
+      )}
 
       <div className="mt-8">
         <CompanyForm company={company} />
@@ -406,6 +413,12 @@ export default async function EditDealCompanyPage({
 
         <form action={addCallLog} className="mt-4 flex flex-col gap-4">
           <input type="hidden" name="company_id" value={company.id} />
+          <input type="hidden" name="record_name" value={company.name} />
+          <input
+            type="hidden"
+            name="expected_date"
+            value={company.next_action_date ?? ""}
+          />
           <input
             type="hidden"
             name="return_to"
@@ -459,7 +472,9 @@ export default async function EditDealCompanyPage({
         <div className="mt-8 flex flex-col divide-y divide-sand border-t border-sand">
           {callLogs.map((log) => (
             <div key={log.id} className="py-4">
-              {log.outcome && <p className="text-sm font-medium text-navy">{log.outcome}</p>}
+              {log.outcome && (
+                <p className="text-sm font-medium text-navy">{outcomeLabel(log.outcome)}</p>
+              )}
               {log.notes && (
                 <p className="mt-1 whitespace-pre-line text-sm text-navy/80">{log.notes}</p>
               )}

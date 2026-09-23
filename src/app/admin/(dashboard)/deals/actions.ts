@@ -190,6 +190,7 @@ export async function addCallLog(formData: FormData) {
   const outcome = String(formData.get("outcome") ?? "").trim();
   const notes = str(formData, "notes");
   const returnTo = str(formData, "return_to") ?? `/admin/deals/${companyId}/edit`;
+  const recordName = str(formData, "record_name");
   if (!companyId || !outcome) return;
 
   const contactId = str(formData, "contact_id");
@@ -202,6 +203,25 @@ export async function addCallLog(formData: FormData) {
     );
   }
 
+  // Guards against two sessions (e.g. two open Call Center tabs) both
+  // grabbing the same queue-front record — see addClientNote for the same
+  // check on the clients side.
+  const expectedDate = str(formData, "expected_date");
+  if (expectedDate) {
+    const { data: currentCompany } = await supabase
+      .from("deal_companies")
+      .select("next_action_date")
+      .eq("id", companyId)
+      .maybeSingle();
+    if (currentCompany && currentCompany.next_action_date !== expectedDate) {
+      redirect(
+        `${returnTo}?error=${encodeURIComponent(
+          "Already logged from another tab — showing the next one."
+        )}`
+      );
+    }
+  }
+
   const nextActionDate = isTerminalOutcome(outcome)
     ? null
     : resolveNextDate(outcome, manualDate);
@@ -210,7 +230,10 @@ export async function addCallLog(formData: FormData) {
   const { error: logError } = await supabase.from("deal_call_logs").insert({
     company_id: companyId,
     contact_id: contactId,
-    outcome: nextActionType,
+    // Store the raw value (matches client_notes.outcome) and resolve to a
+    // label only at display time — a historic label baked in as text would
+    // never pick up a future wording change to call-outcomes.ts.
+    outcome,
     notes,
     next_action_date: nextActionDate,
     next_action_type: nextActionType,
@@ -243,6 +266,12 @@ export async function addCallLog(formData: FormData) {
   revalidatePath("/admin/deals");
   revalidatePath("/admin");
   revalidatePath("/admin/calls");
+
+  redirect(
+    `${returnTo}?logged=${encodeURIComponent(recordName || "")}&outcome=${encodeURIComponent(
+      outcomeLabel(outcome)
+    )}`
+  );
 }
 
 export async function importDealsCsv(formData: FormData) {

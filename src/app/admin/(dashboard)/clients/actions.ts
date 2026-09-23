@@ -134,6 +134,7 @@ export async function addClientNote(formData: FormData) {
   const clientId = String(formData.get("client_id") ?? "");
   const outcome = String(formData.get("outcome") ?? "").trim();
   const returnTo = str(formData, "return_to") ?? `/admin/clients/${clientId}/edit`;
+  const recordName = str(formData, "record_name");
   if (!clientId || !outcome) return;
 
   const manualDate = str(formData, "next_follow_up_date");
@@ -143,6 +144,26 @@ export async function addClientNote(formData: FormData) {
         `"${outcomeLabel(outcome)}" needs a date — nothing was logged.`
       )}`
     );
+  }
+
+  // Guards against two sessions (e.g. two open Call Center tabs) both
+  // grabbing the same queue-front record: the form submits the date it saw
+  // when the page loaded, and if the record has already moved on since,
+  // someone else logged this one first — don't log it again.
+  const expectedDate = str(formData, "expected_date");
+  if (expectedDate) {
+    const { data: currentClient } = await supabase
+      .from("clients")
+      .select("next_follow_up_date")
+      .eq("id", clientId)
+      .maybeSingle();
+    if (currentClient && currentClient.next_follow_up_date !== expectedDate) {
+      redirect(
+        `${returnTo}?error=${encodeURIComponent(
+          "Already logged from another tab — showing the next one."
+        )}`
+      );
+    }
   }
 
   // Notes are optional — a call-center-style session shouldn't require
@@ -186,6 +207,12 @@ export async function addClientNote(formData: FormData) {
   revalidatePath("/admin/clients");
   revalidatePath("/admin");
   revalidatePath("/admin/calls");
+
+  redirect(
+    `${returnTo}?logged=${encodeURIComponent(recordName || "")}&outcome=${encodeURIComponent(
+      outcomeLabel(outcome)
+    )}`
+  );
 }
 
 export async function importClientsCsv(formData: FormData) {
