@@ -45,6 +45,9 @@ export const FEED_SOURCES: { url: string; source: string; theme: MarketReadTheme
   { url: "https://news.google.com/rss/search?q=adaptive+reuse+commercial+real+estate", source: "Google News", theme: "opportunities" },
   { url: "https://news.google.com/rss/search?q=modular+construction+OR+prefab+construction", source: "Google News", theme: "practices" },
   { url: "https://news.google.com/rss/search?q=mass+timber+construction", source: "Google News", theme: "practices" },
+  { url: "https://news.google.com/rss/search?q=cross-laminated+timber+OR+CLT+building+project", source: "Google News", theme: "practices" },
+  { url: "https://news.google.com/rss/search?q=offsite+construction+OR+volumetric+modular+OR+panelized+housing", source: "Google News", theme: "practices" },
+  { url: "https://news.google.com/rss/search?q=3D+printed+homes+OR+3D+printed+construction", source: "Google News", theme: "practices" },
   { url: "https://news.google.com/rss/search?q=construction+productivity+study+OR+research", source: "Google News", theme: "practices" },
   { url: "https://news.google.com/rss/search?q=zoning+reform+real+estate", source: "Google News", theme: "systems_codes" },
   { url: "https://news.google.com/rss/search?q=opportunity+zone+OR+development+incentives", source: "Google News", theme: "systems_codes" },
@@ -138,7 +141,7 @@ type KeywordTheme = "opportunities" | "practices" | "systems_codes" | "vision";
 
 const THEME_KEYWORDS: Record<KeywordTheme, string[]> = {
   opportunities: ["investment", "invest", "returns", "roi", "acquisition", "portfolio", "growth", "expand"],
-  practices: ["construction", "modular", "prefab", "timber", "productivity", "technology", "build", "design-build"],
+  practices: ["construction", "modular", "prefab", "timber", "offsite", "panelized", "3d print", "productivity", "technology", "build", "design-build"],
   systems_codes: ["zoning", "code", "regulation", "policy", "incentive", "opportunity zone", "compliance", "sustainab", "green building"],
   vision: ["future", "smart city", "urban planning", "innovation", "placemaking", "architecture", "vision"],
 };
