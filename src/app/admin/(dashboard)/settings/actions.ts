@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import type { ServiceItem } from "@/lib/types";
 
@@ -14,6 +15,10 @@ async function upsertSetting(key: string, value: unknown) {
   revalidatePath("/about");
   revalidatePath("/contact");
   revalidatePath("/admin/settings");
+  // Redirecting back to the section's own anchor (rather than just
+  // re-rendering in place) is what makes the "Saved" confirmation next to
+  // its Save button actually show up — see SaveButton in page.tsx.
+  redirect(`/admin/settings?saved=${key}#${key}`);
 }
 
 export async function updateHero(formData: FormData) {

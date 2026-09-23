@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnSecondary, tag } from "@/components/admin/ui";
 import { propertyTypeCategory, type PropertyTypeCategory } from "@/lib/format";
 import { deleteCompany } from "./actions";
+import { DeleteButton } from "@/components/admin/delete-button";
 import type { DealCompany, PipelineStage } from "@/lib/types";
 
 export const revalidate = 0;
@@ -226,9 +227,12 @@ export default async function AdminDealsPage({
                     </Link>
                     <form action={deleteCompany}>
                       <input type="hidden" name="id" value={c.id} />
-                      <button type="submit" className="text-red-600 hover:text-red-700">
+                      <DeleteButton
+                        confirmMessage={`Delete ${c.name}? This removes its properties, contacts, and call log too — can't be undone.`}
+                        className="text-red-600 hover:text-red-700"
+                      >
                         Delete
-                      </button>
+                      </DeleteButton>
                     </form>
                   </div>
                 </td>

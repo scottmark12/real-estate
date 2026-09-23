@@ -6,6 +6,7 @@ import { formatDate } from "@/lib/format";
 import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
 import type { BuyBox, Client, ClientNote } from "@/lib/types";
 import { addClientNote, deleteBuyBox, upsertBuyBox } from "../../actions";
+import { DeleteButton } from "@/components/admin/delete-button";
 
 export const revalidate = 0;
 
@@ -113,9 +114,12 @@ function BuyBoxCard({ clientId, box }: { clientId: string; box?: BuyBox }) {
           <form action={deleteBuyBox}>
             <input type="hidden" name="id" value={box.id} />
             <input type="hidden" name="client_id" value={clientId} />
-            <button type="submit" className="text-sm text-red-600 hover:text-red-700">
+            <DeleteButton
+              confirmMessage={`Delete ${box.label || "this buy box"}? This can't be undone.`}
+              className="text-sm text-red-600 hover:text-red-700"
+            >
               Delete
-            </button>
+            </DeleteButton>
           </form>
         )}
       </div>

@@ -9,6 +9,7 @@ import {
   deleteListing,
   reorderListings,
 } from "@/app/admin/(dashboard)/listings/actions";
+import { DeleteButton } from "@/components/admin/delete-button";
 import type { Listing } from "@/lib/types";
 
 export default function AdminListingsGrid({
@@ -159,9 +160,12 @@ export default function AdminListingsGrid({
               </Link>
               <form action={deleteListing}>
                 <input type="hidden" name="id" value={listing.id} />
-                <button type="submit" className="text-red-600 hover:text-red-700">
+                <DeleteButton
+                  confirmMessage={`Delete "${listing.title}"? This can't be undone.`}
+                  className="text-red-600 hover:text-red-700"
+                >
                   Delete
-                </button>
+                </DeleteButton>
               </form>
             </div>
           </div>

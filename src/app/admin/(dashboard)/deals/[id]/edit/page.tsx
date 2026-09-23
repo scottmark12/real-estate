@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import CompanyForm from "@/components/admin/company-form";
+import { DeleteButton } from "@/components/admin/delete-button";
 import { btnPrimary, btnSecondary, input, label, select, textarea } from "@/components/admin/ui";
 import { formatDate, PROPERTY_TYPE_OPTIONS } from "@/lib/format";
 import { CALL_OUTCOMES, outcomeLabel } from "@/lib/call-outcomes";
@@ -149,9 +150,12 @@ function PropertyCard({
             <form action={deleteProperty}>
               <input type="hidden" name="id" value={property.id} />
               <input type="hidden" name="company_id" value={companyId} />
-              <button type="submit" className="text-sm text-red-600 hover:text-red-700">
+              <DeleteButton
+                confirmMessage={`Delete ${property.name || "this property"}? This can't be undone.`}
+                className="text-sm text-red-600 hover:text-red-700"
+              >
                 Delete
-              </button>
+              </DeleteButton>
             </form>
           )}
         </div>
@@ -290,9 +294,12 @@ function ContactCard({ companyId, contact }: { companyId: string; contact?: Deal
           <form action={deleteContact}>
             <input type="hidden" name="id" value={contact.id} />
             <input type="hidden" name="company_id" value={companyId} />
-            <button type="submit" className="text-sm text-red-600 hover:text-red-700">
+            <DeleteButton
+              confirmMessage={`Delete ${contact.name || "this contact"}? This can't be undone.`}
+              className="text-sm text-red-600 hover:text-red-700"
+            >
               Delete
-            </button>
+            </DeleteButton>
           </form>
         )}
       </div>

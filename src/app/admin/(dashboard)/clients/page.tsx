@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnSecondary, tag } from "@/components/admin/ui";
 import { deleteClient } from "./actions";
+import { DeleteButton } from "@/components/admin/delete-button";
 import type { Client, ClientStatus } from "@/lib/types";
 
 export const revalidate = 0;
@@ -154,9 +155,12 @@ export default async function AdminClientsPage({
                     </Link>
                     <form action={deleteClient}>
                       <input type="hidden" name="id" value={c.id} />
-                      <button type="submit" className="text-red-600 hover:text-red-700">
+                      <DeleteButton
+                        confirmMessage={`Delete ${c.name}? This can't be undone.`}
+                        className="text-red-600 hover:text-red-700"
+                      >
                         Delete
-                      </button>
+                      </DeleteButton>
                     </form>
                   </div>
                 </td>

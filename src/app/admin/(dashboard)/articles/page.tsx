@@ -4,6 +4,7 @@ import { formatDate } from "@/lib/format";
 import type { Article } from "@/lib/types";
 import { btnPrimary, tag } from "@/components/admin/ui";
 import { deleteArticle, toggleArticleField } from "./actions";
+import { DeleteButton } from "@/components/admin/delete-button";
 
 export const revalidate = 0;
 
@@ -97,9 +98,12 @@ export default async function AdminArticlesPage() {
                     </Link>
                     <form action={deleteArticle}>
                       <input type="hidden" name="id" value={article.id} />
-                      <button type="submit" className="text-red-600 hover:text-red-700">
+                      <DeleteButton
+                        confirmMessage={`Delete "${article.title}"? This can't be undone.`}
+                        className="text-red-600 hover:text-red-700"
+                      >
                         Delete
-                      </button>
+                      </DeleteButton>
                     </form>
                   </div>
                 </td>

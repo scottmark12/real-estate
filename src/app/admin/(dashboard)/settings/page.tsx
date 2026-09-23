@@ -29,14 +29,16 @@ import {
 export const revalidate = 0;
 
 function Section({
+  id,
   title,
   children,
 }: {
+  id: string;
   title: string;
   children: React.ReactNode;
 }) {
   return (
-    <section className="border-t border-sand pt-10 first:border-t-0 first:pt-0">
+    <section id={id} className="scroll-mt-6 border-t border-sand pt-10 first:border-t-0 first:pt-0">
       <h2 className="font-display text-xl font-normal text-navy">{title}</h2>
       <div className="mt-5">{children}</div>
     </section>
@@ -74,15 +76,23 @@ function Field({
   );
 }
 
-function SaveButton() {
+function SaveButton({ saved }: { saved?: boolean }) {
   return (
-    <button type="submit" className={`mt-5 self-start ${btnPrimary}`}>
-      Save
-    </button>
+    <div className="mt-5 flex items-center gap-3">
+      <button type="submit" className={`self-start ${btnPrimary}`}>
+        Save
+      </button>
+      {saved && <span className="text-sm font-medium text-green-700">&#10003; Saved</span>}
+    </div>
   );
 }
 
-export default async function AdminSettingsPage() {
+export default async function AdminSettingsPage({
+  searchParams,
+}: PageProps<"/admin/settings">) {
+  const params = await searchParams;
+  const saved = typeof params.saved === "string" ? params.saved : undefined;
+
   const [hero, marketChart, services, about, newsletter, contact] =
     await Promise.all([
       getSetting<HeroSettings>("hero", DEFAULT_HERO),
@@ -110,7 +120,7 @@ export default async function AdminSettingsPage() {
       </p>
 
       <div className="mt-10 flex flex-col gap-10">
-        <Section title="Hero">
+        <Section id="hero" title="Hero">
           <form action={updateHero} className="flex flex-col gap-4">
             <Field label="Headline" name="headline" defaultValue={hero.headline} />
             <Field
@@ -152,11 +162,11 @@ export default async function AdminSettingsPage() {
               label="Background Image"
               initialUrl={hero.image_url}
             />
-            <SaveButton />
+            <SaveButton saved={saved === "hero"} />
           </form>
         </Section>
 
-        <Section title="Market Chart">
+        <Section id="market_chart" title="Market Chart">
           <form action={updateMarketChart} className="flex flex-col gap-4">
             <Field
               label="Years (comma-separated)"
@@ -179,11 +189,11 @@ export default async function AdminSettingsPage() {
               defaultValue={marketChart.source_note}
               textarea
             />
-            <SaveButton />
+            <SaveButton saved={saved === "market_chart"} />
           </form>
         </Section>
 
-        <Section title="How I Can Help (Services)">
+        <Section id="services" title="How I Can Help (Services)">
           <form action={updateServices} className="flex flex-col gap-6">
             {servicesPadded.map((service, i) => (
               <div key={i} className="border-t border-sand pt-4 first:border-t-0 first:pt-0">
@@ -210,11 +220,11 @@ export default async function AdminSettingsPage() {
                 </div>
               </div>
             ))}
-            <SaveButton />
+            <SaveButton saved={saved === "services"} />
           </form>
         </Section>
 
-        <Section title="About / Pull Quote">
+        <Section id="about" title="About / Pull Quote">
           <form action={updateAbout} className="flex flex-col gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Name" name="name" defaultValue={about.name} />
@@ -396,11 +406,11 @@ export default async function AdminSettingsPage() {
               </div>
             </div>
 
-            <SaveButton />
+            <SaveButton saved={saved === "about"} />
           </form>
         </Section>
 
-        <Section title="Newsletter Band">
+        <Section id="newsletter" title="Newsletter Band">
           <form action={updateNewsletter} className="flex flex-col gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field
@@ -426,11 +436,11 @@ export default async function AdminSettingsPage() {
               label="Background Image"
               initialUrl={newsletter.image_url}
             />
-            <SaveButton />
+            <SaveButton saved={saved === "newsletter"} />
           </form>
         </Section>
 
-        <Section title="Contact & Footer">
+        <Section id="contact" title="Contact & Footer">
           <form action={updateContact} className="flex flex-col gap-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label="Name" name="name" defaultValue={contact.name ?? ""} />
@@ -478,7 +488,7 @@ export default async function AdminSettingsPage() {
               name="handwritten_note"
               defaultValue={contact.handwritten_note ?? ""}
             />
-            <SaveButton />
+            <SaveButton saved={saved === "contact"} />
           </form>
         </Section>
       </div>
