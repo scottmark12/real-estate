@@ -359,3 +359,51 @@ export interface DealCallLog {
   called_at: string;
   created_at: string;
 }
+
+export type GoalCategory = "business" | "personal";
+
+export interface Goal {
+  id: string;
+  title: string;
+  category: GoalCategory;
+  target_metric: string | null;
+  period_start: string;
+  period_end: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GoalWeeklyTarget {
+  id: string;
+  goal_id: string;
+  week_number: number;
+  target_text: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface GoalDailyCheck {
+  id: string;
+  goal_id: string;
+  check_date: string;
+  completed: boolean;
+  created_at: string;
+}
+
+export interface DailyBriefArticle {
+  title: string;
+  url: string;
+  source: string;
+  summary: string;
+}
+
+export interface DailyBrief {
+  id: string;
+  brief_date: string;
+  headline: string | null;
+  articles: DailyBriefArticle[];
+  deep_report: DailyBriefArticle | null;
+  call_summary: string | null;
+  created_at: string;
+}

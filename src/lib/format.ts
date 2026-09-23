@@ -78,3 +78,12 @@ export function propertyTypeCategory(
   const match = PROPERTY_TYPE_OPTIONS.find((o) => o.value === propertyType);
   return match ? match.category : "unspecified";
 }
+
+export function currentWeekNumber(periodStart: string) {
+  const today = new Date().toISOString().slice(0, 10);
+  const diffDays = Math.floor(
+    (new Date(today).getTime() - new Date(periodStart).getTime()) /
+      (1000 * 60 * 60 * 24)
+  );
+  return Math.min(12, Math.max(1, Math.floor(diffDays / 7) + 1));
+}
