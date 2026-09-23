@@ -76,42 +76,32 @@ export function ResearchList({ sections, limit = 6, perThemeCap = 2 }: { section
   const items = picked.slice(0, limit);
   if (items.length === 0) return null;
 
-  // Same shape as HeadlineList: number, bold title with a small grey tag
-  // inline right after it (theme here instead of source), one short
-  // description line below. Deliberately not a paragraph combining
-  // summary + why_it_matters — that was the actual mismatch reported
-  // (Research looked structurally different from Headlines).
+  // Identical shape to HeadlineList — number, bold title, small grey tag
+  // inline right after it. No description line: the headlines let their
+  // titles speak for themselves, so Research does too now.
   return (
     <ol className="m-0 grid list-none gap-3 p-0">
-      {items.map(({ theme, read: a }, i) => {
-        const description = a.summary;
-        return (
-          <li key={a.id} className="grid grid-cols-[22px_1fr] gap-2">
-            <span className="text-sm tabular-nums" style={{ color: "#B4B3A8" }}>
-              {i + 1}
+      {items.map(({ theme, read: a }, i) => (
+        <li key={a.id} className="grid grid-cols-[22px_1fr] gap-2">
+          <span className="text-sm tabular-nums" style={{ color: "#B4B3A8" }}>
+            {i + 1}
+          </span>
+          <div>
+            <a
+              href={a.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-semibold no-underline hover:underline"
+              style={{ color: "#2E2C27" }}
+            >
+              {a.title}
+            </a>
+            <span className="ml-1.5 text-[13px]" style={{ color: "#B4B3A8" }}>
+              {theme}
             </span>
-            <div>
-              <a
-                href={a.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-semibold no-underline hover:underline"
-                style={{ color: "#2E2C27" }}
-              >
-                {a.title}
-              </a>
-              <span className="ml-1.5 text-[13px]" style={{ color: "#B4B3A8" }}>
-                {theme}
-              </span>
-              {description && (
-                <p className="m-0 mt-0.5 text-[14px]" style={{ color: "#6B6A63" }}>
-                  <Bolded text={description} /> <span style={{ color: "#B4B3A8" }}>via {a.source}</span>
-                </p>
-              )}
-            </div>
-          </li>
-        );
-      })}
+          </div>
+        </li>
+      ))}
     </ol>
   );
 }
