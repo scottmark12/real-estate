@@ -76,29 +76,36 @@ export function ResearchList({ sections, limit = 6, perThemeCap = 2 }: { section
   const items = picked.slice(0, limit);
   if (items.length === 0) return null;
 
+  // Same shape as HeadlineList: number, bold title with a small grey tag
+  // inline right after it (theme here instead of source), one short
+  // description line below. Deliberately not a paragraph combining
+  // summary + why_it_matters — that was the actual mismatch reported
+  // (Research looked structurally different from Headlines).
   return (
-    <ol className="m-0 grid list-none gap-4 p-0">
+    <ol className="m-0 grid list-none gap-3 p-0">
       {items.map(({ theme, read: a }, i) => {
-        const description = [a.summary, a.why_it_matters].filter(Boolean).join(" ");
+        const description = a.summary;
         return (
           <li key={a.id} className="grid grid-cols-[22px_1fr] gap-2">
-            <span className="text-sm tabular-nums text-[#B4B3A8]">{i + 1}</span>
+            <span className="text-sm tabular-nums" style={{ color: "#B4B3A8" }}>
+              {i + 1}
+            </span>
             <div>
-              <p className="eyebrow-sm mb-0.5 text-[#B4B3A8]">{theme}</p>
               <a
                 href={a.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-ink no-underline hover:underline"
+                className="font-semibold no-underline hover:underline"
+                style={{ color: "#2E2C27" }}
               >
                 {a.title}
               </a>
+              <span className="ml-1.5 text-[13px]" style={{ color: "#B4B3A8" }}>
+                {theme}
+              </span>
               {description && (
-                <p className="m-0 mt-0.5 text-[14px] text-[#6B6A63]">
-                  <Bolded text={description} />{" "}
-                  <span className="text-[#B4B3A8] underline decoration-[#B4B3A8] underline-offset-2">
-                    via {a.source}
-                  </span>
+                <p className="m-0 mt-0.5 text-[14px]" style={{ color: "#6B6A63" }}>
+                  <Bolded text={description} /> <span style={{ color: "#B4B3A8" }}>via {a.source}</span>
                 </p>
               )}
             </div>
