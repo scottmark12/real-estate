@@ -5,7 +5,7 @@ import { btnPrimary } from "@/components/admin/ui";
 import { Bolded, ResearchList, groupIntoSections } from "@/components/admin/morning-brief-content";
 import { MarkMorningBriefRead } from "@/components/admin/mark-morning-brief-read";
 import { currentWeekNumber } from "@/lib/format";
-import { refreshMarketReads, toggleTodo } from "../actions";
+import { refreshMarketReads } from "../actions";
 import type {
   CalendarNote,
   DailyBrief,
@@ -13,7 +13,6 @@ import type {
   GoalWeeklyTarget,
   HeadlineItem,
   MarketRead,
-  ScheduleBlock,
   Todo,
 } from "@/lib/types";
 
@@ -26,22 +25,6 @@ const SOFT = "#6B6A63";
 const GREY = "#B4B3A8";
 const HAIR = "#E4E3DC";
 
-// Labels the other session's spec calls out as the "key" blocks of the
-// day — matched against the part of the label before the colon
-// ("Build the Pipeline: 60 dials..." -> "Build the Pipeline").
-const KEY_BLOCK_NAMES = new Set(["Build the Pipeline", "MLS scan + offers", "Work the Pipeline", "Strategic Block"]);
-
-function blockName(label: string) {
-  return label.split(":")[0].trim();
-}
-function blockDetail(label: string) {
-  const idx = label.indexOf(":");
-  return idx === -1 ? null : label.slice(idx + 1).trim();
-}
-function isKeyBlock(label: string) {
-  return KEY_BLOCK_NAMES.has(blockName(label));
-}
-
 function formatDateLong(iso: string) {
   return new Date(`${iso}T00:00:00`).toLocaleDateString("en-US", {
     weekday: "long",
@@ -50,21 +33,10 @@ function formatDateLong(iso: string) {
     year: "numeric",
   });
 }
-function formatTime(t: string) {
-  const [hStr, mStr] = t.split(":");
-  const h = Number(hStr);
-  const m = Number(mStr);
-  const period = h >= 12 ? "PM" : "AM";
-  const h12 = h % 12 === 0 ? 12 : h % 12;
-  return m === 0 ? `${h12} ${period}` : `${h12}:${String(m).padStart(2, "0")} ${period}`;
-}
 function addDays(iso: string, days: number) {
   const d = new Date(`${iso}T00:00:00`);
   d.setDate(d.getDate() + days);
   return d.toISOString().slice(0, 10);
-}
-function isBlockNow(b: ScheduleBlock, nowHHMM: string) {
-  return nowHHMM >= b.start_time.slice(0, 5) && nowHHMM < b.end_time.slice(0, 5);
 }
 
 function CalendarNoteList({ notes }: { notes: CalendarNote[] }) {
@@ -150,29 +122,16 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
   const needsAttention = (deepReport?.needs_attention ?? []).slice(0, 6);
   const resolved = (deepReport?.resolved ?? []).slice(0, 6);
   const headlines = (deepReport?.headlines ?? []).slice(0, 6);
-  const dayOfWeek = new Date(`${showingDate}T00:00:00`).getDay();
   const isToday = showingDate === todayIso;
-  const nowHHMM = now.toTimeString().slice(0, 5);
 
-  const [{ data: marketReadsData }, { data: allBlocksData }, { data: dayTodosData }, { data: goalsData }] = await Promise.all([
+  const [{ data: marketReadsData }, { data: goalsData }] = await Promise.all([
     supabase.from("market_reads").select("*").eq("kept", true).order("published_at", { ascending: false }).limit(40),
-    supabase.from("schedule_blocks").select("*").eq("day_of_week", dayOfWeek).order("start_time"),
-    supabase.from("todos").select("*").eq("scheduled_date", showingDate),
     supabase.from("goals").select("*").lte("period_start", showingDate).gte("period_end", showingDate).order("sort_order"),
   ]);
 
   const reads = (marketReadsData as MarketRead[]) ?? [];
   const sections = groupIntoSections(reads);
 
-  const dayBlocks = ((allBlocksData as ScheduleBlock[]) ?? []).sort((a, b) => a.start_time.localeCompare(b.start_time));
-  const dayTodos = (dayTodosData as Todo[]) ?? [];
-  const todosByBlock = new Map<string, Todo[]>();
-  for (const t of dayTodos) {
-    if (!t.assigned_block_id) continue;
-    const list = todosByBlock.get(t.assigned_block_id) ?? [];
-    list.push(t);
-    todosByBlock.set(t.assigned_block_id, list);
-  }
   const showingDateObj = new Date(`${showingDate}T00:00:00`);
   const weekStart = addDays(showingDate, -showingDateObj.getDay());
   const weekEnd = addDays(weekStart, 6);
@@ -266,65 +225,6 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
                 Resolved
               </h2>
               <CalendarNoteList notes={resolved} />
-            </div>
-          )}
-
-          {dayBlocks.length > 0 && (
-            <div>
-              <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
-                Today&apos;s Blocks
-              </h2>
-              <ul className="m-0 list-none border-t p-0" style={{ borderColor: HAIR }}>
-                {dayBlocks.map((b) => {
-                  const blockTodos = todosByBlock.get(b.id) ?? [];
-                  const key = isKeyBlock(b.label);
-                  const current = isToday && isBlockNow(b, nowHHMM);
-                  const detail = blockDetail(b.label);
-                  return (
-                    <li
-                      key={b.id}
-                      className="grid grid-cols-[64px_1fr] gap-3 border-b py-2"
-                      style={{ borderColor: HAIR, background: current ? "#F3EFE3" : undefined }}
-                    >
-                      <span className="pt-0.5 text-[12px] tabular-nums" style={{ color: SOFT }}>
-                        {formatTime(b.start_time)}
-                      </span>
-                      <div>
-                        <span className={`text-[14px] leading-snug ${key ? "font-bold" : "font-medium"}`} style={{ color: INK }}>
-                          {blockName(b.label)}
-                        </span>
-                        {detail && (
-                          <p className="m-0 mt-0.5 text-[13px] leading-snug" style={{ color: SOFT }}>
-                            {detail}
-                          </p>
-                        )}
-                        {blockTodos.length > 0 && (
-                          <div className="mt-1 flex flex-col gap-1">
-                            {blockTodos.map((t) => (
-                              <form key={t.id} action={toggleTodo} className="flex items-center gap-2">
-                                <input type="hidden" name="id" value={t.id} />
-                                <input type="hidden" name="done" value={t.status === "done" ? "false" : "true"} />
-                                <button
-                                  type="submit"
-                                  className="h-3.5 w-3.5 shrink-0 border"
-                                  style={{ borderColor: GREY, background: t.status === "done" ? INK : "transparent" }}
-                                  aria-label="Toggle done"
-                                />
-                                <span
-                                  className="text-[13px]"
-                                  style={{ color: t.status === "done" ? GREY : SOFT, textDecoration: t.status === "done" ? "line-through" : "none" }}
-                                >
-                                  {t.title}
-                                </span>
-                              </form>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
             </div>
           )}
 
