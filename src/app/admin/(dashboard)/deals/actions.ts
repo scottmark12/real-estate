@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { parseCsvToRecords } from "@/lib/csv";
+import { isTerminalOutcome, outcomeLabel, resolveNextDate } from "@/lib/call-outcomes";
 import type { PipelineStage } from "@/lib/types";
 
 const PIPELINE_STAGES: PipelineStage[] = [
@@ -181,35 +182,38 @@ export async function addCallLog(formData: FormData) {
   const supabase = await createClient();
 
   const companyId = String(formData.get("company_id") ?? "");
-  const outcome = str(formData, "outcome");
+  const outcome = String(formData.get("outcome") ?? "").trim();
   const notes = str(formData, "notes");
-  if (!companyId || (!outcome && !notes)) return;
+  if (!companyId || !outcome) return;
 
   const contactId = str(formData, "contact_id");
-  const nextActionDate = str(formData, "next_action_date");
-  const nextActionType = str(formData, "next_action_type");
+  const manualDate = str(formData, "next_action_date");
+  const nextActionDate = isTerminalOutcome(outcome)
+    ? null
+    : resolveNextDate(outcome, manualDate);
+  const nextActionType = outcomeLabel(outcome);
 
   await supabase.from("deal_call_logs").insert({
     company_id: companyId,
     contact_id: contactId,
-    outcome,
+    outcome: nextActionType,
     notes,
     next_action_date: nextActionDate,
     next_action_type: nextActionType,
   });
 
   // Logging a call is the primary way a deal's next action gets
-  // (re)scheduled, so keep deal_companies in sync — same pattern as
-  // addClientNote syncing clients.next_follow_up_date.
-  if (nextActionDate) {
-    await supabase
-      .from("deal_companies")
-      .update({
-        next_action_date: nextActionDate,
-        next_action_type: nextActionType,
-      })
-      .eq("id", companyId);
-  }
+  // (re)scheduled — the outcome picked above determines it automatically
+  // unless a manual date override was given, so this never depends on
+  // remembering to type a date in by hand.
+  await supabase
+    .from("deal_companies")
+    .update({
+      next_action_date: nextActionDate,
+      next_action_type: nextActionDate ? nextActionType : null,
+      ...(isTerminalOutcome(outcome) ? { pipeline_stage: "dead" } : {}),
+    })
+    .eq("id", companyId);
 
   revalidatePath(`/admin/deals/${companyId}/edit`);
   revalidatePath("/admin/deals");

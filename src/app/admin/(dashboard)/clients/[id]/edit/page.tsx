@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import ClientForm from "@/components/admin/client-form";
-import { btnPrimary, btnSecondary, input, label, textarea } from "@/components/admin/ui";
+import { btnPrimary, btnSecondary, input, label, select, textarea } from "@/components/admin/ui";
 import { formatDate } from "@/lib/format";
+import { CALL_OUTCOMES } from "@/lib/call-outcomes";
 import type { BuyBox, Client, ClientNote } from "@/lib/types";
 import { addClientNote, deleteBuyBox, upsertBuyBox } from "../../actions";
 
@@ -187,6 +188,23 @@ export default async function EditClientPage({
         <form action={addClientNote} className="mt-4 flex flex-col gap-4">
           <input type="hidden" name="client_id" value={client.id} />
           <div>
+            <label className={label}>Outcome</label>
+            <select name="outcome" required defaultValue="" className={select}>
+              <option value="" disabled>
+                Select what happened&hellip;
+              </option>
+              {CALL_OUTCOMES.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1.5 text-xs text-navy/50">
+              Picking an outcome sets the next follow-up date automatically —
+              override it below only if you need a specific date.
+            </p>
+          </div>
+          <div>
             <label className={label}>Note</label>
             <textarea
               name="body"
@@ -198,7 +216,7 @@ export default async function EditClientPage({
           </div>
           <div className="grid gap-4 sm:grid-cols-[240px_1fr] sm:items-end">
             <div>
-              <label className={label}>Next Follow-up (optional)</label>
+              <label className={label}>Override Next Follow-up (optional)</label>
               <input type="date" name="next_follow_up_date" className={input} />
             </div>
             <button type="submit" className={`self-start ${btnPrimary}`}>
@@ -210,7 +228,13 @@ export default async function EditClientPage({
         <div className="mt-8 flex flex-col divide-y divide-sand border-t border-sand">
           {notes.map((note) => (
             <div key={note.id} className="py-4">
-              <p className="whitespace-pre-line text-sm text-navy">{note.body}</p>
+              {note.outcome && (
+                <p className="text-sm font-medium text-navy">
+                  {CALL_OUTCOMES.find((o) => o.value === note.outcome)?.label ??
+                    note.outcome}
+                </p>
+              )}
+              <p className="mt-1 whitespace-pre-line text-sm text-navy/80">{note.body}</p>
               <p className="eyebrow mt-2 text-navy/40">
                 {formatDate(note.created_at)}
                 {note.next_follow_up_date &&

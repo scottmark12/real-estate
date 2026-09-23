@@ -264,6 +264,7 @@ export interface ClientNote {
   id: string;
   client_id: string;
   body: string;
+  outcome: string | null;
   next_follow_up_date: string | null;
   created_at: string;
 }

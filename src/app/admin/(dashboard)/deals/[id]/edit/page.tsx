@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import CompanyForm from "@/components/admin/company-form";
 import { btnPrimary, btnSecondary, input, label, select, textarea } from "@/components/admin/ui";
 import { formatDate, PROPERTY_TYPE_OPTIONS } from "@/lib/format";
+import { CALL_OUTCOMES } from "@/lib/call-outcomes";
 import type {
   DealCallLog,
   DealCompany,
@@ -409,27 +410,30 @@ export default async function EditDealCompanyPage({
               </select>
             </div>
           )}
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className={label}>Outcome</label>
-              <input
-                name="outcome"
-                placeholder="Left voicemail, spoke with owner, not interested..."
-                className={input}
-              />
-            </div>
-            <div>
-              <label className={label}>Next Action Type</label>
-              <input name="next_action_type" placeholder="Follow-up call" className={input} />
-            </div>
+          <div>
+            <label className={label}>Outcome</label>
+            <select name="outcome" required defaultValue="" className={select}>
+              <option value="" disabled>
+                Select what happened&hellip;
+              </option>
+              {CALL_OUTCOMES.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </select>
+            <p className="mt-1.5 text-xs text-navy/50">
+              Picking an outcome sets the next action date automatically —
+              override it below only if you need a specific date.
+            </p>
           </div>
           <div>
-            <label className={label}>Notes</label>
+            <label className={label}>Notes (optional)</label>
             <textarea name="notes" rows={3} className={textarea} />
           </div>
           <div className="grid gap-4 sm:grid-cols-[240px_1fr] sm:items-end">
             <div>
-              <label className={label}>Next Action Date (optional)</label>
+              <label className={label}>Override Next Action Date (optional)</label>
               <input type="date" name="next_action_date" className={input} />
             </div>
             <button type="submit" className={`self-start ${btnPrimary}`}>

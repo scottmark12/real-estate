@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { parseCsvToRecords } from "@/lib/csv";
+import { isTerminalOutcome, resolveNextDate } from "@/lib/call-outcomes";
 import type { ClientStatus, ClientType } from "@/lib/types";
 
 const CLIENT_STATUSES: ClientStatus[] = [
@@ -127,33 +128,33 @@ export async function addClientNote(formData: FormData) {
 
   const clientId = String(formData.get("client_id") ?? "");
   const body = String(formData.get("body") ?? "").trim();
-  if (!clientId || !body) return;
+  const outcome = String(formData.get("outcome") ?? "").trim();
+  if (!clientId || !body || !outcome) return;
 
-  const nextFollowUpDate = str(formData, "next_follow_up_date");
+  const manualDate = str(formData, "next_follow_up_date");
+  const nextFollowUpDate = isTerminalOutcome(outcome)
+    ? null
+    : resolveNextDate(outcome, manualDate);
 
   await supabase.from("client_notes").insert({
     client_id: clientId,
     body,
+    outcome,
     next_follow_up_date: nextFollowUpDate,
   });
 
-  // Logging a note is the primary way a follow-up date gets (re)scheduled,
-  // so keep it in sync on the client record too rather than making the
-  // "who to call" view join through client_notes to find the latest one.
-  if (nextFollowUpDate) {
-    await supabase
-      .from("clients")
-      .update({
-        next_follow_up_date: nextFollowUpDate,
-        last_contacted_at: new Date().toISOString(),
-      })
-      .eq("id", clientId);
-  } else {
-    await supabase
-      .from("clients")
-      .update({ last_contacted_at: new Date().toISOString() })
-      .eq("id", clientId);
-  }
+  // Logging a note is the primary way a follow-up date gets (re)scheduled —
+  // the outcome picked above determines it automatically unless a manual
+  // date override was given, so this never depends on remembering to type
+  // a date in by hand.
+  await supabase
+    .from("clients")
+    .update({
+      next_follow_up_date: nextFollowUpDate,
+      last_contacted_at: new Date().toISOString(),
+      ...(isTerminalOutcome(outcome) ? { status: "lost" } : {}),
+    })
+    .eq("id", clientId);
 
   revalidatePath(`/admin/clients/${clientId}/edit`);
   revalidatePath("/admin/clients");
