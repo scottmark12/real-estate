@@ -280,3 +280,81 @@ export interface ContactMessage {
   timeline: string | null;
   created_at: string;
 }
+
+export type PipelineStage =
+  | "sourced"
+  | "researching"
+  | "contacted"
+  | "negotiating"
+  | "under_contract"
+  | "closed"
+  | "dead";
+
+export interface DealCompany {
+  id: string;
+  name: string;
+  website: string | null;
+  pipeline_stage: PipelineStage;
+  heat_score: number | null;
+  next_action_date: string | null;
+  next_action_type: string | null;
+  source: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealProperty {
+  id: string;
+  company_id: string;
+  name: string | null;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  property_type: string | null;
+  units: number | null;
+  year_built: number | null;
+  total_sf: number | null;
+  lot_size_acres: number | null;
+  occupancy_current: number | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealFinancials {
+  property_id: string;
+  purchase_price: number | null;
+  gross_revenue: number | null;
+  operating_expenses: number | null;
+  exit_cap_rate: number | null;
+  hold_period_years: number | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealContact {
+  id: string;
+  company_id: string;
+  name: string;
+  role: string | null;
+  phone: string | null;
+  email: string | null;
+  is_decision_maker: boolean;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface DealCallLog {
+  id: string;
+  company_id: string;
+  contact_id: string | null;
+  outcome: string | null;
+  notes: string | null;
+  next_action_date: string | null;
+  next_action_type: string | null;
+  called_at: string;
+  created_at: string;
+}
