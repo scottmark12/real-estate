@@ -14,6 +14,19 @@ export function MorningBriefTeaser({
 }) {
   const { expanded, toggle } = useMorningBrief();
 
+  // toggle() only flips React state — the panel further down the page
+  // (a separate component) doesn't exist in the DOM until that state
+  // change re-renders it, so a plain click otherwise looks like nothing
+  // happened. Wait two animation frames (render + paint) before scrolling.
+  const handleExpand = () => {
+    toggle();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        document.getElementById("morning-brief")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  };
+
   // Once read, this shouldn't keep holding the most valuable spot on the
   // page — collapse to a thin line and let the full brief live at the
   // bottom instead (see MorningBriefPanel, id="morning-brief"). A plain
@@ -38,7 +51,7 @@ export function MorningBriefTeaser({
   return (
     <button
       type="button"
-      onClick={toggle}
+      onClick={handleExpand}
       className="mt-8 block w-full border border-navy bg-navy p-7 text-left text-cream transition-colors hover:bg-ink"
     >
       <p className="eyebrow text-gold">The Morning Brief</p>
