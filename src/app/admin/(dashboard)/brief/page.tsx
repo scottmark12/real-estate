@@ -80,21 +80,21 @@ function LeadStory({ a }: { a: MarketRead }) {
   );
 }
 
+// Deliberately echoes LeadStory's own shape (source eyebrow, then
+// headline) rather than a bulleted/dotted list — it needs to read as
+// more distinct stories, not as sub-points of the lead above it.
 function QuickHit({ a }: { a: MarketRead }) {
   return (
     <a
       href={a.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex items-start gap-3 border-t border-sand/70 py-3.5 first:border-t-0"
+      className="group block border-t border-sand/70 py-4 first:border-t-0"
     >
-      <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-navy/25 group-hover:bg-gold" />
-      <div className="min-w-0">
-        <p className="font-medium leading-snug text-navy group-hover:underline group-hover:decoration-gold group-hover:decoration-2 group-hover:underline-offset-4">
-          {a.title}
-        </p>
-        <p className="mt-0.5 text-xs text-navy/40">{a.source}</p>
-      </div>
+      <p className="eyebrow-sm text-navy/35">{a.source}</p>
+      <p className="mt-1 font-display text-base font-semibold leading-snug text-navy group-hover:underline group-hover:decoration-gold group-hover:decoration-2 group-hover:underline-offset-4">
+        {a.title}
+      </p>
     </a>
   );
 }
@@ -124,7 +124,8 @@ function Section({
       </div>
       <LeadStory a={lead} />
       {rest.length > 0 && (
-        <div className="border-t border-sand">
+        <div className="border-t-2 border-sand bg-sand/15 px-4">
+          <p className="eyebrow-sm pt-3 text-navy/35">More From This Section</p>
           {rest.map((a) => (
             <QuickHit key={a.id} a={a} />
           ))}
