@@ -238,6 +238,97 @@ export default async function AdminHomePage() {
         spotlightCount={spotlightReads.length}
       />
 
+      <div className="mt-10">
+        <p className="eyebrow text-gold">This Week&apos;s Goals</p>
+        {goals.length === 0 ? (
+          <p className="mt-3 text-navy/50">
+            No active goals right now.{" "}
+            <Link href="/admin/goals/new" className="underline decoration-gold decoration-2 underline-offset-4">
+              Set one up &rarr;
+            </Link>
+          </p>
+        ) : (
+          <div className="mt-4 flex flex-col divide-y divide-sand border-t border-sand">
+            {goals.map((g) => {
+              const card = scoreCard.get(g.id);
+              const target = weeklyTargets.get(g.id) ?? "";
+              return (
+                <div key={g.id} className="py-4">
+                  <div className="flex items-baseline justify-between">
+                    <Link
+                      href={`/admin/goals/${g.id}/edit`}
+                      className="font-medium text-navy underline decoration-gold decoration-2 underline-offset-4"
+                    >
+                      {g.title}
+                    </Link>
+                    <span className="eyebrow text-navy/40">
+                      Week {currentWeekNumber(g.period_start)} of 12
+                      {card ? ` · ${card.done}/${card.total} this week` : ""}
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-sm text-navy/70">
+                    {target || "No target set for this week yet."}
+                  </p>
+                  {target && (
+                    <form action={addTodo} className="mt-2">
+                      <input type="hidden" name="title" value={target} />
+                      <input type="hidden" name="goal_id" value={g.id} />
+                      <input type="hidden" name="scheduled_date" value={todayIso} />
+                      <button type="submit" className="text-xs text-navy/40 underline decoration-gold decoration-2 underline-offset-4 hover:text-navy">
+                        + Add as today&apos;s to-do
+                      </button>
+                    </form>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Business at a glance — reference, not action. */}
+      <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-sand pt-8 sm:grid-cols-3 lg:grid-cols-6">
+        <div>
+          <p className="font-display text-4xl font-normal text-navy">{clientCount ?? 0}</p>
+          <p className="eyebrow mt-2 text-navy/50">Clients</p>
+          <Link href="/admin/clients" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
+            Manage &rarr;
+          </Link>
+        </div>
+        <div>
+          <p className="font-display text-4xl font-normal text-navy">{leadCount ?? 0}</p>
+          <p className="eyebrow mt-2 text-navy/50">Leads</p>
+          <Link href="/admin/leads" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
+            Review &rarr;
+          </Link>
+        </div>
+        <div>
+          <p className="font-display text-4xl font-normal text-navy">{dealCount ?? 0}</p>
+          <p className="eyebrow mt-2 text-navy/50">Deals</p>
+          <Link href="/admin/deals" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
+            Manage &rarr;
+          </Link>
+        </div>
+        <div>
+          <p className="font-display text-4xl font-normal text-navy">{listingCount ?? 0}</p>
+          <p className="eyebrow mt-2 text-navy/50">Listings</p>
+          <Link href="/admin/listings" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
+            Manage &rarr;
+          </Link>
+        </div>
+        <div>
+          <p className="font-display text-4xl font-normal text-navy">{articleCount ?? 0}</p>
+          <p className="eyebrow mt-2 text-navy/50">Articles</p>
+          <Link href="/admin/articles" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
+            Manage &rarr;
+          </Link>
+        </div>
+        <div>
+          <p className="font-display text-4xl font-normal text-navy">{subCount ?? 0}</p>
+          <p className="eyebrow mt-2 text-navy/50">Newsletter Subscribers</p>
+        </div>
+      </div>
+
       {/* Calls — the first action of the day. */}
       <div className="mt-10 border-t border-sand pt-8">
         <div className="flex items-baseline justify-between">
@@ -436,97 +527,6 @@ export default async function AdminHomePage() {
             Add to Backlog
           </button>
         </form>
-      </div>
-
-      <div className="mt-10">
-        <p className="eyebrow text-gold">This Week&apos;s Goals</p>
-        {goals.length === 0 ? (
-          <p className="mt-3 text-navy/50">
-            No active goals right now.{" "}
-            <Link href="/admin/goals/new" className="underline decoration-gold decoration-2 underline-offset-4">
-              Set one up &rarr;
-            </Link>
-          </p>
-        ) : (
-          <div className="mt-4 flex flex-col divide-y divide-sand border-t border-sand">
-            {goals.map((g) => {
-              const card = scoreCard.get(g.id);
-              const target = weeklyTargets.get(g.id) ?? "";
-              return (
-                <div key={g.id} className="py-4">
-                  <div className="flex items-baseline justify-between">
-                    <Link
-                      href={`/admin/goals/${g.id}/edit`}
-                      className="font-medium text-navy underline decoration-gold decoration-2 underline-offset-4"
-                    >
-                      {g.title}
-                    </Link>
-                    <span className="eyebrow text-navy/40">
-                      Week {currentWeekNumber(g.period_start)} of 12
-                      {card ? ` · ${card.done}/${card.total} this week` : ""}
-                    </span>
-                  </div>
-                  <p className="mt-1.5 text-sm text-navy/70">
-                    {target || "No target set for this week yet."}
-                  </p>
-                  {target && (
-                    <form action={addTodo} className="mt-2">
-                      <input type="hidden" name="title" value={target} />
-                      <input type="hidden" name="goal_id" value={g.id} />
-                      <input type="hidden" name="scheduled_date" value={todayIso} />
-                      <button type="submit" className="text-xs text-navy/40 underline decoration-gold decoration-2 underline-offset-4 hover:text-navy">
-                        + Add as today&apos;s to-do
-                      </button>
-                    </form>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* Business at a glance — reference, not action. */}
-      <div className="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-sand pt-8 sm:grid-cols-3 lg:grid-cols-6">
-        <div>
-          <p className="font-display text-4xl font-normal text-navy">{clientCount ?? 0}</p>
-          <p className="eyebrow mt-2 text-navy/50">Clients</p>
-          <Link href="/admin/clients" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
-            Manage &rarr;
-          </Link>
-        </div>
-        <div>
-          <p className="font-display text-4xl font-normal text-navy">{leadCount ?? 0}</p>
-          <p className="eyebrow mt-2 text-navy/50">Leads</p>
-          <Link href="/admin/leads" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
-            Review &rarr;
-          </Link>
-        </div>
-        <div>
-          <p className="font-display text-4xl font-normal text-navy">{dealCount ?? 0}</p>
-          <p className="eyebrow mt-2 text-navy/50">Deals</p>
-          <Link href="/admin/deals" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
-            Manage &rarr;
-          </Link>
-        </div>
-        <div>
-          <p className="font-display text-4xl font-normal text-navy">{listingCount ?? 0}</p>
-          <p className="eyebrow mt-2 text-navy/50">Listings</p>
-          <Link href="/admin/listings" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
-            Manage &rarr;
-          </Link>
-        </div>
-        <div>
-          <p className="font-display text-4xl font-normal text-navy">{articleCount ?? 0}</p>
-          <p className="eyebrow mt-2 text-navy/50">Articles</p>
-          <Link href="/admin/articles" className="eyebrow mt-4 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4">
-            Manage &rarr;
-          </Link>
-        </div>
-        <div>
-          <p className="font-display text-4xl font-normal text-navy">{subCount ?? 0}</p>
-          <p className="eyebrow mt-2 text-navy/50">Newsletter Subscribers</p>
-        </div>
       </div>
 
       <div className="mt-14 border-t border-sand pt-8">
