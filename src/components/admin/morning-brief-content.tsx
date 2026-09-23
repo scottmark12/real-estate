@@ -2,9 +2,9 @@ import type { MarketRead } from "@/lib/types";
 
 export type SectionMeta = { id: string; label: string; emoji: string; color: string };
 
-// Each section gets its own real hue (not a shade of the same navy) and its
-// own emoji anchor — that's most of what makes a newsletter feel like a
-// sequence of distinct "stops" while you scroll, rather than one long list.
+// Kept for the Dashboard's compact preview (morning-brief-preview.tsx),
+// which still groups by section with a color/emoji per theme. The full
+// /admin/brief page below no longer uses color/emoji — see ResearchList.
 export const SECTION_META: Record<string, SectionMeta> = {
   rates: { id: "rates", label: "Rates", emoji: "💰", color: "#2b57a8" },
   san_diego: { id: "san-diego", label: "San Diego & SoCal", emoji: "🌴", color: "#0d7a6e" },
@@ -27,15 +27,15 @@ export function groupIntoSections(reads: MarketRead[]): GroupedSection[] {
 }
 
 // Renders "**bold**" spans as real emphasis — lets the sweep bold the
-// numbers/facts that matter, Morning-Brew style, without a full markdown
-// parser or dangerouslySetInnerHTML.
+// numbers/facts that matter, without a full markdown parser or
+// dangerouslySetInnerHTML.
 export function Bolded({ text }: { text: string }) {
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return (
     <>
       {parts.map((part, i) =>
         part.startsWith("**") && part.endsWith("**") ? (
-          <strong key={i} className="font-semibold text-navy">
+          <strong key={i} className="font-semibold text-ink">
             {part.slice(2, -2)}
           </strong>
         ) : (
@@ -46,148 +46,44 @@ export function Bolded({ text }: { text: string }) {
   );
 }
 
-function KeyPoints({ a, color }: { a: MarketRead; color: string }) {
-  if (!a.key_points || a.key_points.length === 0) return null;
-  return (
-    <div className="mt-3 flex flex-col gap-1.5">
-      {a.key_points.map((point, i) => (
-        <div key={i} className="flex items-start gap-2">
-          <span className="mt-0.5" style={{ color }}>
-            &#10003;
-          </span>
-          <span
-            className="text-[15px] leading-[1.55]"
-            style={{ color: "color-mix(in srgb, var(--navy) 82%, transparent)" }}
-          >
-            <Bolded text={point} />
-          </span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// The first story in a section reads like a lede — full headline, full
-// treatment. The rest are scannable "quick hits" — headline only, visually
-// grouped apart so they don't read as sub-points of the lede.
-function LeadStory({ a, color }: { a: MarketRead; color: string }) {
-  return (
-    <div className="py-6">
-      <p className="eyebrow-sm" style={{ color: "color-mix(in srgb, " + color + " 70%, var(--navy))" }}>
-        {a.source}
-      </p>
-      <p className="mt-2 font-display text-[1.75rem] font-semibold leading-[1.15] tracking-tight text-navy">
-        {a.title}
-      </p>
-      {a.summary && (
-        <p
-          className="mt-3 max-w-[52ch] text-[15px] leading-[1.7]"
-          style={{ color: "color-mix(in srgb, var(--navy) 78%, transparent)" }}
-        >
-          <Bolded text={a.summary} />
-        </p>
-      )}
-      <KeyPoints a={a} color={color} />
-      {a.why_it_matters && (
-        <div className="mt-3 max-w-[52ch] border-l-2 pl-3" style={{ borderColor: color + "66" }}>
-          <p className="eyebrow-sm text-navy/40">Bottom Line</p>
-          <p className="mt-1 text-sm text-navy/70">
-            <Bolded text={a.why_it_matters} />
-          </p>
-        </div>
-      )}
-      <a
-        href={a.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="eyebrow-sm mt-3 inline-block underline decoration-2 underline-offset-4"
-        style={{ color, textDecorationColor: color }}
-      >
-        Read the Full Story &rarr;
-      </a>
-    </div>
-  );
-}
-
-function QuickHit({ a }: { a: MarketRead }) {
-  return (
-    <a
-      href={a.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group block border-t border-sand/70 py-4 first:border-t-0"
-    >
-      <p className="eyebrow-sm text-navy/35">{a.source}</p>
-      <p className="mt-1 font-display text-base font-semibold leading-snug text-navy group-hover:underline group-hover:decoration-gold group-hover:decoration-2 group-hover:underline-offset-4">
-        {a.title}
-      </p>
-    </a>
-  );
-}
-
-function Section({ meta, reads }: { meta: SectionMeta; reads: MarketRead[] }) {
-  if (reads.length === 0) return null;
-  const [lead, ...rest] = reads;
-  return (
-    <div id={meta.id} className="mt-12 scroll-mt-6">
-      <div className="flex items-baseline justify-between border-b-2 pb-2" style={{ borderColor: meta.color }}>
-        <p className="eyebrow" style={{ color: meta.color }}>
-          <span className="mr-1.5">{meta.emoji}</span>
-          {meta.label}
-        </p>
-        <p className="eyebrow-sm text-navy/30">
-          {reads.length} {reads.length === 1 ? "story" : "stories"}
-        </p>
-      </div>
-      <LeadStory a={lead} color={meta.color} />
-      {rest.length > 0 && (
-        <div className="border-t-2 border-sand bg-sand/15 px-4">
-          <p className="eyebrow-sm pt-3 text-navy/35">More From This Section</p>
-          {rest.map((a) => (
-            <QuickHit key={a.id} a={a} />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// The jump-list + every section, in order. Used by both the standalone
-// /admin/brief page and the inline panel on the Dashboard.
-export function BriefSections({ sections }: { sections: GroupedSection[] }) {
-  const totalStories = sections.reduce((sum, s) => sum + s.reads.length, 0);
-
-  if (sections.length === 0) return null;
+// A single flat numbered list, priority-ordered (rates/San Diego first,
+// matching SECTION_ORDER) rather than six separate colored sections —
+// each entry: a small caps theme tag, a bold title, one flowing
+// paragraph (summary + the "why it matters" angle folded in), and a
+// muted "via Source" close. Matches the reference format directly.
+export function ResearchList({ sections }: { sections: GroupedSection[] }) {
+  const items = sections.flatMap((s) => s.reads.map((a) => ({ theme: s.meta.label, read: a })));
+  if (items.length === 0) return null;
 
   return (
-    <>
-      <p className="mt-6 text-navy/70">
-        <strong className="text-navy">{totalStories} stories</strong> across {sections.length} beats
-        today — here&apos;s what&apos;s on deck.
-      </p>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {sections.map(({ theme, meta, reads: sectionReads }) => (
-          <a
-            key={theme}
-            href={`#${meta.id}`}
-            className="flex items-center gap-1.5 border px-3 py-1.5 text-sm font-medium text-navy transition-colors hover:text-white hover:[background-color:var(--pill-color)]"
-            style={
-              {
-                borderColor: meta.color,
-                "--pill-color": meta.color,
-              } as React.CSSProperties
-            }
-          >
-            <span>{meta.emoji}</span>
-            {meta.label}
-            <span className="text-navy/40">({sectionReads.length})</span>
-          </a>
-        ))}
-      </div>
-
-      {sections.map(({ theme, meta, reads: sectionReads }) => (
-        <Section key={theme} meta={meta} reads={sectionReads} />
-      ))}
-    </>
+    <ol className="m-0 grid list-none gap-4 p-0">
+      {items.map(({ theme, read: a }, i) => {
+        const description = [a.summary, a.why_it_matters].filter(Boolean).join(" ");
+        return (
+          <li key={a.id} className="grid grid-cols-[22px_1fr] gap-2">
+            <span className="text-sm tabular-nums text-[#B4B3A8]">{i + 1}</span>
+            <div>
+              <p className="eyebrow-sm mb-0.5 text-[#B4B3A8]">{theme}</p>
+              <a
+                href={a.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-ink no-underline hover:underline"
+              >
+                {a.title}
+              </a>
+              {description && (
+                <p className="m-0 mt-0.5 text-[14px] text-[#6B6A63]">
+                  <Bolded text={description} />{" "}
+                  <span className="text-[#B4B3A8] underline decoration-[#B4B3A8] underline-offset-2">
+                    via {a.source}
+                  </span>
+                </p>
+              )}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
   );
 }
