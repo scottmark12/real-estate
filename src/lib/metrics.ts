@@ -56,6 +56,30 @@ export function formatMetricValue(metric: MetricKey, value: number): string {
   return String(value);
 }
 
+// Which weekly_targets_numeric metrics belong to which of the three
+// goals — the table itself has no goal_id, so this matches on keywords
+// in the goal's title. protein_day is left out here on purpose: it's a
+// same-day yes/no logged through the Log Results drawer, not a "do this
+// many today" count that reads well as a checkbox todo.
+const RE_METRICS: MetricKey[] = [
+  "offers", "listing_agent_calls", "dials", "conversations", "appointments", "open_houses", "sphere_touches",
+];
+const AWL_METRICS: MetricKey[] = ["reels", "shop_pitches", "hats_sold"];
+const BODY_METRICS: MetricKey[] = ["workouts"];
+
+export function metricsForGoal(goalTitle: string): MetricKey[] {
+  const t = goalTitle.toLowerCase();
+  if (t.includes("awl") || t.includes("hat")) return AWL_METRICS;
+  if (t.includes("lbs") || t.includes("body fat") || t.includes("weight")) return BODY_METRICS;
+  return RE_METRICS;
+}
+
+export function pluralizeMetric(metric: MetricKey, n: number): string {
+  const base = METRIC_LABELS[metric].toLowerCase();
+  if (n === 1) return base;
+  return base.endsWith("ch") ? `${base}es` : `${base}s`;
+}
+
 function blockShortName(label: string) {
   return label.split(":")[0].trim().toLowerCase();
 }

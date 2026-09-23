@@ -3,13 +3,16 @@ import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, input } from "@/components/admin/ui";
 import { SubmitButton } from "@/components/admin/submit-button";
 import { currentWeekNumber } from "@/lib/format";
+import { metricsForGoal, pluralizeMetric } from "@/lib/metrics";
 import type {
   Client,
   DealCompany,
   Goal,
   GoalDailyCheck,
   GoalWeeklyTarget,
+  MetricKey,
   Todo,
+  WeeklyTargetNumeric,
 } from "@/lib/types";
 import { addTodo, deleteTodo, toggleTodo } from "./actions";
 
@@ -114,13 +117,14 @@ export default async function AdminHomePage() {
 
   let weeklyTargets = new Map<string, string>();
   const scoreCard = new Map<string, { done: number; total: number }>();
+  const numericTargetsByWeek = new Map<number, Map<MetricKey, number>>();
   if (goals.length > 0) {
     const goalIds = goals.map((g) => g.id);
     const weekAgo = new Date(today);
     weekAgo.setDate(weekAgo.getDate() - 6);
     const weekAgoIso = weekAgo.toISOString().slice(0, 10);
 
-    const [{ data: targetsData }, { data: checksData }] = await Promise.all([
+    const [{ data: targetsData }, { data: checksData }, { data: numericTargetsData }] = await Promise.all([
       supabase.from("goal_weekly_targets").select("*").in("goal_id", goalIds),
       supabase
         .from("goal_daily_checks")
@@ -128,6 +132,7 @@ export default async function AdminHomePage() {
         .in("goal_id", goalIds)
         .gte("check_date", weekAgoIso)
         .lte("check_date", todayIso),
+      supabase.from("weekly_targets_numeric").select("*"),
     ]);
 
     const targets = (targetsData as GoalWeeklyTarget[]) ?? [];
@@ -149,21 +154,48 @@ export default async function AdminHomePage() {
         total: 7,
       });
     }
+
+    for (const t of (numericTargetsData as WeeklyTargetNumeric[]) ?? []) {
+      const m = numericTargetsByWeek.get(t.week_number) ?? new Map<MetricKey, number>();
+      m.set(t.metric, t.target);
+      numericTargetsByWeek.set(t.week_number, m);
+    }
   }
 
-  // Auto-fill today's list with each active goal's current weekly target —
-  // one per goal, created once per day (skipped if a todo for that
-  // goal+day already exists), so the list is ready without having to
-  // build it by hand.
+  // Auto-fill today's list with this week's numeric targets relevant to
+  // each active goal (e.g. "3 offers", "425 dials") — one clean todo per
+  // metric, created once per day and skipped entirely if that goal
+  // already has any todo today (so it never fights with hand-built or
+  // block-assigned todos for the same goal). Falls back to the raw
+  // goal_weekly_targets text only if no numeric targets exist for that
+  // goal's metrics this week.
   const existingGoalIds = new Set(todayTodos.filter((t) => t.goal_id).map((t) => t.goal_id));
-  const todosToCreate = goals
-    .filter((g) => weeklyTargets.has(g.id) && !existingGoalIds.has(g.id))
-    .map((g) => ({
-      title: weeklyTargets.get(g.id) as string,
-      goal_id: g.id,
-      scheduled_date: todayIso,
-      status: "pending" as const,
-    }));
+  const todosToCreate: { title: string; goal_id: string; scheduled_date: string; status: "pending" }[] = [];
+  for (const g of goals) {
+    if (existingGoalIds.has(g.id)) continue;
+    const week = currentWeekNumber(g.period_start);
+    const weekTargets = numericTargetsByWeek.get(week);
+    const relevantMetrics = metricsForGoal(g.title);
+    const numericRows = relevantMetrics
+      .filter((m) => weekTargets?.has(m))
+      .map((m) => ({
+        title: `${weekTargets!.get(m)} ${pluralizeMetric(m, weekTargets!.get(m)!)}`,
+        goal_id: g.id,
+        scheduled_date: todayIso,
+        status: "pending" as const,
+      }));
+
+    if (numericRows.length > 0) {
+      todosToCreate.push(...numericRows);
+    } else if (weeklyTargets.has(g.id)) {
+      todosToCreate.push({
+        title: weeklyTargets.get(g.id) as string,
+        goal_id: g.id,
+        scheduled_date: todayIso,
+        status: "pending",
+      });
+    }
+  }
 
   if (todosToCreate.length > 0) {
     const { data: created } = await supabase.from("todos").insert(todosToCreate).select("*");
