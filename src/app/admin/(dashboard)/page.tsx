@@ -2,8 +2,9 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnSecondary, input, label, select } from "@/components/admin/ui";
 import { currentWeekNumber } from "@/lib/format";
-import { Bolded } from "@/components/admin/morning-brief-content";
+import { Bolded, groupIntoSections } from "@/components/admin/morning-brief-content";
 import { MorningBriefTeaser } from "@/components/admin/morning-brief-teaser";
+import { MorningBriefPreview } from "@/components/admin/morning-brief-preview";
 import type {
   Client,
   DailyBrief,
@@ -131,6 +132,7 @@ export default async function AdminHomePage() {
   );
   const topStory = allMarketReads[0] ?? null;
   const totalBriefCount = allMarketReads.length;
+  const briefSections = groupIntoSections(allMarketReads);
 
   const dueClients = (dueClientsData as Client[]) ?? [];
   const dueDeals = (dueDealsData as DealCompany[]) ?? [];
@@ -579,6 +581,8 @@ export default async function AdminHomePage() {
           </button>
         </form>
       </div>
+
+      <MorningBriefPreview sections={briefSections} />
     </div>
   );
 }
