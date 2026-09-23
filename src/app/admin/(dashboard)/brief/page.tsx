@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { btnPrimary, btnSecondary, input } from "@/components/admin/ui";
+import { btnPrimary } from "@/components/admin/ui";
 import type { MarketRead } from "@/lib/types";
-import { addResearchRead, refreshMarketReads } from "../actions";
+import { refreshMarketReads } from "../actions";
 
 export const revalidate = 0;
 
@@ -134,56 +134,7 @@ function Section({
   );
 }
 
-function ResearchStory({ a }: { a: MarketRead }) {
-  const pending = !a.key_points && !a.summary;
-  return (
-    <div className="border-b border-sand/70 py-6 last:border-0">
-      <p className="eyebrow-sm text-navy/40">{a.source}</p>
-      <p className="mt-2 font-display text-xl font-semibold leading-snug text-navy">
-        {a.title}
-      </p>
-      {pending ? (
-        <p className="mt-2 text-sm italic text-navy/40">
-          Not read yet — the next sweep will summarize this (or hit &quot;Run now&quot; on the
-          market-reads-sweep task for an immediate pass).
-        </p>
-      ) : (
-        <>
-          {a.summary && (
-            <p
-              className="mt-3 max-w-[52ch] text-[15px] leading-[1.7]"
-              style={{ color: "color-mix(in srgb, var(--navy) 78%, transparent)" }}
-            >
-              {a.summary}
-            </p>
-          )}
-          <KeyPoints a={a} />
-          {a.why_it_matters && (
-            <div className="mt-3 max-w-[52ch] border-l-2 border-gold/40 pl-3">
-              <p className="eyebrow-sm text-navy/40">Why It Matters</p>
-              <p className="mt-1 text-sm text-navy/70">{a.why_it_matters}</p>
-            </div>
-          )}
-        </>
-      )}
-      <a
-        href={a.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="eyebrow-sm mt-3 inline-block text-blue underline decoration-blue decoration-2 underline-offset-4"
-      >
-        Read the Full Story &rarr;
-      </a>
-    </div>
-  );
-}
-
-export default async function AdminBriefPage({
-  searchParams,
-}: PageProps<"/admin/brief">) {
-  const params = await searchParams;
-  const error = typeof params.error === "string" ? params.error : undefined;
-
+export default async function AdminBriefPage() {
   const supabase = await createClient();
   const { data } = await supabase
     .from("market_reads")
@@ -193,13 +144,11 @@ export default async function AdminBriefPage({
     .limit(40);
 
   const reads = (data as MarketRead[]) ?? [];
-  const research = reads.filter((a) => a.source_type === "manual");
-  const feedReads = reads.filter((a) => a.source_type !== "manual");
-  const spotlight = feedReads.filter((a) => a.theme === "rates" || a.theme === "san_diego");
+  const spotlight = reads.filter((a) => a.theme === "rates" || a.theme === "san_diego");
   const sections = SECTION_ORDER.map((theme) => ({
     theme,
     label: SECTION_LABELS[theme],
-    reads: feedReads.filter((a) => a.theme === theme),
+    reads: reads.filter((a) => a.theme === theme),
   })).filter((s) => s.reads.length > 0);
 
   return (
@@ -229,32 +178,6 @@ export default async function AdminBriefPage({
         </div>
       </div>
 
-      {error && (
-        <p className="mt-4 border border-red-300 bg-red-50 px-4 py-3 text-sm text-red-700">
-          {error}
-        </p>
-      )}
-
-      <div className="mt-8 border border-navy/15 bg-white/60 p-5">
-        <p className="eyebrow-sm text-navy/50">Add Your Own Research</p>
-        <form action={addResearchRead} className="mt-3 flex gap-2">
-          <input
-            name="url"
-            type="url"
-            required
-            placeholder="Paste an article URL&hellip;"
-            className={`${input} mt-0 flex-1`}
-          />
-          <button type="submit" className={btnSecondary}>
-            Add
-          </button>
-        </form>
-        <p className="mt-2 text-xs text-navy/40">
-          Shows up below right away; the full read-through and key points land on the next
-          sweep.
-        </p>
-      </div>
-
       {reads.length === 0 && (
         <div className="mt-10 border border-dashed border-navy/20 p-8 text-center">
           <p className="text-navy/50">No brief pulled yet today.</p>
@@ -263,22 +186,6 @@ export default async function AdminBriefPage({
               Refresh Articles
             </button>
           </form>
-        </div>
-      )}
-
-      {research.length > 0 && (
-        <div className="mt-10">
-          <div className="flex items-baseline justify-between border-b-2 border-navy pb-2">
-            <p className="eyebrow text-navy">Your Research</p>
-            <p className="eyebrow-sm text-navy/30">
-              {research.length} {research.length === 1 ? "story" : "stories"}
-            </p>
-          </div>
-          <div>
-            {research.map((a) => (
-              <ResearchStory key={a.id} a={a} />
-            ))}
-          </div>
         </div>
       )}
 

@@ -1,41 +1,12 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { fetchMarketReads, fetchPageTitle } from "@/lib/rss";
+import { fetchMarketReads } from "@/lib/rss";
 
 function str(formData: FormData, key: string): string | null {
   const raw = String(formData.get(key) ?? "").trim();
   return raw || null;
-}
-
-export async function addResearchRead(formData: FormData) {
-  const url = str(formData, "url");
-  if (!url || !/^https?:\/\//i.test(url)) {
-    redirect("/admin/brief?error=Paste a full URL (starting with http:// or https://)");
-  }
-
-  const { title, source } = await fetchPageTitle(url);
-
-  const supabase = await createClient();
-  // Upsert without touching summary/theme/key_points: if this url was
-  // already pulled (and maybe rejected) by the sweep, re-submitting it
-  // manually promotes it to kept + manual without clobbering anything
-  // the sweep may have already written.
-  await supabase.from("market_reads").upsert(
-    {
-      title,
-      url,
-      source,
-      kept: true,
-      source_type: "manual",
-    },
-    { onConflict: "url" }
-  );
-
-  revalidatePath("/admin/brief");
-  redirect("/admin/brief");
 }
 
 export async function addTodo(formData: FormData) {
