@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary } from "@/components/admin/ui";
 import { BriefSections, groupIntoSections } from "@/components/admin/morning-brief-content";
+import { MarkMorningBriefRead } from "@/components/admin/mark-morning-brief-read";
 import type { MarketRead } from "@/lib/types";
 import { refreshMarketReads } from "../actions";
 
@@ -29,6 +30,7 @@ export default async function AdminBriefPage() {
 
   return (
     <div className="mx-auto max-w-2xl">
+      <MarkMorningBriefRead />
       <Link
         href="/admin"
         className="eyebrow-sm text-navy/40 underline decoration-gold decoration-2 underline-offset-4 hover:text-navy"

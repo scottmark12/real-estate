@@ -2,10 +2,8 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { btnPrimary, btnSecondary, input, label, select } from "@/components/admin/ui";
 import { currentWeekNumber } from "@/lib/format";
-import { Bolded, groupIntoSections } from "@/components/admin/morning-brief-content";
-import { MorningBriefProvider } from "@/components/admin/morning-brief-context";
+import { Bolded } from "@/components/admin/morning-brief-content";
 import { MorningBriefTeaser } from "@/components/admin/morning-brief-teaser";
-import { MorningBriefPanel } from "@/components/admin/morning-brief-panel";
 import type {
   Client,
   DailyBrief,
@@ -133,7 +131,6 @@ export default async function AdminHomePage() {
   );
   const topStory = allMarketReads[0] ?? null;
   const totalBriefCount = allMarketReads.length;
-  const briefSections = groupIntoSections(allMarketReads);
 
   const dueClients = (dueClientsData as Client[]) ?? [];
   const dueDeals = (dueDealsData as DealCompany[]) ?? [];
@@ -217,7 +214,6 @@ export default async function AdminHomePage() {
   }
 
   return (
-    <MorningBriefProvider>
     <div className="mx-auto max-w-2xl">
       <p className="eyebrow text-gold">{formatToday()}</p>
       <h1 className="mt-2 font-display text-4xl font-semibold text-navy">Good morning, Mark.</h1>
@@ -231,9 +227,9 @@ export default async function AdminHomePage() {
         </div>
       )}
 
-      {/* Morning brief teaser — clicking it reveals the full brief further
-          down this same page (MorningBriefPanel), rather than navigating
-          away. State is shared via MorningBriefProvider's context. */}
+      {/* Morning brief teaser — its own page (/admin/brief), not rendered
+          inline. Shrinks to a thin line once read today (localStorage,
+          resets at 3am Pacific — see lib/morning-brief-read-state.ts). */}
       <MorningBriefTeaser
         topStory={topStory}
         totalBriefCount={totalBriefCount}
@@ -583,9 +579,6 @@ export default async function AdminHomePage() {
           </button>
         </form>
       </div>
-
-      <MorningBriefPanel sections={briefSections} />
     </div>
-    </MorningBriefProvider>
   );
 }
