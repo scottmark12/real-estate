@@ -130,7 +130,7 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
     .map((item, i) => ({ item, i }))
     .sort((a, b) => (b.item.score ?? 0) - (a.item.score ?? 0) || a.i - b.i)
     .map(({ item }) => item)
-    .slice(0, 10);
+    .slice(0, 7);
   const isToday = showingDate === todayIso;
 
   const [{ data: marketReadsData }, { data: altReadsData }, { data: goalsData }] = await Promise.all([
