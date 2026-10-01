@@ -408,6 +408,9 @@ export interface HeadlineItem {
   title: string;
   url: string;
   source: string;
+  // Internal 1-10 relevance rating set by the daily sweep; orders Current
+  // Events, never displayed.
+  score?: number;
 }
 
 // deep_report is where the calendar-derived sections actually live —
@@ -416,9 +419,9 @@ export interface HeadlineItem {
 export interface DeepReport {
   needs_attention?: CalendarNote[];
   resolved?: CalendarNote[];
-  // Local (San Diego) news. Briefs from before Oct 1, 2026 used this key
-  // for world news, and have no world_headlines.
+  // Current Events: local and world news together, ordered by score.
   headlines?: HeadlineItem[];
+  // Only on the Oct 1, 2026 brief, from before the lists were merged.
   world_headlines?: HeadlineItem[];
   brief_url?: string;
 }

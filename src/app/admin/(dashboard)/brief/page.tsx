@@ -122,11 +122,15 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
   const deepReport = dailyBrief?.deep_report ?? null;
   const needsAttention = (deepReport?.needs_attention ?? []).slice(0, 6);
   const resolved = (deepReport?.resolved ?? []).slice(0, 6);
-  const headlines = (deepReport?.headlines ?? []).slice(0, 6);
-  const worldHeadlines = (deepReport?.world_headlines ?? []).slice(0, 6);
-  // Older briefs kept world news under `headlines` with no world list, so
-  // only call that list "Local" when the brief splits the two.
-  const hasNewsSplit = deepReport?.world_headlines !== undefined;
+  // Current Events: local and world news in one list, most relevant first.
+  // `score` is the sweep's internal 1-10 relevance rating; it orders the
+  // list but is never shown. world_headlines only exists on Oct 1, 2026
+  // briefs, from before the two lists were merged.
+  const currentEvents = [...(deepReport?.headlines ?? []), ...(deepReport?.world_headlines ?? [])]
+    .map((item, i) => ({ item, i }))
+    .sort((a, b) => (b.item.score ?? 0) - (a.item.score ?? 0) || a.i - b.i)
+    .map(({ item }) => item)
+    .slice(0, 10);
   const isToday = showingDate === todayIso;
 
   const [{ data: marketReadsData }, { data: altReadsData }, { data: goalsData }] = await Promise.all([
@@ -239,21 +243,12 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
             </div>
           )}
 
-          {headlines.length > 0 && (
+          {currentEvents.length > 0 && (
             <div>
               <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
-                {hasNewsSplit ? "Local News" : "Headlines"}
+                Current Events
               </h2>
-              <HeadlineList items={headlines} />
-            </div>
-          )}
-
-          {worldHeadlines.length > 0 && (
-            <div>
-              <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
-                World News
-              </h2>
-              <HeadlineList items={worldHeadlines} />
+              <HeadlineList items={currentEvents} />
             </div>
           )}
 
