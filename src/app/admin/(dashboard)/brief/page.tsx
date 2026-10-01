@@ -123,6 +123,10 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
   const needsAttention = (deepReport?.needs_attention ?? []).slice(0, 6);
   const resolved = (deepReport?.resolved ?? []).slice(0, 6);
   const headlines = (deepReport?.headlines ?? []).slice(0, 6);
+  const worldHeadlines = (deepReport?.world_headlines ?? []).slice(0, 6);
+  // Older briefs kept world news under `headlines` with no world list, so
+  // only call that list "Local" when the brief splits the two.
+  const hasNewsSplit = deepReport?.world_headlines !== undefined;
   const isToday = showingDate === todayIso;
 
   const [{ data: marketReadsData }, { data: altReadsData }, { data: goalsData }] = await Promise.all([
@@ -238,15 +242,24 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
           {headlines.length > 0 && (
             <div>
               <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
-                Headlines
+                {hasNewsSplit ? "Local News" : "Headlines"}
               </h2>
               <HeadlineList items={headlines} />
             </div>
           )}
 
+          {worldHeadlines.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
+                World News
+              </h2>
+              <HeadlineList items={worldHeadlines} />
+            </div>
+          )}
+
           <div>
             <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
-              Research
+              Market News
             </h2>
             {reads.length === 0 ? (
               <div className="border border-dashed p-8 text-center" style={{ borderColor: HAIR }}>

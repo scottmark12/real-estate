@@ -416,7 +416,10 @@ export interface HeadlineItem {
 export interface DeepReport {
   needs_attention?: CalendarNote[];
   resolved?: CalendarNote[];
+  // Local (San Diego) news. Briefs from before Oct 1, 2026 used this key
+  // for world news, and have no world_headlines.
   headlines?: HeadlineItem[];
+  world_headlines?: HeadlineItem[];
   brief_url?: string;
 }
 
