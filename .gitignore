@@ -39,3 +39,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# market reads sweep: local list of already-emitted candidates
+scripts/.market-reads-seen.json
+scripts/.market-reads-candidates.json
