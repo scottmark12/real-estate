@@ -25,7 +25,9 @@ export type MarketReadTheme =
 // Mark's #3 priority (mass timber, modular, alt construction) or proved
 // useful: Yardi Matrix, Smart Cities Dive, WoodWorks, Think Wood, and the
 // alt-construction Google News searches.
-type FeedSource = { url: string; source: string; theme: MarketReadTheme; match?: RegExp };
+// `match` filters a feed's items on title (plus summary for regexes, since
+// Google News summaries just repeat the title and publisher).
+type FeedSource = { url: string; source: string; theme: MarketReadTheme; match?: RegExp | ((title: string) => boolean) };
 
 // Kept narrow on purpose: words like "home" or "economy" alone pull in
 // crime stories and foreign news that have nothing to do with the market.
@@ -37,6 +39,20 @@ const LOCAL_REAL_ESTATE = /housing|home (prices?|sales|values|buyers?)|homebuy|h
 // filter on the broad alt-construction searches, which otherwise drag in
 // nuclear "small modular reactors" and unrelated design-site stories.
 const ALT_CONSTRUCTION = /^(?![\s\S]*modular (nuclear )?reactor)[\s\S]*(mass timber|cross-laminated|\bCLT\b|glulam|modular (home|hous|construct|build|apartment|unit|townhome|communit)|prefab|off-?site construction|factory-built|panelized|volumetric|3d[- ]printed (home|house|housing|building|wall|concrete)|3d concrete print|light[- ]gauge steel|precast concrete)/i;
+
+// CBRE, JLL and Colliers research pages sit behind Cloudflare and publish
+// no RSS, but Google News indexes them, so path-limited site: searches pull
+// each new report. Their national feeds also carry other cities' and
+// countries' reports; keep national and California ones, plus topical
+// research that isn't tied to one market.
+const FIRM_LOCAL_REPORT = /figures|market (report|dynamics|outlook|update)|region .*report|leasing activity|economic index|\b(Q[1-4]|[HQ][12]) 20\d\d/i;
+const FIRM_IN_MARKET = /san diego|southern california|socal|los angeles|orange county|inland empire|california|\bU\.S\.|united states|national|americas/i;
+const FOREIGN = /india|indian|uae|dubai|japan|china|hong kong|singapore|australia|europe|emea|apac|asia|uk\b|london|germany|france|nordic|stockholm|canada|toronto|mexico|philippine|middle east|saudi/i;
+
+function isUsefulFirmResearch(text: string): boolean {
+  if (FOREIGN.test(text)) return false;
+  return FIRM_IN_MARKET.test(text) || !FIRM_LOCAL_REPORT.test(text);
+}
 
 // Headlines that are never worth grading, whatever feed they come from:
 // listicles and loan-shopping guides, market-size press releases, listing
@@ -101,11 +117,19 @@ export const FEED_SOURCES: FeedSource[] = [
   { url: "https://commercialobserver.com/feed/", source: "Commercial Observer", theme: "opportunities" },
   { url: "https://www.bisnow.com/rss", source: "Bisnow", theme: "opportunities" },
   { url: "https://therealdeal.com/la/feed/", source: "The Real Deal", theme: "san_diego" },
+
+  // Brokerage research: San Diego market reports, then national research
+  { url: gn('site:cbre.com/insights "San Diego"', "7d"), source: "Google News", theme: "san_diego" },
+  { url: gn('site:jll.com/en-us/insights "San Diego"', "7d"), source: "Google News", theme: "san_diego" },
+  { url: gn('site:colliers.com/en/research "San Diego"', "7d"), source: "Google News", theme: "san_diego" },
+  { url: gn("site:cbre.com/insights", "7d"), source: "Google News", theme: "opportunities", match: isUsefulFirmResearch },
+  { url: gn("site:jll.com/en-us/insights", "7d"), source: "Google News", theme: "opportunities", match: isUsefulFirmResearch },
+  { url: gn("site:colliers.com/en/research", "7d"), source: "Google News", theme: "opportunities", match: isUsefulFirmResearch },
   { url: gn("site:therealdeal.com (California OR Los Angeles OR San Diego OR national)"), source: "Google News", theme: "opportunities" },
 
-  // Old newsletter's investing searches (its CBRE/JLL/Colliers/Brookfield/
-  // Prologis site: searches were dropped: they return job postings and
-  // staff bios, not research)
+  // Old newsletter's investing searches (its whole-site CBRE/JLL/Colliers/
+  // Brookfield/Prologis searches were dropped: they return job postings and
+  // staff bios. The brokerage research searches above are path-limited.)
   { url: gn("site:nar.realtor market insights", "14d"), source: "Google News", theme: "opportunities" },
   { url: gn("multifamily investment ROI OR returns"), source: "Google News", theme: "opportunities" },
   { url: gn("\"adaptive reuse\" commercial real estate"), source: "Google News", theme: "opportunities" },
@@ -388,7 +412,9 @@ export async function fetchMarketReads(): Promise<FetchedMarketRead[]> {
       const xml = await res.text();
       const isGoogleNews = url.startsWith("https://news.google.com/");
       return parseFeed(xml)
-        .filter((item) => !match || match.test(`${item.title} ${item.summary}`))
+        .filter((item) =>
+          !match || (typeof match === "function" ? match(item.title) : match.test(`${item.title} ${item.summary}`))
+        )
         .slice(0, 8)
         .map((item) => {
           const split = isGoogleNews ? splitGoogleNewsTitle(item.title) : null;
