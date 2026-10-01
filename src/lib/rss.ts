@@ -88,6 +88,14 @@ export const FEED_SOURCES: FeedSource[] = [
   { url: gn(`(mortgage rates OR "10-year Treasury" OR "Federal Reserve") ${NATIONAL_SITES}`), source: "Google News", theme: "rates" },
   { url: gn("mortgage rates (site:freddiemac.com OR site:fanniemae.com OR site:mba.org OR site:finance.yahoo.com)"), source: "Google News", theme: "rates" },
 
+  // Mark pays for the NYT and Reuters, so each gets dedicated feeds rather
+  // than competing with CNBC and Yahoo inside the shared national search.
+  // Reuters has no public RSS; a Reuters-only Google News search stands in.
+  { url: "https://rss.nytimes.com/services/xml/rss/nyt/Business.xml", source: "The New York Times", theme: "rates", match: ECONOMY },
+  { url: "https://rss.nytimes.com/services/xml/rss/nyt/YourMoney.xml", source: "The New York Times", theme: "rates", match: ECONOMY },
+  { url: "https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml", source: "The New York Times", theme: "vision", match: ECONOMY },
+  { url: gn('site:reuters.com (mortgage OR housing OR "home sales" OR "Federal Reserve" OR Treasury OR "real estate" OR homebuilder)'), source: "Google News", theme: "rates" },
+
   // San Diego and SoCal: local newsrooms, filtered to real estate stories
   { url: "https://www.kpbs.org/index.rss", source: "KPBS", theme: "san_diego", match: LOCAL_REAL_ESTATE },
   { url: "https://www.nbcsandiego.com/?rss=y", source: "NBC 7 San Diego", theme: "san_diego", match: LOCAL_REAL_ESTATE },
