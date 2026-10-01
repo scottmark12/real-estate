@@ -456,10 +456,14 @@ export async function fetchMarketReads(): Promise<FetchedMarketRead[]> {
 
   // Resolve after filtering so only surviving candidates cost a lookup, then
   // drop paywalled links and any that now point at the same article as
-  // another feed's item.
+  // another feed's item. Also drop Google News links that still didn't
+  // resolve (Google throttles bursts with a CAPTCHA page): they can't be
+  // read, and they'd never match the real URL when the story comes back
+  // resolved on the next run, so it would get graded twice.
   await resolveGoogleNewsLinks(filtered);
   const seenUrls = new Set<string>();
   return filtered.filter((r) => {
+    if (r.url.startsWith("https://news.google.com/")) return false;
     if (isPaywalled(r.url, r.source) || seenUrls.has(r.url)) return false;
     seenUrls.add(r.url);
     return true;
