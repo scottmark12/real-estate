@@ -14,6 +14,11 @@ export type MarketReadTheme =
 // through. Everything here was tested live on Sept 25, 2026; dead feeds
 // fail silently in fetchMarketReads.
 //
+// On Oct 1, 2026 every feed from the old newsletter project
+// (v4-Newsletter's working_feeds.json and google_news_feeds.json) was
+// re-tested and the ones still live were added back. About 50 of its
+// ~120 URLs were dead (403/404, empty, or years stale) and stay out.
+//
 // Kept outside the brief's list on purpose, because they're free and cover
 // Mark's #3 priority (mass timber, modular, alt construction) or proved
 // useful: Yardi Matrix, Smart Cities Dive, WoodWorks, Think Wood, and the
@@ -32,8 +37,14 @@ const LOCAL_REAL_ESTATE = /housing|home (prices?|sales|values|buyers?)|homebuy|h
 const ALT_CONSTRUCTION = /^(?![\s\S]*modular (nuclear )?reactor)[\s\S]*(mass timber|cross-laminated|\bCLT\b|glulam|modular (home|hous|construct|build|apartment|unit|townhome|communit)|prefab|off-?site construction|factory-built|panelized|volumetric|3d[- ]printed (home|house|housing|building|wall|concrete)|3d concrete print|light[- ]gauge steel|precast concrete)/i;
 
 // Google News search RSS, limited to the last 2 days and to allowed sites.
-const gn = (query: string) =>
-  `https://news.google.com/rss/search?q=${encodeURIComponent(`${query} when:2d`)}&hl=en-US&gl=US&ceid=US:en`;
+// Slow-publishing sources (firm research pages) get a wider window.
+const gn = (query: string, window = "2d") =>
+  `https://news.google.com/rss/search?q=${encodeURIComponent(`${query} when:${window}`)}&hl=en-US&gl=US&ceid=US:en`;
+const yt = (channelId: string) => `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+
+// For broad design/engineering feeds that mostly cover furniture, products
+// or non-building engineering.
+const BUILDING = /housing|homes?\b|apartment|residential|building|construction|architect|developer|development|urban|city|cities|zoning|timber|modular|prefab|retrofit|adaptive reuse|mixed-use|tower|infrastructure/i;
 const NATIONAL_SITES = "(site:reuters.com OR site:nytimes.com OR site:apnews.com OR site:aljazeera.com OR site:cnbc.com OR site:axios.com OR site:thehill.com OR site:cnn.com OR site:npr.org)";
 const SD_SITES = "(site:kpbs.org OR site:nbcsandiego.com OR site:fox5sandiego.com OR site:10news.com OR site:timesofsandiego.com OR site:voiceofsandiego.org OR site:calmatters.org OR site:laist.com OR site:sandiego.gov OR site:sandiegocounty.gov)";
 
@@ -68,18 +79,52 @@ export const FEED_SOURCES: FeedSource[] = [
   { url: gn("housing (site:census.gov OR site:nar.realtor OR site:hud.gov)"), source: "Google News", theme: "opportunities" },
   { url: gn(`("fix and flip" OR "home flipping" OR "real estate investors") ${NATIONAL_SITES}`), source: "Google News", theme: "opportunities" },
 
+  { url: "https://www.realtor.com/news/real-estate-news/feed/", source: "Realtor.com", theme: "opportunities" },
+  { url: "https://www.realtor.com/news/trends/feed/", source: "Realtor.com", theme: "opportunities" },
+
   // Deals and CRE
   { url: "https://commercialobserver.com/feed/", source: "Commercial Observer", theme: "opportunities" },
   { url: "https://www.bisnow.com/rss", source: "Bisnow", theme: "opportunities" },
+  { url: "https://therealdeal.com/national/feed/", source: "The Real Deal", theme: "opportunities" },
+  { url: "https://therealdeal.com/la/feed/", source: "The Real Deal", theme: "san_diego" },
   { url: gn("site:therealdeal.com (California OR Los Angeles OR San Diego OR national)"), source: "Google News", theme: "opportunities" },
+
+  // Old newsletter's investor and firm-research searches. None of these
+  // firms publish a real RSS feed, so Google News site: searches stand in.
+  { url: gn("site:cbre.com insights OR research", "14d"), source: "Google News", theme: "opportunities" },
+  { url: gn("site:jll.com research OR insights", "14d"), source: "Google News", theme: "opportunities" },
+  { url: gn("site:colliers.com research OR insights", "14d"), source: "Google News", theme: "opportunities" },
+  { url: gn("site:brookfield.com insights", "14d"), source: "Google News", theme: "opportunities" },
+  { url: gn("site:prologis.com insights", "14d"), source: "Google News", theme: "opportunities" },
+  { url: gn("site:nar.realtor market insights", "14d"), source: "Google News", theme: "opportunities" },
+  { url: gn("multifamily investment ROI OR returns"), source: "Google News", theme: "opportunities" },
+  { url: gn("\"adaptive reuse\" commercial real estate"), source: "Google News", theme: "opportunities" },
+  { url: gn("real estate development case study OR \"success story\""), source: "Google News", theme: "opportunities" },
+  { url: gn("small developer growth OR \"scaled up\" real estate"), source: "Google News", theme: "opportunities" },
+  { url: gn("Airbnb investment OR \"short-term rental\" portfolio"), source: "Google News", theme: "opportunities" },
 
   // Al Jazeera, used heavily per the brief's rules: economy and U.S. stories only
   { url: "https://www.aljazeera.com/xml/rss/all.xml", source: "Al Jazeera", theme: "vision", match: ECONOMY },
   { url: gn("site:aljazeera.com (economy OR inflation OR \"interest rates\" OR housing OR tariffs)"), source: "Google News", theme: "vision" },
   { url: "https://feeds.npr.org/1017/rss.xml", source: "NPR", theme: "vision", match: ECONOMY },
 
-  // How we build: general construction industry news
+  // How we build: general construction, engineering and design news.
+  // Alt-construction items in these get moved to their own section by
+  // detectTheme.
   { url: "https://www.constructiondive.com/feeds/news/", source: "Construction Dive", theme: "practices" },
+  { url: "https://www.constructionexec.com/feed/", source: "Construction Executive", theme: "practices" },
+  { url: "https://www.construction.com/feed/", source: "Dodge Construction Network", theme: "practices" },
+  { url: "https://builtworlds.com/news/feed/", source: "BuiltWorlds", theme: "practices" },
+  { url: "https://aecmag.com/feed/", source: "AEC Magazine", theme: "practices" },
+  { url: "https://www.engineering.com/feed/", source: "Engineering.com", theme: "practices", match: BUILDING },
+  { url: "https://www.archdaily.com/feed", source: "ArchDaily", theme: "vision", match: BUILDING },
+  { url: "https://www.dezeen.com/feed/", source: "Dezeen", theme: "vision", match: BUILDING },
+  { url: "https://www.greenbuildingadvisor.com/feed/", source: "Green Building Advisor", theme: "practices" },
+  { url: "https://www.buildinggreen.com/feed/", source: "BuildingGreen", theme: "practices" },
+  { url: "https://architecture2030.org/feed/", source: "Architecture 2030", theme: "systems_codes" },
+  { url: "https://carbonleadershipforum.org/feed/", source: "Carbon Leadership Forum", theme: "systems_codes" },
+  { url: gn("construction productivity study OR research"), source: "Google News", theme: "practices" },
+  { url: gn("building practices innovation OR efficiency"), source: "Google News", theme: "practices" },
 
   // Alternative construction (Mark's #3 priority, its own section on the
   // brief): mass timber, modular/prefab, 3D printing, panelized and other
@@ -94,7 +139,20 @@ export const FEED_SOURCES: FeedSource[] = [
   { url: gn("California (\"mass timber\" OR modular OR prefab OR \"3D printed\") (housing OR ADU OR apartments)"), source: "Google News", theme: "alt_construction", match: ALT_CONSTRUCTION },
   { url: gn("(site:constructiondive.com OR site:archdaily.com OR site:dezeen.com OR site:archpaper.com) (timber OR modular OR prefab OR \"3D print\")"), source: "Google News", theme: "alt_construction", match: ALT_CONSTRUCTION },
 
+  // Cities and the big picture (old newsletter's vision searches + its
+  // urbanism YouTube channels)
+  { url: gn("\"future of cities\" OR \"future of real estate\""), source: "Google News", theme: "vision" },
+  { url: gn("urban planning innovation OR placemaking"), source: "Google News", theme: "vision" },
+  { url: gn("smart city development OR infrastructure"), source: "Google News", theme: "vision" },
+  { url: gn("architecture visionary design OR biophilic"), source: "Google News", theme: "vision" },
+  { url: yt("UCGc8ZVCsrR3dAuhvUbkbToQ"), source: "City Beautiful", theme: "vision" },
+  { url: yt("UC0intLFzLaudFG-xAvUEO-A"), source: "Not Just Bikes", theme: "vision" },
+
   // Policy and codes
+  { url: gn("zoning reform real estate"), source: "Google News", theme: "systems_codes" },
+  { url: gn("\"building code\" timber OR update OR reform"), source: "Google News", theme: "systems_codes" },
+  { url: gn("\"green building\" policy OR \"sustainable building code\""), source: "Google News", theme: "systems_codes" },
+  { url: gn("development incentives OR \"opportunity zone\""), source: "Google News", theme: "systems_codes" },
   { url: "https://www.smartcitiesdive.com/feeds/news/", source: "Smart Cities Dive", theme: "systems_codes", match: /housing|zoning|build|development|transit|land|permit|code/i },
   { url: gn(`California (zoning OR "housing bill" OR "building code" OR CEQA) (site:calmatters.org OR ${NATIONAL_SITES.slice(1)}`), source: "Google News", theme: "systems_codes" },
 ];
