@@ -10,11 +10,12 @@ export const SECTION_META: Record<string, SectionMeta> = {
   san_diego: { id: "san-diego", label: "San Diego & SoCal", emoji: "🌴", color: "#0d7a6e" },
   opportunities: { id: "opportunities", label: "Deals & Opportunities", emoji: "🤝", color: "#a3690a" },
   practices: { id: "how-we-build", label: "How We Build", emoji: "🏗️", color: "#b0492f" },
+  alt_construction: { id: "alt-construction", label: "Alternative Construction", emoji: "🪵", color: "#7a5a2b" },
   systems_codes: { id: "policy-codes", label: "Policy & Codes", emoji: "📜", color: "#1f6b3a" },
   vision: { id: "big-picture", label: "The Big Picture", emoji: "🔭", color: "#6b3fa0" },
 };
 
-export const SECTION_ORDER = ["rates", "san_diego", "opportunities", "practices", "systems_codes", "vision"];
+export const SECTION_ORDER = ["rates", "san_diego", "alt_construction", "opportunities", "practices", "systems_codes", "vision"];
 
 export type GroupedSection = { theme: string; meta: SectionMeta; reads: MarketRead[] };
 

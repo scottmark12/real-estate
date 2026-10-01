@@ -125,13 +125,15 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
   const headlines = (deepReport?.headlines ?? []).slice(0, 6);
   const isToday = showingDate === todayIso;
 
-  const [{ data: marketReadsData }, { data: goalsData }] = await Promise.all([
-    supabase.from("market_reads").select("*").eq("kept", true).order("published_at", { ascending: false }).limit(40),
+  const [{ data: marketReadsData }, { data: altReadsData }, { data: goalsData }] = await Promise.all([
+    supabase.from("market_reads").select("*").eq("kept", true).neq("theme", "alt_construction").order("published_at", { ascending: false }).limit(40),
+    supabase.from("market_reads").select("*").eq("kept", true).eq("theme", "alt_construction").order("published_at", { ascending: false }).limit(8),
     supabase.from("goals").select("*").lte("period_start", showingDate).gte("period_end", showingDate).order("sort_order"),
   ]);
 
   const reads = (marketReadsData as MarketRead[]) ?? [];
   const sections = groupIntoSections(reads);
+  const altReads = (altReadsData as MarketRead[]) ?? [];
 
   const showingDateObj = new Date(`${showingDate}T00:00:00`);
   const weekStart = addDays(showingDate, -showingDateObj.getDay());
@@ -259,6 +261,15 @@ export default async function AdminBriefPage({ searchParams }: PageProps<"/admin
               <ResearchList sections={sections} />
             )}
           </div>
+
+          {altReads.length > 0 && (
+            <div>
+              <h2 className="mb-3 text-[15px] font-semibold" style={{ color: INK }}>
+                Alternative Construction
+              </h2>
+              <HeadlineList items={altReads.map((r) => ({ title: r.title, url: r.url, source: r.source }))} />
+            </div>
+          )}
 
           {goals.length > 0 && (
             <div>
