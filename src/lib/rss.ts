@@ -16,8 +16,10 @@ export type MarketReadTheme =
 //
 // On Oct 1, 2026 every feed from the old newsletter project
 // (v4-Newsletter's working_feeds.json and google_news_feeds.json) was
-// re-tested and the ones still live were added back. About 50 of its
-// ~120 URLs were dead (403/404, empty, or years stale) and stay out.
+// re-tested and the ones still live and useful were added back. About 50
+// of its ~120 URLs were dead (403/404, empty, or years stale), and a
+// headline review dropped the noisy ones (forum Q&A, software news,
+// furniture design, firm job postings).
 //
 // Kept outside the brief's list on purpose, because they're free and cover
 // Mark's #3 priority (mass timber, modular, alt construction) or proved
@@ -35,6 +37,19 @@ const LOCAL_REAL_ESTATE = /housing|home (prices?|sales|values|buyers?)|homebuy|h
 // filter on the broad alt-construction searches, which otherwise drag in
 // nuclear "small modular reactors" and unrelated design-site stories.
 const ALT_CONSTRUCTION = /^(?![\s\S]*modular (nuclear )?reactor)[\s\S]*(mass timber|cross-laminated|\bCLT\b|glulam|modular (home|hous|construct|build|apartment|unit|townhome|communit)|prefab|off-?site construction|factory-built|panelized|volumetric|3d[- ]printed (home|house|housing|building|wall|concrete)|3d concrete print|light[- ]gauge steel|precast concrete)/i;
+
+// Headlines that are never worth grading, whatever feed they come from:
+// listicles and loan-shopping guides, market-size press releases, listing
+// roundups, job postings, stock tips, event promos, obituaries and local
+// crime.
+const JUNK_TITLE = /\| 20\d\d$|^(the )?\d+ best\b|\bbest [\w ]*(loans?|lenders?|rates)\b|market (size|forecast|analysis|outlook) to 20\d\d|market to (reach|20\d\d)|forecast to 20\d\d|homes for sale in|\bintern\b|^(senior )?(manager|director|analyst|associate),|\bpast events\b|\bwebinar\b|events? guide|\bexpo\b|\bdies at\b|\bobituary\b|found dead|body found|\bhomicide\b|\bstabbing\b|\bshooting\b|\bSWAT\b|\bcramer\b|\b(NYSE|NASDAQ|TSX)\s*:|\bstocks?\b.*\b(buy|bet|picks?)\b|^q&a:|editor.s note/i;
+const JUNK_SOURCE = /tradingview|indexbox|ein news|kalkine|marketbeat|tipranks|moomoo|u\.s\. census bureau|^google news$/i;
+
+function isJunk(title: string, source: string): boolean {
+  // Bare titles like "October 2026" or "Torben Dunkel" are index or bio pages.
+  if (title.split(/\s+/).length < 4) return true;
+  return JUNK_TITLE.test(title) || JUNK_SOURCE.test(source);
+}
 
 // Google News search RSS, limited to the last 2 days and to allowed sites.
 // Slow-publishing sources (firm research pages) get a wider window.
@@ -85,23 +100,15 @@ export const FEED_SOURCES: FeedSource[] = [
   // Deals and CRE
   { url: "https://commercialobserver.com/feed/", source: "Commercial Observer", theme: "opportunities" },
   { url: "https://www.bisnow.com/rss", source: "Bisnow", theme: "opportunities" },
-  { url: "https://therealdeal.com/national/feed/", source: "The Real Deal", theme: "opportunities" },
   { url: "https://therealdeal.com/la/feed/", source: "The Real Deal", theme: "san_diego" },
   { url: gn("site:therealdeal.com (California OR Los Angeles OR San Diego OR national)"), source: "Google News", theme: "opportunities" },
 
-  // Old newsletter's investor and firm-research searches. None of these
-  // firms publish a real RSS feed, so Google News site: searches stand in.
-  { url: gn("site:cbre.com insights OR research", "14d"), source: "Google News", theme: "opportunities" },
-  { url: gn("site:jll.com research OR insights", "14d"), source: "Google News", theme: "opportunities" },
-  { url: gn("site:colliers.com research OR insights", "14d"), source: "Google News", theme: "opportunities" },
-  { url: gn("site:brookfield.com insights", "14d"), source: "Google News", theme: "opportunities" },
-  { url: gn("site:prologis.com insights", "14d"), source: "Google News", theme: "opportunities" },
+  // Old newsletter's investing searches (its CBRE/JLL/Colliers/Brookfield/
+  // Prologis site: searches were dropped: they return job postings and
+  // staff bios, not research)
   { url: gn("site:nar.realtor market insights", "14d"), source: "Google News", theme: "opportunities" },
   { url: gn("multifamily investment ROI OR returns"), source: "Google News", theme: "opportunities" },
   { url: gn("\"adaptive reuse\" commercial real estate"), source: "Google News", theme: "opportunities" },
-  { url: gn("real estate development case study OR \"success story\""), source: "Google News", theme: "opportunities" },
-  { url: gn("small developer growth OR \"scaled up\" real estate"), source: "Google News", theme: "opportunities" },
-  { url: gn("Airbnb investment OR \"short-term rental\" portfolio"), source: "Google News", theme: "opportunities" },
 
   // Al Jazeera, used heavily per the brief's rules: economy and U.S. stories only
   { url: "https://www.aljazeera.com/xml/rss/all.xml", source: "Al Jazeera", theme: "vision", match: ECONOMY },
@@ -115,16 +122,10 @@ export const FEED_SOURCES: FeedSource[] = [
   { url: "https://www.constructionexec.com/feed/", source: "Construction Executive", theme: "practices" },
   { url: "https://www.construction.com/feed/", source: "Dodge Construction Network", theme: "practices" },
   { url: "https://builtworlds.com/news/feed/", source: "BuiltWorlds", theme: "practices" },
-  { url: "https://aecmag.com/feed/", source: "AEC Magazine", theme: "practices" },
-  { url: "https://www.engineering.com/feed/", source: "Engineering.com", theme: "practices", match: BUILDING },
   { url: "https://www.archdaily.com/feed", source: "ArchDaily", theme: "vision", match: BUILDING },
-  { url: "https://www.dezeen.com/feed/", source: "Dezeen", theme: "vision", match: BUILDING },
-  { url: "https://www.greenbuildingadvisor.com/feed/", source: "Green Building Advisor", theme: "practices" },
-  { url: "https://www.buildinggreen.com/feed/", source: "BuildingGreen", theme: "practices" },
   { url: "https://architecture2030.org/feed/", source: "Architecture 2030", theme: "systems_codes" },
   { url: "https://carbonleadershipforum.org/feed/", source: "Carbon Leadership Forum", theme: "systems_codes" },
   { url: gn("construction productivity study OR research"), source: "Google News", theme: "practices" },
-  { url: gn("building practices innovation OR efficiency"), source: "Google News", theme: "practices" },
 
   // Alternative construction (Mark's #3 priority, its own section on the
   // brief): mass timber, modular/prefab, 3D printing, panelized and other
@@ -143,8 +144,6 @@ export const FEED_SOURCES: FeedSource[] = [
   // urbanism YouTube channels)
   { url: gn("\"future of cities\" OR \"future of real estate\""), source: "Google News", theme: "vision" },
   { url: gn("urban planning innovation OR placemaking"), source: "Google News", theme: "vision" },
-  { url: gn("smart city development OR infrastructure"), source: "Google News", theme: "vision" },
-  { url: gn("architecture visionary design OR biophilic"), source: "Google News", theme: "vision" },
   { url: yt("UCGc8ZVCsrR3dAuhvUbkbToQ"), source: "City Beautiful", theme: "vision" },
   { url: yt("UC0intLFzLaudFG-xAvUEO-A"), source: "Not Just Bikes", theme: "vision" },
 
@@ -152,7 +151,6 @@ export const FEED_SOURCES: FeedSource[] = [
   { url: gn("zoning reform real estate"), source: "Google News", theme: "systems_codes" },
   { url: gn("\"building code\" timber OR update OR reform"), source: "Google News", theme: "systems_codes" },
   { url: gn("\"green building\" policy OR \"sustainable building code\""), source: "Google News", theme: "systems_codes" },
-  { url: gn("development incentives OR \"opportunity zone\""), source: "Google News", theme: "systems_codes" },
   { url: "https://www.smartcitiesdive.com/feeds/news/", source: "Smart Cities Dive", theme: "systems_codes", match: /housing|zoning|build|development|transit|land|permit|code/i },
   { url: gn(`California (zoning OR "housing bill" OR "building code" OR CEQA) (site:calmatters.org OR ${NATIONAL_SITES.slice(1)}`), source: "Google News", theme: "systems_codes" },
 ];
@@ -415,14 +413,15 @@ export async function fetchMarketReads(): Promise<FetchedMarketRead[]> {
 
   // Cheap, deterministic pre-filter so the (expensive) grading step only
   // ever sees a reasonably-sized, already-deduped candidate list: drop
-  // items clearly stale (Google's site:-restricted searches surface old
-  // evergreen pages, not just fresh articles) and collapse near-identical
+  // items older than a week (the sweep runs daily, so anything older was
+  // already seen), junk headlines (see isJunk), and collapse near-identical
   // titles that multiple feeds picked up (wire stories, syndication).
-  const cutoff = Date.now() - 45 * 24 * 60 * 60 * 1000;
+  const cutoff = Date.now() - 7 * 24 * 60 * 60 * 1000;
   const seenTitles = new Set<string>();
   const filtered: FetchedMarketRead[] = [];
   for (const r of reads) {
     if (r.published_at && new Date(r.published_at).getTime() < cutoff) continue;
+    if (isJunk(r.title, r.source)) continue;
     const normalizedTitle = r.title.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
     if (seenTitles.has(normalizedTitle)) continue;
     seenTitles.add(normalizedTitle);
