@@ -32,7 +32,7 @@ export default function NeighborhoodsPage() {
   return (
     <div className="mx-auto max-w-[1500px] px-12 pb-20 max-[600px]:px-6 max-[600px]:pb-12">
       {/* Photo hero with search, Florida Coastal style */}
-      <section className="full-bleed relative z-10 flex min-h-[100svh] items-center justify-center pt-20">
+      <section className="full-bleed relative z-10 flex min-h-[75svh] items-center justify-center pt-20">
         <div className="absolute inset-0 overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1628482348649-e77b92762a73?auto=format&fit=crop&w=2600&q=85"

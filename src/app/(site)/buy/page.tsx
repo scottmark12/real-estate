@@ -69,6 +69,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   const filtering = Boolean(
     q || city || zip || min_price || max_price || min_beds || property_type
   );
+  const compact = filtering || page > 1;
   const [result, featured] = await Promise.all([
     searchListings({ q, city, zip, min_price, max_price, min_beds, property_type, sort, page }),
     !filtering && page === 1 ? getFeaturedListings(6) : Promise.resolve([]),
@@ -109,7 +110,9 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   return (
     <div className="mx-auto max-w-[1400px] px-6 pb-20 max-[600px]:pb-12 sm:px-10 lg:px-12">
       {/* Photo header with the search on top of it */}
-      <section className="full-bleed relative flex min-h-[100svh] items-end overflow-hidden">
+      {/* Tall enough to set the scene, short enough that homes peek up from below.
+          After a search it shrinks to a banner so results show right away. */}
+      <section className={`full-bleed relative flex items-end overflow-hidden ${compact ? "min-h-[40svh]" : "min-h-[75svh]"}`}>
         <Image
           src="https://images.unsplash.com/photo-1773099032238-6aaee4fb7f18?auto=format&fit=crop&w=2400&q=85"
           alt="A modern coastal home under palm trees and a clear blue sky"
@@ -120,9 +123,9 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/30" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/20 to-transparent" />
-        <div className="relative mx-auto w-full max-w-[1400px] px-6 pb-12 pt-28 sm:px-10 lg:px-12 lg:pb-16">
+        <div className={`relative mx-auto w-full max-w-[1400px] px-6 pt-28 sm:px-10 lg:px-12 ${compact ? "pb-8 lg:pb-10" : "pb-12 lg:pb-16"}`}>
       <p className="eyebrow text-white/75">Buy</p>
-      <h1 className="mt-3 max-w-3xl font-georgia text-[42px] font-normal leading-[1.02] tracking-[-0.01em] text-white sm:text-[60px] lg:text-[72px]">
+      <h1 className={`mt-3 max-w-3xl font-georgia font-normal leading-[1.02] tracking-[-0.01em] text-white ${compact ? "text-[34px] sm:text-[44px] lg:text-[52px]" : "text-[42px] sm:text-[60px] lg:text-[72px]"}`}>
         {area ? `Homes for sale in ${area}.` : "Find your place in San Diego."}
       </h1>
       {area && (
@@ -136,15 +139,17 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           </Link>
         </p>
       )}
-      <p className="mt-5 max-w-xl text-lg text-white max-[600px]:text-base">
-        Every home for sale in San Diego County, live from the MLS. See one you
-        like? I&apos;ll tell you what the listing doesn&apos;t.
-      </p>
+      {!compact && (
+        <p className="mt-5 max-w-xl text-lg text-white max-[600px]:text-base">
+          Every home for sale in San Diego County, live from the MLS. See one you
+          like? I&apos;ll tell you what the listing doesn&apos;t.
+        </p>
+      )}
 
       <form
         action="/buy"
         method="get"
-        className="mt-10 grid gap-px bg-navy/10 shadow-2xl sm:grid-cols-2 lg:grid-cols-[2.2fr_1fr_1fr_1fr_1fr_1fr_auto]"
+        className={`${compact ? "mt-6" : "mt-10"} grid gap-px bg-navy/10 shadow-2xl sm:grid-cols-2 lg:grid-cols-[2.2fr_1fr_1fr_1fr_1fr_1fr_auto]`}
       >
         {city && <input type="hidden" name="city" value={city} />}
         {zip && <input type="hidden" name="zip" value={zip} />}

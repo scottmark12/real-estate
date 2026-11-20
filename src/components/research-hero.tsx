@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function ResearchHero() {
   return (
-    <section className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink">
+    <section className="relative flex min-h-[60svh] items-end overflow-hidden bg-ink">
       <Image
         src="https://images.unsplash.com/photo-1641353190354-a1d4c14df4da?auto=format&fit=crop&w=2600&q=85"
         alt="The downtown San Diego skyline across the bay"
@@ -17,7 +17,7 @@ export default function ResearchHero() {
       <div className="relative w-full px-12 pb-16 pt-32 max-[600px]:px-6 lg:pb-24">
         <div className="mx-auto max-w-[1500px]">
           <h1 className="eyebrow text-white/80">Market Research</h1>
-          <p className="mt-3 max-w-3xl font-georgia text-[42px] font-normal leading-[1.02] tracking-[-0.01em] text-white sm:text-[60px] lg:text-[72px]">
+          <p className="mt-3 max-w-3xl font-georgia text-[42px] font-normal leading-[1.02] tracking-[-0.01em] text-white sm:text-[60px] lg:text-[64px]">
             What&apos;s actually moving San Diego prices.
           </p>
           <p className="mt-5 max-w-xl text-lg text-white max-[600px]:text-base">
