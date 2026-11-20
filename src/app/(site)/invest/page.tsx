@@ -2,10 +2,13 @@ import Link from "next/link";
 import ListingCard from "@/components/listing-card";
 import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/types";
+import { LISTINGS_PAUSED } from "@/lib/listings-paused";
+import ListingsComingSoon from "@/components/listings-coming-soon";
 
 export const revalidate = 0;
 
 export default async function InvestPage() {
+  if (LISTINGS_PAUSED) return <ListingsComingSoon eyebrow="Invest" />;
   const supabase = await createClient();
   const { data } = await supabase
     .from("listings")

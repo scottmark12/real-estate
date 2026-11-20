@@ -14,6 +14,7 @@ import {
   DEFAULT_SERVICES,
   getSetting,
 } from "@/lib/settings";
+import { LISTINGS_PAUSED } from "@/lib/listings-paused";
 import type {
   AboutSettings,
   Article,
@@ -82,6 +83,7 @@ function renderHeadline(headline: string) {
 }
 
 async function getFeaturedListings(): Promise<Listing[]> {
+  if (LISTINGS_PAUSED) return [];
   const supabase = await createClient();
 
   const featured = await supabase
@@ -280,6 +282,7 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Listings */}
+      {!LISTINGS_PAUSED && (
       <section className="px-[4vw] pb-12 pt-12 lg:pt-6">
         <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
           <p className="eyebrow text-gold">Featured Listings</p>
@@ -307,6 +310,7 @@ export default async function HomePage() {
           View All Listings &rarr;
         </Link>
       </section>
+      )}
 
       {/* Market, Right Now */}
       <section className="bg-cream-deep py-16">
