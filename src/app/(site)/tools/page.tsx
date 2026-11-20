@@ -33,7 +33,7 @@ const TOOLS = [
     href: "/neighborhoods",
     eyebrow: "Guide",
     title: "Neighborhood guide",
-    body: "What 29 San Diego neighborhoods are actually like, roughly what they cost, and the honest trade offs.",
+    body: "What neighborhoods across San Diego County are actually like, roughly what they cost, and the honest trade offs.",
     cta: "Browse neighborhoods",
   },
   {
