@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import NeighborhoodSearch, { type SearchItem } from "@/components/neighborhood-search";
+import { NEIGHBORHOOD_FEED } from "@/lib/neighborhood-feed";
 import NeighborhoodCard from "@/components/neighborhood-card";
 import { NEIGHBORHOODS, REGIONS } from "@/lib/neighborhoods";
 
@@ -11,40 +14,74 @@ export const metadata: Metadata = {
 
 const regionId = (r: string) => r.toLowerCase().replace(/[^a-z]+/g, "-");
 
+const searchItems: SearchItem[] = NEIGHBORHOODS.map((n) => {
+  const feed = NEIGHBORHOOD_FEED[n.slug];
+  return {
+    slug: n.slug,
+    name: n.name,
+    region: n.region,
+    keys: [n.name, n.region, feed?.city, feed?.zip, ...n.tags]
+      .filter(Boolean)
+      .join(" ")
+      .toLowerCase(),
+  };
+});
+
 export default function NeighborhoodsPage() {
   return (
-    <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 max-[600px]:px-6 max-[600px]:pt-10 max-[600px]:pb-12">
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="eyebrow text-gold">Neighborhoods</p>
-          <h1 className="mt-3 max-w-2xl font-georgia text-[42px] font-normal leading-[1.1] text-navy max-[600px]:text-[36px] sm:text-[48px]">
-            Find the part of San Diego that fits how you live.
+    <div className="mx-auto max-w-[1500px] px-12 pb-20 max-[600px]:px-6 max-[600px]:pb-12">
+      {/* Photo hero with search, Florida Coastal style */}
+      <section className="full-bleed relative flex min-h-[82vh] items-center justify-center overflow-hidden max-[600px]:min-h-[78vh]">
+        <Image
+          src="https://images.unsplash.com/photo-1647670545038-84090e69c79b?auto=format&fit=crop&w=2400&q=75"
+          alt="Torrey Pines and the coast north of La Jolla"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/35" />
+        <div className="relative w-full px-6 py-24 text-center">
+          <p className="eyebrow text-white/85">
+            {NEIGHBORHOODS.length} neighborhoods &middot; Oceanside to the border
+          </p>
+          <h1 className="mx-auto mt-5 max-w-4xl font-georgia text-[44px] font-normal leading-[1.02] text-white sm:text-[68px] lg:text-[84px]">
+            Every corner of San Diego County
           </h1>
-          <p className="mt-4 max-w-xl text-navy/70">
-            {NEIGHBORHOODS.length} places across the county. What each one is
-            like, roughly what it costs, and the honest trade offs.
+          <p className="mx-auto mt-5 max-w-xl text-lg text-white/90 max-[600px]:text-base">
+            What each place is actually like, what it costs and the honest trade
+            offs. Look one up, or let the quiz pick three for you.
+          </p>
+          <div className="mt-9">
+            <NeighborhoodSearch items={searchItems} />
+          </div>
+          <p className="mt-6 flex flex-wrap justify-center gap-x-8 gap-y-2 text-sm text-white">
+            <Link href="/quiz" className="underline underline-offset-4 hover:text-white/80">
+              Not sure yet? Take the quiz
+            </Link>
+            <Link href="/tools/cost-calculator" className="underline underline-offset-4 hover:text-white/80">
+              What would it cost?
+            </Link>
           </p>
         </div>
-        <div className="flex shrink-0 flex-wrap gap-3 self-start lg:self-auto">
-          <Link
-            href="/quiz"
-            className="border border-blue bg-blue px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
+        <p className="absolute bottom-3 right-3 text-[10px] text-white/60">
+          Photo:{" "}
+          <a
+            href="https://unsplash.com/@kcwelch330?utm_source=markscott&utm_medium=referral"
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
           >
-            Not Sure? Take the Quiz
-          </Link>
-          <Link
-            href="/tools/cost-calculator"
-            className="border border-navy px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
-          >
-            Cost Calculator
-          </Link>
-        </div>
-      </div>
+            KC Welch
+          </a>{" "}
+          / Unsplash
+        </p>
+      </section>
 
       {/* Jump to a region */}
       <nav
         aria-label="Regions"
-        className="-mx-12 mt-10 flex gap-2 overflow-x-auto border-y border-sand px-12 py-4 max-[600px]:-mx-6 max-[600px]:px-6"
+        className="-mx-12 flex gap-2 overflow-x-auto border-b border-sand px-12 py-4 max-[600px]:-mx-6 max-[600px]:px-6"
       >
         {REGIONS.map((r) => (
           <a

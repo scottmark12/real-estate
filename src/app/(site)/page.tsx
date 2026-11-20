@@ -221,14 +221,14 @@ export default async function HomePage() {
 
       {/* Homes — from the live feed (hearted in the admin, else newest) */}
       {homeListings.listings.length > 0 && (
-        <section className="full-bleed mt-6 bg-ink px-4 py-12 max-[600px]:px-6 lg:mt-12 lg:px-12 lg:py-14">
-          <div className="mx-auto flex max-w-[1500px] items-end justify-between gap-4 border-b border-white/15 pb-3">
-            <p className="eyebrow text-white/70">
-              {homeListings.featured ? "Featured Listings" : "Just Listed"}
+        <section className="full-bleed mt-6 border-y border-navy/10 bg-white px-4 py-12 max-[600px]:px-6 lg:mt-12 lg:px-12 lg:py-16">
+          <div className="mx-auto flex max-w-[1500px] items-end justify-between gap-4 pb-2">
+            <p className="font-georgia text-[34px] leading-none text-navy sm:text-[44px]">
+              {homeListings.featured ? "Featured homes" : "Just listed"}
             </p>
             <Link
               href="/buy"
-              className="eyebrow text-white underline decoration-gold decoration-2 underline-offset-4"
+              className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
             >
               See All Homes &rarr;
             </Link>
@@ -237,7 +237,7 @@ export default async function HomePage() {
           <div className="-mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 max-[600px]:-mx-6 max-[600px]:scroll-px-6 max-[600px]:px-6 sm:mx-auto sm:grid sm:max-w-[1500px] sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 lg:grid-cols-4">
             {homeListings.listings.map((listing) => (
               <div key={listing.id} className="w-[78%] shrink-0 snap-start sm:w-auto">
-                <FeedListingCard listing={listing} tone="dark" />
+                <FeedListingCard listing={listing} />
               </div>
             ))}
           </div>
