@@ -10,9 +10,11 @@ const TIMELINE_OPTIONS = ["Just curious", "0–3 months", "3–6 months", "6+ mo
 export default function ValuationModal({
   open,
   onClose,
+  initialAddress = "",
 }: {
   open: boolean;
   onClose: () => void;
+  initialAddress?: string;
 }) {
   const [step, setStep] = useState<"address" | "details" | "done">("address");
   const [address, setAddress] = useState("");
@@ -30,19 +32,23 @@ export default function ValuationModal({
   useEffect(() => {
     if (!open) return;
     triggerRef.current = document.activeElement as HTMLElement;
-    setStep("address");
-    setAddress("");
+    const typed = initialAddress.trim();
+    setStep(typed ? "details" : "address");
+    setAddress(typed);
     setTimeline(null);
     setStatus("idle");
     setMessage("");
-    const focusTimer = setTimeout(() => addressRef.current?.focus(), 10);
+    const focusTimer = setTimeout(
+      () => (typed ? nameRef.current : addressRef.current)?.focus(),
+      10
+    );
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       clearTimeout(focusTimer);
       document.body.style.overflow = previousOverflow;
     };
-  }, [open]);
+  }, [open, initialAddress]);
 
   useEffect(() => {
     if (!open || step !== "details") return;

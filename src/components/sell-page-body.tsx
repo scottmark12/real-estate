@@ -120,47 +120,67 @@ export default function SellPageBody({
 }) {
   // /sell?value=1 (the homepage Home Value door) opens the form right away.
   const [valuationOpen, setValuationOpen] = useState(openValuation);
+  const [heroAddress, setHeroAddress] = useState("");
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
 
   return (
     <div>
-      {/* Hero */}
-      <section className="px-[4vw] pb-10 pt-10 lg:pt-14">
-        <div className="grid gap-10 lg:grid-cols-[48fr_52fr] lg:items-stretch">
-          <div className="flex flex-col justify-center py-6 lg:py-0">
-            <p className="eyebrow text-gold">Sell</p>
-            <h1 className="mt-3 font-display text-5xl font-normal leading-[1.02] text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-6xl">
-              A straightforward
-              <br />
-              way to sell.
-            </h1>
-            <p className="mt-5 max-w-sm text-navy/70">
-              You know what you want from the sale. My job is to build the
-              strategy around it.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-4">
-              <PrimaryCta
-                onClick={() => setValuationOpen(true)}
-                label="Start with a Valuation →"
-              />
-              <SecondaryCta href="/contact?intent=selling" label="Talk to Mark →" />
-            </div>
-          </div>
-          <div>
-            <div className="relative aspect-4/3 w-full overflow-hidden lg:aspect-auto lg:h-full lg:min-h-[380px]">
-              <Image
-                src="/images/sell-hero.jpg"
-                alt="A modern home with a pool"
-                fill
-                sizes="(min-width: 1024px) 50vw, 100vw"
-                className="object-cover"
-                priority
-              />
-            </div>
-            <p className="eyebrow mt-3 text-right text-navy/50">
-              {contact.city_state}
-            </p>
-          </div>
+      {/* Hero: full screen photo with the home value bar on top of it */}
+      <section className="relative flex min-h-[100svh] items-end overflow-hidden bg-ink">
+        <Image
+          src="/images/sell-hero.jpg"
+          alt="A modern home with a pool"
+          fill
+          sizes="100vw"
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />
+
+        <div className="relative w-full px-[4vw] pb-14 pt-32 lg:pb-20">
+          <p className="eyebrow text-white/80">Sell</p>
+          <h1 className="mt-3 max-w-3xl font-georgia text-[42px] font-normal leading-[1.02] tracking-[-0.01em] text-white sm:text-[60px] lg:text-[72px]">
+            A straightforward way to sell.
+          </h1>
+          <p className="mt-5 max-w-xl text-lg text-white max-[600px]:text-base">
+            You know what you want from the sale. My job is to build the strategy
+            around it, starting with what your home is really worth.
+          </p>
+
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              const typed = new FormData(e.currentTarget).get("address");
+              setHeroAddress(typeof typed === "string" ? typed : "");
+              setValuationOpen(true);
+            }}
+            className="mt-10 flex max-w-3xl flex-col gap-px bg-white/10 shadow-2xl sm:flex-row"
+          >
+            <label htmlFor="sell-address" className="sr-only">
+              Your home address
+            </label>
+            <input
+              id="sell-address"
+              name="address"
+              autoComplete="street-address"
+              placeholder="Enter your home address"
+              className="min-w-0 flex-1 bg-white px-5 py-4 text-[15px] text-navy placeholder:text-navy/45 focus:outline-none"
+            />
+            <button
+              type="submit"
+              className="bg-ink px-8 py-4 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-blue"
+            >
+              Get My Home Value
+            </button>
+          </form>
+          <p className="mt-4 text-sm text-white/80">
+            Free, from recent sales near you. Or{" "}
+            <Link href="/contact?intent=selling" className="underline underline-offset-4 hover:text-white">
+              talk to Mark first
+            </Link>
+            .
+          </p>
         </div>
       </section>
 
@@ -299,7 +319,14 @@ export default function SellPageBody({
         </p>
       </div>
 
-      <ValuationModal open={valuationOpen} onClose={() => setValuationOpen(false)} />
+      <ValuationModal
+        open={valuationOpen}
+        onClose={() => {
+          setValuationOpen(false);
+          setHeroAddress("");
+        }}
+        initialAddress={heroAddress}
+      />
     </div>
   );
 }
