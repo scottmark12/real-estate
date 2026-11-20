@@ -219,12 +219,8 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         </p>
       </section>
 
-      <div className="mt-10">
-        <SaveSearchForm params={alertParams} label={describeParams(alertParams)} />
-      </div>
-
       {featured.length > 0 && (
-        <section className="mt-16">
+        <section className="mt-10">
           <div className="flex items-end justify-between gap-4">
             <h2 className="font-georgia text-[36px] leading-none text-navy sm:text-[44px]">Featured</h2>
             <p className="text-sm text-navy/50">Hand picked by Mark</p>
@@ -236,6 +232,11 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           </div>
         </section>
       )}
+
+      {/* Alerts sit after the featured homes so the homes peek above the fold. */}
+      <div className={featured.length > 0 ? "mt-16" : "mt-10"}>
+        <SaveSearchForm params={alertParams} label={describeParams(alertParams)} />
+      </div>
 
       <div className="mt-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
