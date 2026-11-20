@@ -206,9 +206,9 @@ function ArchitecturalBanner({ article }: { article: Article }) {
   return (
     <Link
       href={`/insights/${article.slug}`}
-      className="group grid lg:grid-cols-[35fr_65fr]"
+      className="group grid gap-8 border-y border-navy/15 py-10 lg:grid-cols-[35fr_65fr] lg:gap-12"
     >
-      <div className="flex flex-col justify-center bg-cream-deep px-8 py-10">
+      <div className="flex flex-col justify-center">
         <p className="eyebrow text-gold">Architectural Spotlight</p>
         <h3 className="mt-3 font-display text-3xl font-normal leading-tight text-navy max-[600px]:text-[26px] max-[600px]:leading-[1.12] sm:text-4xl">
           {article.title}
@@ -223,7 +223,7 @@ function ArchitecturalBanner({ article }: { article: Article }) {
           Read &rarr;
         </span>
       </div>
-      <div className="relative h-[300px] w-full overflow-hidden lg:h-auto lg:min-h-[340px]">
+      <div className="relative order-first h-[300px] w-full overflow-hidden lg:order-none lg:h-auto lg:min-h-[340px]">
         <ArticleImage
           article={article}
           imgClassName="object-cover transition-transform duration-700 group-hover:scale-105"

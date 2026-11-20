@@ -229,7 +229,7 @@ export default async function HomePage() {
         <div className="absolute inset-x-0 bottom-0 mx-auto max-w-[1500px] px-6 pb-10 lg:px-12 lg:pb-14">
           <p className="eyebrow text-white/75">San Diego County</p>
           <h2 className="mt-3 max-w-3xl font-georgia text-[40px] leading-[1.05] text-white max-[600px]:text-[32px] lg:text-[64px]">
-            Every town on this coast lives differently.
+            Pick the morning walk first. Then the house.
           </h2>
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
