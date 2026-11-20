@@ -14,6 +14,7 @@ import { DEFAULT_MARKET_CHART, getSetting } from "@/lib/settings";
 import type { MarketChartSettings } from "@/lib/types";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import NeighborhoodCard from "@/components/neighborhood-card";
+import HomeVideoHero from "@/components/home-video-hero";
 
 
 export const revalidate = 0;
@@ -139,86 +140,7 @@ export default async function HomePage() {
 
   return (
     <div className="mx-auto max-w-[1500px] px-0 lg:px-12">
-      {/* Hero / cover — mobile */}
-      <section className="overflow-hidden pt-8 lg:hidden">
-        <div className="px-4 max-[600px]:px-6">
-          <p className="eyebrow text-gold">San Diego Real Estate</p>
-          <h1 className="relative z-20 mt-2 font-georgia text-[32px] font-normal leading-[0.95] text-navy max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em]">
-            <span className="block">Real Estate,</span>
-            <span className="block">Real Different.</span>
-          </h1>
-          <p className="relative z-20 mt-[65px] max-w-[37%] text-[15px] text-navy/70">
-            Homes picked with a designer&apos;s eye.
-          </p>
-
-          <div className="relative z-20 mt-[68px] w-[42%] max-w-[165px] -rotate-2">
-            <Image
-              src="/images/handwriting-diligence.png"
-              alt="Curiosity is good due diligence! —MS"
-              width={816}
-              height={211}
-              className="h-auto w-full"
-            />
-          </div>
-        </div>
-
-        <div className="relative z-10 -mt-[313px] mb-8 ml-[15%] w-[124%]">
-          <Image
-            src="/images/mark-headshot-illustration.png"
-            alt="Mark Scott"
-            width={993}
-            height={866}
-            priority
-            sizes="124vw"
-            className="h-auto w-full"
-          />
-        </div>
-      </section>
-
-      {/* Hero / cover — desktop */}
-      <section className="hidden pt-10 lg:block">
-        <div className="relative grid grid-cols-[minmax(0,45fr)_minmax(0,55fr)] gap-x-0 gap-y-0">
-          <div className="relative z-20 col-start-1 row-start-1 self-start pl-32">
-            <h1 className="font-georgia text-[120px] font-normal leading-[0.95] text-navy">
-              <span className="block whitespace-nowrap">Real Estate,</span>
-              <span className="block whitespace-nowrap">Real Different.</span>
-            </h1>
-            <p className="mt-5 max-w-[560px] text-[22.8px] text-navy/70">
-              San Diego homes, picked with a designer&apos;s eye and an investor&apos;s math.
-            </p>
-          </div>
-
-          <div className="absolute left-[247px] top-[500px] z-10 w-[320px] rotate-[-4deg]">
-            <Image
-              src="/images/handwriting-diligence.png"
-              alt="Curiosity is good due diligence! —MS"
-              width={816}
-              height={211}
-              className="h-auto w-full"
-            />
-          </div>
-
-          <div className="relative col-start-2 row-start-1 row-span-2 -ml-28 w-[120%] self-end">
-            <Image
-              src="/images/mark-headshot-illustration.png"
-              alt="Mark Scott"
-              width={993}
-              height={866}
-              priority
-              sizes="55vw"
-              className="h-auto w-full"
-            />
-          </div>
-
-          <div className="col-start-1 row-start-2 self-end">
-            <p className="eyebrow text-navy/40">
-              Residential Real Estate &middot; Market Research
-              <br />
-              San Diego, California
-            </p>
-          </div>
-        </div>
-      </section>
+      <HomeVideoHero />
 
       {/* Homes — from the live feed (hearted in the admin, else newest) */}
       {homeListings.listings.length > 0 && (

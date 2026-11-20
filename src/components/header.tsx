@@ -20,7 +20,7 @@ const NAV_LINKS = [
 
 // Pages with a full screen photo hero get a see-through header that sits on
 // the photo and scrolls away with it, same as floridacoastal.co.
-const OVERLAY_PATHS = ["/neighborhoods", "/buy"];
+const OVERLAY_PATHS = ["/", "/neighborhoods", "/buy"];
 
 export default function Header({ contact }: { contact: ContactSettings }) {
   const pathname = usePathname();
