@@ -2,7 +2,7 @@
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
-import type { Map as MLMap, Marker, StyleSpecification } from "maplibre-gl";
+import type { LineLayerSpecification, Map as MLMap, Marker, StyleSpecification } from "maplibre-gl";
 import { NEIGHBORHOODS, PRICE_TIERS, REGIONS, type Region } from "@/lib/neighborhoods";
 
 // Florida Coastal map colors: warm light land, soft blue water, dark pins,
@@ -19,6 +19,21 @@ const LABEL = "#5e6b6d";
 const PIN = "#152a2e";
 const PIN_OFF = "#9aa3a5";
 const BLUE = "#3262a6";
+const BOUNDARY = "#152a2e";
+
+// City of San Diego community plan areas (official open data), used to
+// outline neighborhoods inside the city. Loaded in the browser; if it
+// fails, the map just shows city limits.
+const SD_COMMUNITIES =
+  "https://webmaps.sandiego.gov/arcgis/rest/services/DSD/Planning/MapServer/2/query" +
+  "?where=1%3D1&outFields=CPNAME&returnGeometry=true&outSR=4326&maxAllowableOffset=0.0002&f=geojson";
+
+const BOUNDARY_PAINT: LineLayerSpecification["paint"] = {
+  "line-color": BOUNDARY,
+  "line-opacity": 0.35,
+  "line-width": ["interpolate", ["linear"], ["zoom"], 9, 0.8, 14, 1.4],
+  "line-dasharray": [3, 3],
+};
 
 const STYLE: StyleSpecification = {
   version: 8,
@@ -133,6 +148,15 @@ const STYLE: StyleSpecification = {
       },
     },
     {
+      // City limits (Oceanside, Carlsbad, Encinitas, Coronado and so on).
+      id: "city-limits",
+      type: "line",
+      source: "omt",
+      "source-layer": "boundary",
+      filter: ["all", ["==", ["get", "admin_level"], 8], ["!=", ["get", "maritime"], 1]],
+      paint: BOUNDARY_PAINT,
+    },
+    {
       id: "place-labels",
       type: "symbol",
       source: "omt",
@@ -196,6 +220,27 @@ export default function NeighborhoodMap() {
         })
       );
       mapRef.current = map;
+
+      map.on("load", async () => {
+        try {
+          const res = await fetch(SD_COMMUNITIES);
+          if (!res.ok) return;
+          const data = await res.json();
+          if (cancelled || !data?.features?.length) return;
+          map.addSource("sd-communities", { type: "geojson", data });
+          map.addLayer(
+            {
+              id: "sd-communities",
+              type: "line",
+              source: "sd-communities",
+              paint: BOUNDARY_PAINT,
+            },
+            "place-labels"
+          );
+        } catch {
+          // Boundaries are a nice to have; the map works without them.
+        }
+      });
 
       for (const n of NEIGHBORHOODS) {
         const dot = document.createElement("button");
