@@ -2,7 +2,13 @@
 
 import "maplibre-gl/dist/maplibre-gl.css";
 import { useEffect, useRef, useState } from "react";
-import type { LineLayerSpecification, Map as MLMap, Marker, StyleSpecification } from "maplibre-gl";
+import type {
+  FilterSpecification,
+  LineLayerSpecification,
+  Map as MLMap,
+  Marker,
+  StyleSpecification,
+} from "maplibre-gl";
 import { NEIGHBORHOODS, PRICE_TIERS, REGIONS, type Region } from "@/lib/neighborhoods";
 
 // Florida Coastal map colors: warm light land, soft blue water, dark pins,
@@ -21,12 +27,69 @@ const PIN_OFF = "#9aa3a5";
 const BLUE = "#3262a6";
 const BOUNDARY = "#152a2e";
 
-// City of San Diego community plan areas (official open data), used to
-// outline neighborhoods inside the city. Loaded in the browser; if it
-// fails, the map just shows city limits.
+// Official boundaries, loaded in the browser. Neighborhoods inside the City
+// of San Diego use the City's community plan areas; other cities use SANDAG's
+// municipal boundaries. If either fails to load, the map works without it.
 const SD_COMMUNITIES =
   "https://webmaps.sandiego.gov/arcgis/rest/services/DSD/Planning/MapServer/2/query" +
   "?where=1%3D1&outFields=CPNAME&returnGeometry=true&outSR=4326&maxAllowableOffset=0.0002&f=geojson";
+const MUNICIPALITIES =
+  "https://geo.sandag.org/server/rest/services/Hosted/Municipal_Boundaries/FeatureServer/0/query" +
+  "?where=1%3D1&outFields=name&returnGeometry=true&outSR=4326&maxAllowableOffset=0.0002&geometryPrecision=5&f=geojson";
+
+type Ring = [number, number][];
+type Geom = { type: "Polygon"; coordinates: Ring[] } | { type: "MultiPolygon"; coordinates: Ring[][] };
+type Feature = { type: "Feature"; geometry: Geom | null; properties: Record<string, unknown> };
+
+function inRing(x: number, y: number, ring: Ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+function contains(g: Geom | null, x: number, y: number) {
+  if (!g) return false;
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.coordinates;
+  return polys.some((rings) => inRing(x, y, rings[0]) && !rings.slice(1).some((h) => inRing(x, y, h)));
+}
+
+async function loadFeatures(url: string): Promise<Feature[]> {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data?.features) ? data.features : [];
+  } catch {
+    return [];
+  }
+}
+
+// Match each neighborhood to the official area its pin sits in, and tag that
+// area with the neighborhood's region so it can be shaded when picked.
+async function loadAreas() {
+  const [communities, cities] = await Promise.all([loadFeatures(SD_COMMUNITIES), loadFeatures(MUNICIPALITIES)]);
+  const cityAreas = cities.filter((f) => String(f.properties?.name ?? "").toLowerCase() !== "san diego");
+  const picked = new Map<Feature, Set<string>>();
+  for (const n of NEIGHBORHOODS) {
+    const hit =
+      communities.find((f) => contains(f.geometry, n.lng, n.lat)) ??
+      cityAreas.find((f) => contains(f.geometry, n.lng, n.lat));
+    if (!hit) continue;
+    if (!picked.has(hit)) picked.set(hit, new Set());
+    picked.get(hit)!.add(n.region);
+  }
+  const features: Feature[] = [];
+  for (const [f, regions] of picked) {
+    for (const region of regions) {
+      features.push({ type: "Feature", geometry: f.geometry, properties: { region } });
+    }
+  }
+  return { type: "FeatureCollection" as const, features };
+}
 
 const BOUNDARY_PAINT: LineLayerSpecification["paint"] = {
   "line-color": BOUNDARY,
@@ -148,15 +211,6 @@ const STYLE: StyleSpecification = {
       },
     },
     {
-      // City limits (Oceanside, Carlsbad, Encinitas, Coronado and so on).
-      id: "city-limits",
-      type: "line",
-      source: "omt",
-      "source-layer": "boundary",
-      filter: ["all", ["==", ["get", "admin_level"], 8], ["!=", ["get", "maritime"], 1]],
-      paint: BOUNDARY_PAINT,
-    },
-    {
       id: "place-labels",
       type: "symbol",
       source: "omt",
@@ -197,6 +251,7 @@ export default function NeighborhoodMap() {
   const mapRef = useRef<MLMap | null>(null);
   const markers = useRef<Record<string, { marker: Marker; dot: HTMLElement }>>({});
   const [region, setRegion] = useState<Region | "All">("All");
+  const regionRef = useRef<Region | "All">("All");
 
   useEffect(() => {
     let cancelled = false;
@@ -222,24 +277,21 @@ export default function NeighborhoodMap() {
       mapRef.current = map;
 
       map.on("load", async () => {
-        try {
-          const res = await fetch(SD_COMMUNITIES);
-          if (!res.ok) return;
-          const data = await res.json();
-          if (cancelled || !data?.features?.length) return;
-          map.addSource("sd-communities", { type: "geojson", data });
-          map.addLayer(
-            {
-              id: "sd-communities",
-              type: "line",
-              source: "sd-communities",
-              paint: BOUNDARY_PAINT,
-            },
-            "place-labels"
-          );
-        } catch {
-          // Boundaries are a nice to have; the map works without them.
-        }
+        const areas = await loadAreas();
+        if (cancelled || !areas.features.length) return;
+        map.addSource("areas", { type: "geojson", data: areas as GeoJSON.FeatureCollection });
+        const filter: FilterSpecification = ["==", ["get", "region"], regionRef.current];
+        map.addLayer(
+          {
+            id: "areas-fill",
+            type: "fill",
+            source: "areas",
+            filter,
+            paint: { "fill-color": BLUE, "fill-opacity": 0.08 },
+          },
+          "place-labels"
+        );
+        map.addLayer({ id: "areas-line", type: "line", source: "areas", filter, paint: BOUNDARY_PAINT }, "place-labels");
       });
 
       for (const n of NEIGHBORHOODS) {
@@ -270,7 +322,10 @@ export default function NeighborhoodMap() {
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
+    regionRef.current = region;
     const shown = NEIGHBORHOODS.filter((n) => region === "All" || n.region === region);
+    const filter: FilterSpecification = ["==", ["get", "region"], region];
+    for (const id of ["areas-fill", "areas-line"]) if (map.getLayer(id)) map.setFilter(id, filter);
     for (const n of NEIGHBORHOODS) {
       const m = markers.current[n.slug];
       if (!m) continue;
