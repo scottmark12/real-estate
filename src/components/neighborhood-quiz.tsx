@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { buyHref } from "@/lib/neighborhood-feed";
 import { useMemo, useState, type FormEvent } from "react";
 import { NEIGHBORHOODS, PRICE_TIERS, type Neighborhood } from "@/lib/neighborhoods";
 
@@ -340,12 +341,20 @@ function Results({
                 <p className="mt-3 max-w-2xl text-navy/80">{n.tagline}</p>
                 <p className="eyebrow mt-3 text-navy/50">{n.tags.join(" · ")}</p>
               </div>
-              <Link
-                href={`/neighborhoods/${n.slug}`}
-                className="self-start border border-navy px-5 py-2.5 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
-              >
-                See {n.name}
-              </Link>
+              <div className="flex flex-wrap gap-2 self-start">
+                <Link
+                  href={`/neighborhoods/${n.slug}`}
+                  className="border border-navy px-5 py-2.5 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
+                >
+                  About {n.name}
+                </Link>
+                <Link
+                  href={buyHref(n.slug, n.name)}
+                  className="border border-blue bg-blue px-5 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
+                >
+                  Homes for Sale
+                </Link>
+              </div>
             </li>
           ))}
         </ol>

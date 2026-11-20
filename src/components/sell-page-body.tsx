@@ -111,8 +111,15 @@ function SecondaryCta({ href, label }: { href: string; label: string }) {
   );
 }
 
-export default function SellPageBody({ contact }: { contact: ContactSettings }) {
-  const [valuationOpen, setValuationOpen] = useState(false);
+export default function SellPageBody({
+  contact,
+  openValuation = false,
+}: {
+  contact: ContactSettings;
+  openValuation?: boolean;
+}) {
+  // /sell?value=1 (the homepage Home Value door) opens the form right away.
+  const [valuationOpen, setValuationOpen] = useState(openValuation);
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
 
   return (

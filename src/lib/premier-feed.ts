@@ -41,6 +41,9 @@ export type FeedListing = {
 
 export type FeedQuery = {
   q?: string;
+  city?: string;
+  zip?: string;
+  limit?: number;
   min_price?: string;
   max_price?: string;
   min_beds?: string;
@@ -68,12 +71,17 @@ function isForSale(l: FeedListing) {
 }
 
 export async function searchListings(query: FeedQuery) {
-  const params = new URLSearchParams({ status: "active", limit: String(PAGE_SIZE) });
+  const params = new URLSearchParams({
+    status: "active",
+    limit: String(query.limit ?? PAGE_SIZE),
+  });
   const set = (k: string, v?: string | number) => {
     const s = v == null ? "" : String(v).trim();
     if (s) params.set(k, s);
   };
   set("q", query.q);
+  set("city", query.city);
+  set("zip", /^\d{5}$/.test(query.zip ?? "") ? query.zip : undefined);
   set("min_price", Math.max(Number(query.min_price) || 0, SALE_PRICE_FLOOR));
   set("max_price", query.max_price);
   set("min_beds", query.min_beds);

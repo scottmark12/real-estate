@@ -35,6 +35,9 @@ const field =
 export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   const sp = await searchParams;
   const q = one(sp.q) ?? "";
+  const city = one(sp.city) ?? "";
+  const zip = one(sp.zip) ?? "";
+  const area = one(sp.area) ?? "";
   const min_price = one(sp.min_price) ?? "";
   const max_price = one(sp.max_price) ?? "";
   const min_beds = one(sp.min_beds) ?? "";
@@ -42,9 +45,11 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   const sort = one(sp.sort) ?? "recent";
   const page = Math.max(1, Math.floor(Number(one(sp.page)) || 1));
 
-  const filtering = Boolean(q || min_price || max_price || min_beds || property_type);
+  const filtering = Boolean(
+    q || city || zip || min_price || max_price || min_beds || property_type
+  );
   const [result, featured] = await Promise.all([
-    searchListings({ q, min_price, max_price, min_beds, property_type, sort, page }),
+    searchListings({ q, city, zip, min_price, max_price, min_beds, property_type, sort, page }),
     !filtering && page === 1 ? getFeaturedListings(6) : Promise.resolve([]),
   ]);
 
@@ -55,6 +60,9 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   const pageHref = (p: number) => {
     const params = new URLSearchParams();
     if (q) params.set("q", q);
+    if (city) params.set("city", city);
+    if (zip) params.set("zip", zip);
+    if (area) params.set("area", area);
     if (min_price) params.set("min_price", min_price);
     if (max_price) params.set("max_price", max_price);
     if (min_beds) params.set("min_beds", min_beds);
@@ -69,8 +77,19 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
     <div className="mx-auto max-w-6xl px-6 py-20 max-[600px]:py-12 sm:px-10">
       <p className="eyebrow text-gold">Buy</p>
       <h1 className="mt-2 font-display text-4xl font-normal text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-5xl">
-        Homes for sale across San Diego County.
+        {area ? `Homes for sale in ${area}.` : "Homes for sale across San Diego County."}
       </h1>
+      {area && (
+        <p className="mt-3 text-sm text-navy/60">
+          <Link href={`/neighborhoods`} className="underline decoration-gold underline-offset-4">
+            About the neighborhoods
+          </Link>
+          <span className="mx-2 text-navy/30">&middot;</span>
+          <Link href="/buy" className="underline decoration-gold underline-offset-4">
+            Search all of San Diego County
+          </Link>
+        </p>
+      )}
       <p className="mt-4 max-w-xl text-navy/70">
         Live from the MLS and updated through the day. See one you like? Ask me
         about it and I&apos;ll tell you what the listing doesn&apos;t.
@@ -81,6 +100,9 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         method="get"
         className="mt-10 grid gap-3 border border-sand bg-cream-deep p-4 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_auto]"
       >
+        {city && <input type="hidden" name="city" value={city} />}
+        {zip && <input type="hidden" name="zip" value={zip} />}
+        {area && <input type="hidden" name="area" value={area} />}
         <label className="sr-only" htmlFor="q">City, zip or address</label>
         <input
           id="q"
@@ -149,7 +171,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           <p className="text-sm text-navy/60">
             {result.listings.length === 0
               ? "No homes match that search."
-              : `Showing page ${page}${q ? ` for “${q}”` : ""}`}
+              : `Showing page ${page}${area ? ` in ${area}` : q ? ` for “${q}”` : ""}`}
           </p>
           <Link
             href="/contact?intent=buying"

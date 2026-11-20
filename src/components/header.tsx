@@ -9,11 +9,11 @@ import NewsletterModal from "@/components/newsletter-modal";
 import type { ContactSettings } from "@/lib/types";
 
 const NAV_LINKS = [
-  { href: "/discover", label: "Discover" },
-  { href: "/tools", label: "Tools" },
   { href: "/buy", label: "Buy" },
   { href: "/sell", label: "Sell" },
+  { href: "/tools", label: "Tools" },
   { href: "/insights", label: "Market Research" },
+  { href: "/discover", label: "Discover" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -71,6 +71,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
 
         <MobileNav
           links={NAV_LINKS}
+          phone={contact.phone}
           onOpenNewsletter={() => setNewsletterOpen(true)}
         />
       </div>

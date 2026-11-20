@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
 type Field = {
@@ -123,6 +124,30 @@ export default function CostCalculator() {
               of this. Your lender can price it.
             </p>
           )}
+        </div>
+
+        <div className="mt-8 border-t border-sand pt-6">
+          <p className="font-display text-xl text-navy">
+            Want me to run this on a real home?
+          </p>
+          <p className="mt-1 text-sm text-navy/70">
+            Send me a listing and I&apos;ll pull the actual tax rate, any Mello
+            Roos and HOA, and what similar homes sold for.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href="/contact?intent=buying"
+              className="border border-blue bg-blue px-5 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
+            >
+              Run It on a Home
+            </Link>
+            <Link
+              href="/buy"
+              className="border border-navy px-5 py-2.5 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
+            >
+              Browse Homes
+            </Link>
+          </div>
         </div>
 
         <p className="mt-6 text-xs leading-relaxed text-navy/50">

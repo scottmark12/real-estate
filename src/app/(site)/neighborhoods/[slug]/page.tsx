@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import RecentSalesForm from "@/components/recent-sales-form";
+import FeedListingCard from "@/components/feed-listing-card";
+import { searchListings } from "@/lib/premier-feed";
+import { NEIGHBORHOOD_FEED, buyHref } from "@/lib/neighborhood-feed";
 import { notFound } from "next/navigation";
 import {
   NEIGHBORHOODS,
@@ -44,6 +47,9 @@ export default async function NeighborhoodPage({
   if (!n) notFound();
 
   const nearby = nearbyNeighborhoods(n);
+  const area = NEIGHBORHOOD_FEED[n.slug] ?? { q: n.name };
+  const homes = await searchListings({ ...area, sort: "recent", limit: 6 });
+  const homesHref = buyHref(n.slug, n.name);
 
   return (
     <div className="mx-auto max-w-[1500px] px-12 pt-12 pb-20 max-[600px]:px-6 max-[600px]:pt-8 max-[600px]:pb-12">
@@ -130,6 +136,31 @@ export default async function NeighborhoodPage({
           the people who live there.
         </p>
       </section>
+
+      {/* Homes for sale here, from the live feed */}
+      {homes && homes.listings.length > 0 && (
+        <section className="mt-12 border-t border-sand pt-12">
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <div>
+              <p className="eyebrow text-gold">For Sale Now</p>
+              <h2 className="mt-2 font-display text-3xl font-normal text-navy">
+                Homes for sale in {n.name}
+              </h2>
+            </div>
+            <Link
+              href={homesHref}
+              className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
+            >
+              See All Homes in {n.name} &rarr;
+            </Link>
+          </div>
+          <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+            {homes.listings.slice(0, 3).map((listing) => (
+              <FeedListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Recent sales — lead capture */}
       <section className="mt-12 bg-cream-deep px-12 py-12 max-[600px]:-mx-6 max-[600px]:px-6">

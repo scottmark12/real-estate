@@ -12,11 +12,13 @@ export const metadata: Metadata = {
 
 export const revalidate = 0;
 
-export default async function SellPage() {
+export default async function SellPage({ searchParams }: PageProps<"/sell">) {
+  const sp = await searchParams;
+  const openValuation = sp.value === "1";
   const contact = await getSetting<ContactSettings>(
     "contact",
     DEFAULT_CONTACT
   );
 
-  return <SellPageBody contact={contact} />;
+  return <SellPageBody contact={contact} openValuation={openValuation} />;
 }

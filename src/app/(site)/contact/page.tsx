@@ -53,7 +53,21 @@ export default async function ContactPage() {
             )}
             <p className="mt-2 text-navy/80">{contact.city_state}</p>
             {contact.phone && (
-              <p className="text-navy/80">{contact.phone}</p>
+              <p className="text-navy/80">
+                <a
+                  href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
+                  className="hover:text-blue"
+                >
+                  {contact.phone}
+                </a>
+                <span className="mx-2 text-navy/30">&middot;</span>
+                <a
+                  href={`sms:${contact.phone.replace(/[^\d+]/g, "")}`}
+                  className="underline decoration-gold underline-offset-4 hover:text-blue"
+                >
+                  Text me
+                </a>
+              </p>
             )}
             <a
               href={`mailto:${contact.email}`}

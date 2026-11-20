@@ -5,12 +5,15 @@ import { useState } from "react";
 
 export default function MobileNav({
   links,
+  phone,
   onOpenNewsletter,
 }: {
   links: { href: string; label: string }[];
+  phone?: string | null;
   onOpenNewsletter: () => void;
 }) {
   const [open, setOpen] = useState(false);
+  const digits = phone?.replace(/[^\d+]/g, "") || "";
 
   return (
     <div className="lg:hidden">
@@ -51,15 +54,31 @@ export default function MobileNav({
                 {link.label}
               </Link>
             ))}
+            {digits && (
+              <div className="mt-2 grid grid-cols-2 gap-3">
+                <a
+                  href={`tel:${digits}`}
+                  className="bg-blue px-5 py-3 text-center text-sm font-semibold text-cream"
+                >
+                  Call Mark
+                </a>
+                <a
+                  href={`sms:${digits}`}
+                  className="border border-blue px-5 py-3 text-center text-sm font-semibold text-blue"
+                >
+                  Text Mark
+                </a>
+              </div>
+            )}
             <button
               type="button"
               onClick={() => {
                 setOpen(false);
                 onOpenNewsletter();
               }}
-              className="mt-2 rounded-full bg-navy px-5 py-2.5 text-center text-sm font-medium text-cream"
+              className="text-left text-sm font-medium text-navy/70 underline decoration-gold underline-offset-4"
             >
-              Join the Newsletter
+              Join the Market Letter
             </button>
           </nav>
         </div>

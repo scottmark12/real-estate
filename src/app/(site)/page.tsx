@@ -27,7 +27,7 @@ const PRIMARY_PATHS = [
     title: "What's my home worth?",
     short: "Home Value",
     body: "A real value from recent sales, not a robot.",
-    href: "/sell",
+    href: "/sell?value=1",
   },
   {
     title: "Market Research",

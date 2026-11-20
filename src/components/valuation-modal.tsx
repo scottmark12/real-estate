@@ -128,7 +128,7 @@ export default function ValuationModal({
         role="dialog"
         aria-modal="true"
         aria-labelledby="valuation-modal-heading"
-        className="fixed inset-6 flex flex-col overflow-y-auto bg-cream p-8 sm:inset-auto sm:left-1/2 sm:top-1/2 sm:h-auto sm:max-h-[85vh] sm:w-[600px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:p-14"
+        className="fixed inset-x-0 bottom-0 flex max-h-[90vh] flex-col overflow-y-auto bg-cream p-8 pb-12 shadow-2xl sm:inset-auto sm:bottom-auto sm:pb-14 sm:shadow-none sm:left-1/2 sm:top-1/2 sm:h-auto sm:max-h-[85vh] sm:w-[600px] sm:-translate-x-1/2 sm:-translate-y-1/2 sm:p-14"
       >
         <button
           type="button"
