@@ -4,7 +4,8 @@ import { usePathname } from "next/navigation";
 import NewsletterForm from "@/components/newsletter-form";
 
 // Pages that already show the full Market Letter band skip this one.
-const HAS_BAND = (path: string) => path === "/" || path.startsWith("/insights");
+const HAS_BAND = (path: string) =>
+  path === "/" || path === "/discover" || path.startsWith("/insights");
 
 export default function FooterNewsletter() {
   const path = usePathname() ?? "";
