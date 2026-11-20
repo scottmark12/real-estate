@@ -137,7 +137,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="mx-auto max-w-[1500px] px-0 lg:px-12">
+    <div className="mx-auto max-w-[1500px] overflow-x-clip px-0 lg:px-12">
       {/* Hero / cover — mobile */}
       <section className="overflow-hidden pt-8 lg:hidden">
         <div className="px-4 max-[600px]:px-6">
@@ -221,23 +221,23 @@ export default async function HomePage() {
 
       {/* Homes — from the live feed (hearted in the admin, else newest) */}
       {homeListings.listings.length > 0 && (
-        <section className="mt-6 px-4 max-[600px]:px-6 lg:mt-16 lg:px-0">
-          <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
-            <p className="eyebrow text-gold">
+        <section className="full-bleed mt-6 bg-ink px-4 py-12 max-[600px]:px-6 lg:mt-12 lg:px-12 lg:py-14">
+          <div className="mx-auto flex max-w-[1500px] items-end justify-between gap-4 border-b border-white/15 pb-3">
+            <p className="eyebrow text-white/70">
               {homeListings.featured ? "Featured Listings" : "Just Listed"}
             </p>
             <Link
               href="/buy"
-              className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
+              className="eyebrow text-white underline decoration-gold decoration-2 underline-offset-4"
             >
               See All Homes &rarr;
             </Link>
           </div>
           {/* Swipe row on phones, grid from tablet up */}
-          <div className="-mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 max-[600px]:scroll-px-6 max-[600px]:-mx-6 max-[600px]:px-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+          <div className="-mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 max-[600px]:-mx-6 max-[600px]:scroll-px-6 max-[600px]:px-6 sm:mx-auto sm:grid sm:max-w-[1500px] sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 lg:grid-cols-4">
             {homeListings.listings.map((listing) => (
               <div key={listing.id} className="w-[78%] shrink-0 snap-start sm:w-auto">
-                <FeedListingCard listing={listing} />
+                <FeedListingCard listing={listing} tone="dark" />
               </div>
             ))}
           </div>
@@ -245,7 +245,7 @@ export default async function HomePage() {
       )}
 
       {/* Primary paths — mobile */}
-      <section className="mt-10 border-y border-sand py-3 lg:hidden">
+      <section className="border-b border-sand py-3 lg:hidden">
         <div className="relative grid grid-cols-3 divide-x divide-sand">
           {PRIMARY_PATHS.map((p) => (
             <Link
@@ -261,7 +261,7 @@ export default async function HomePage() {
       </section>
 
       {/* Primary paths — desktop */}
-      <section className="mt-14 hidden border-t border-sand py-9 lg:block">
+      <section className="hidden border-b border-sand py-9 lg:block">
         <div className="relative grid grid-cols-3 divide-y-0">
           <span className="pointer-events-none absolute left-1/3 top-1/2 h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand" />
           <span className="pointer-events-none absolute left-2/3 top-1/2 h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand" />
@@ -285,9 +285,53 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Full width photo statement */}
+      <section className="full-bleed relative mt-0 h-[62vh] min-h-[380px] max-h-[640px] overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1632074480971-19241d4d422b?auto=format&fit=crop&w=2400&q=75"
+          alt="The North County coast from the bluffs in Carlsbad"
+          fill
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-black/5" />
+        <div className="absolute inset-x-0 bottom-0 mx-auto max-w-[1500px] px-6 pb-10 lg:px-12 lg:pb-14">
+          <p className="eyebrow text-white/75">San Diego County</p>
+          <h2 className="mt-3 max-w-3xl font-georgia text-[40px] leading-[1.05] text-white max-[600px]:text-[32px] lg:text-[64px]">
+            Homes picked with a designer&apos;s eye and an investor&apos;s math.
+          </h2>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link
+              href="/quiz"
+              className="bg-white px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-cream"
+            >
+              Find Your Neighborhood
+            </Link>
+            <Link
+              href="/about"
+              className="border border-white px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-navy"
+            >
+              How I Work
+            </Link>
+          </div>
+        </div>
+        <p className="absolute right-3 top-3 text-[10px] text-white/60">
+          Photo:{" "}
+          <a
+            href="https://unsplash.com/@samanthadeestudio?utm_source=markscott&utm_medium=referral"
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            Samantha Jean
+          </a>{" "}
+          / Unsplash
+        </p>
+      </section>
+
       {/* On My Radar — mobile */}
       {radar && (
-        <section className="mt-[54px] lg:hidden">
+        <section className="mt-10 lg:hidden">
           <p className="eyebrow px-4 text-gold max-[600px]:px-6">
             On My Radar
             <span className="ml-2 inline-block h-px w-[44px] bg-gold align-middle" />
@@ -343,7 +387,7 @@ export default async function HomePage() {
 
       {/* On My Radar — desktop */}
       {radar && (
-        <section className="hidden border-t border-sand pt-14 lg:block">
+        <section className="hidden pt-12 lg:block">
           <div className="grid grid-cols-[64px_57fr_38fr] gap-x-10">
             <div className="flex flex-col items-start gap-2">
               <p className="eyebrow leading-tight text-gold">
@@ -404,8 +448,8 @@ export default async function HomePage() {
       )}
 
       {/* The numbers — market chart */}
-      <section className="mt-14 bg-cream-deep px-4 py-12 max-[600px]:px-6 lg:px-12">
-        <div className="grid gap-10 lg:grid-cols-[38fr_62fr] lg:items-center">
+      <section className="full-bleed mt-12 bg-cream-deep px-4 py-12 max-[600px]:px-6 lg:px-12">
+        <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[38fr_62fr] lg:items-center lg:px-12">
           <div>
             <p className="eyebrow text-gold">The Market, Right Now</p>
             <h2 className="mt-3 font-display text-[32px] font-normal leading-[1.1] text-navy max-[600px]:text-[26px]">
@@ -429,7 +473,7 @@ export default async function HomePage() {
       </section>
 
       {/* Neighborhoods — photo cards */}
-      <section className="mt-14 px-4 max-[600px]:px-6 lg:px-0">
+      <section className="mt-12 px-4 max-[600px]:px-6 lg:px-0">
         <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
           <p className="eyebrow text-gold">Neighborhoods</p>
           <Link
@@ -450,7 +494,7 @@ export default async function HomePage() {
 
       {/* Elsewhere */}
       {elsewhere.length > 0 && (
-        <section className="mt-14 border-t border-sand px-4 pb-16 pt-10 max-[600px]:px-6 lg:px-0">
+        <section className="mt-12 border-t border-sand px-4 pb-12 pt-10 max-[600px]:px-6 lg:px-0">
           <p className="eyebrow text-gold">More From the Research</p>
           <div className="mt-6 grid gap-10 sm:grid-cols-3 sm:divide-x sm:divide-sand">
             {elsewhere.map((item, i) => (
@@ -475,7 +519,7 @@ export default async function HomePage() {
       )}
 
       {/* Newsletter */}
-      <MarketLetterBand className="mt-16 lg:mb-16" />
+      <MarketLetterBand className="full-bleed lg:px-24" />
     </div>
   );
 }

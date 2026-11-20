@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import FeedListingCard from "@/components/feed-listing-card";
@@ -74,23 +75,35 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-20 max-[600px]:py-12 sm:px-10">
-      <p className="eyebrow text-gold">Buy</p>
-      <h1 className="mt-2 font-display text-4xl font-normal text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-5xl">
+    <div className="mx-auto max-w-6xl overflow-x-clip px-6 pb-20 max-[600px]:pb-12 sm:px-10">
+      {/* Photo header with the search on top of it */}
+      <section className="full-bleed relative overflow-hidden">
+        <Image
+          src="https://images.unsplash.com/photo-1611459711466-5926ba1a3d43?auto=format&fit=crop&w=2400&q=75"
+          alt="Sunset at Crystal Pier, Pacific Beach"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/20" />
+        <div className="relative mx-auto max-w-6xl px-6 pb-8 pt-24 sm:px-10 lg:pt-32">
+      <p className="eyebrow text-white/75">Buy</p>
+      <h1 className="mt-2 font-georgia text-[40px] font-normal leading-[1.02] text-white sm:text-[60px]">
         {area ? `Homes for sale in ${area}.` : "Homes for sale across San Diego County."}
       </h1>
       {area && (
-        <p className="mt-3 text-sm text-navy/60">
+        <p className="mt-3 text-sm text-white/75">
           <Link href={`/neighborhoods`} className="underline decoration-gold underline-offset-4">
             About the neighborhoods
           </Link>
-          <span className="mx-2 text-navy/30">&middot;</span>
+          <span className="mx-2 text-white/40">&middot;</span>
           <Link href="/buy" className="underline decoration-gold underline-offset-4">
             Search all of San Diego County
           </Link>
         </p>
       )}
-      <p className="mt-4 max-w-xl text-navy/70">
+      <p className="mt-4 max-w-xl text-white/85">
         Live from the MLS and updated through the day. See one you like? Ask me
         about it and I&apos;ll tell you what the listing doesn&apos;t.
       </p>
@@ -98,7 +111,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
       <form
         action="/buy"
         method="get"
-        className="mt-10 grid gap-3 border border-sand bg-cream-deep p-4 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_auto]"
+        className="mt-8 grid gap-3 bg-white/95 p-4 shadow-xl sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_auto]"
       >
         {city && <input type="hidden" name="city" value={city} />}
         {zip && <input type="hidden" name="zip" value={zip} />}
@@ -151,6 +164,20 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           Search
         </button>
       </form>
+        </div>
+        <p className="absolute right-3 top-3 text-[10px] text-white/60">
+          Photo:{" "}
+          <a
+            href="https://unsplash.com/@kcwelch330?utm_source=markscott&utm_medium=referral"
+            target="_blank"
+            rel="noreferrer"
+            className="underline"
+          >
+            KC Welch
+          </a>{" "}
+          / Unsplash
+        </p>
+      </section>
 
       {featured.length > 0 && (
         <section className="mt-12">
@@ -158,7 +185,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
             <p className="eyebrow text-gold">Featured</p>
             <p className="text-xs text-navy/50">Hand picked by Mark.</p>
           </div>
-          <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((listing) => (
               <FeedListingCard key={listing.id} listing={listing} />
             ))}
@@ -181,7 +208,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           </Link>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
           {result.listings.map((listing) => (
             <FeedListingCard key={listing.id} listing={listing} />
           ))}

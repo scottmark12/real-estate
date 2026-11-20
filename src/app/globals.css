@@ -117,3 +117,9 @@ body {
     line-height: 1.55;
   }
 }
+
+/* Edge to edge sections inside a centered page container. */
+@utility full-bleed {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
