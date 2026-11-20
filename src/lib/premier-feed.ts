@@ -66,7 +66,7 @@ export const PROPERTY_TYPES = [
 
 export const PAGE_SIZE = 48;
 
-function isForSale(l: FeedListing) {
+export function isForSale(l: FeedListing) {
   return !/lease|rent/i.test(l.property_type ?? "") && Number(l.price) >= SALE_PRICE_FLOOR;
 }
 
@@ -147,21 +147,4 @@ export function formatFeedStats(l: FeedListing) {
   return parts.join(" · ");
 }
 
-// Feed listings Mark has hearted in the admin. Stored in site_settings as a
-// list of feed ids, newest heart first. Homes that sell or come off the
-// market drop out on their own.
 export const FEATURED_SETTING = "featured_listings";
-
-export async function getFeaturedIds(): Promise<string[]> {
-  const { getSetting } = await import("@/lib/settings");
-  const ids = await getSetting<string[]>(FEATURED_SETTING, []);
-  return ids.filter((id) => typeof id === "string" && /^\d+$/.test(id));
-}
-
-export async function getFeaturedListings(limit = 12): Promise<FeedListing[]> {
-  const ids = (await getFeaturedIds()).slice(0, limit);
-  const listings = await Promise.all(ids.map((id) => getListing(id)));
-  return listings.filter(
-    (l): l is FeedListing => l != null && l.status === "active" && isForSale(l)
-  );
-}

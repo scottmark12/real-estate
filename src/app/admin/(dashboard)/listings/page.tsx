@@ -4,15 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import type { Listing } from "@/lib/types";
 import { btnPrimary } from "@/components/admin/ui";
 import AdminListingsGrid from "@/components/admin/admin-listings-grid";
-import {
-  PAGE_SIZE,
-  SORTS,
-  formatFeedPrice,
-  formatFeedStats,
-  getFeaturedIds,
-  getFeaturedListings,
-  searchListings,
-} from "@/lib/premier-feed";
+import { PAGE_SIZE, SORTS, formatFeedPrice, formatFeedStats, searchListings } from "@/lib/premier-feed";
+import { getFeaturedIds, getFeaturedListings } from "@/lib/featured-listings";
 import HeartButton from "@/components/admin/heart-button";
 import { toggleFeatured } from "./featured-actions";
 

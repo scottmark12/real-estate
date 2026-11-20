@@ -2,7 +2,8 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
-import { FEATURED_SETTING, getFeaturedIds } from "@/lib/premier-feed";
+import { FEATURED_SETTING } from "@/lib/premier-feed";
+import { getFeaturedIds } from "@/lib/featured-listings";
 
 export async function toggleFeatured(formData: FormData) {
   const id = String(formData.get("id") ?? "");

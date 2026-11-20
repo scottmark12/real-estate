@@ -6,14 +6,8 @@ import FilterToggle from "@/components/filter-toggle";
 import SaveSearchForm from "@/components/save-search-form";
 import { type AlertParams, describeParams } from "@/lib/listing-alerts";
 import ListingsComingSoon from "@/components/listings-coming-soon";
-import {
-  BROKERAGE_CREDIT,
-  PAGE_SIZE,
-  PROPERTY_TYPES,
-  SORTS,
-  getFeaturedListings,
-  searchListings,
-} from "@/lib/premier-feed";
+import { BROKERAGE_CREDIT, PAGE_SIZE, PROPERTY_TYPES, SORTS, searchListings } from "@/lib/premier-feed";
+import { getFeaturedListings } from "@/lib/featured-listings";
 
 export const metadata: Metadata = {
   title: "Homes for Sale in San Diego County",
