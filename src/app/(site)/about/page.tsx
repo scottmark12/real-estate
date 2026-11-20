@@ -1,26 +1,42 @@
 import Image from "next/image";
+import Link from "next/link";
+import { DM_Sans } from "next/font/google";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { DEFAULT_ABOUT, DEFAULT_CONTACT, getSetting } from "@/lib/settings";
 import type { AboutSettings, ContactSettings } from "@/lib/types";
 
 export const revalidate = 0;
 
-const ATTENTION_ITEMS = [
-  { n: "01", label: "Property", body: "What's actually here?" },
-  { n: "02", label: "Numbers", body: "What is it really worth?" },
-  {
-    n: "03",
-    label: "Neighborhood",
-    body: "Why do people want to be here?",
-  },
-  {
-    n: "04",
-    label: "Long view",
-    body: "What makes this better—or worse—ten years from now?",
-  },
+// About page uses the Florida Coastal style: DM Sans for almost everything,
+// Libre Caslon (font-display) for the two big headline moments, sunset
+// orange accents and rounded photos. Scoped to this page for now.
+const dmSans = DM_Sans({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
+
+const ACCENT = "text-[#c65213]";
+const BODY = "text-[#3e5154]";
+const INK = "text-[#152a2e]";
+
+const LENS_ITEMS = [
+  { n: "01", label: "Human Scale", body: "Does it fit the way you'll actually live?" },
+  { n: "02", label: "Potential", body: "What would it take to get there?" },
+  { n: "03", label: "Numbers", body: "Do the numbers make sense?" },
 ];
 
-function EditorialPhoto({
+function Eyebrow({ children }: { children: React.ReactNode }) {
+  return (
+    <p
+      className={`eyebrow inline-block pb-2 ${ACCENT}`}
+      style={{
+        background:
+          "linear-gradient(90deg,#c65213,#e3a66d 60%,transparent) left bottom/100% 3px no-repeat",
+      }}
+    >
+      {children}
+    </p>
+  );
+}
+
+function Photo({
   src,
   alt,
   caption,
@@ -38,9 +54,9 @@ function EditorialPhoto({
   sizes?: string;
 }) {
   return (
-    <div className="flex h-full flex-col">
+    <figure className="flex h-full flex-col">
       <div
-        className={`relative min-h-0 flex-1 overflow-hidden ${boxClassName}`}
+        className={`relative min-h-0 flex-1 overflow-hidden rounded-[14px] bg-[#efe7d8] ${boxClassName}`}
       >
         {src ? (
           <Image
@@ -52,18 +68,19 @@ function EditorialPhoto({
             style={{ objectPosition: focal || "50% 50%" }}
           />
         ) : (
-          <ImagePlaceholder
-            label={placeholderLabel}
-            className="absolute inset-0"
-          />
+          <ImagePlaceholder label={placeholderLabel} className="absolute inset-0" />
         )}
       </div>
       {caption && (
-        <p className="eyebrow mt-2 shrink-0 text-navy/40">{caption}</p>
+        <figcaption className="eyebrow mt-2 shrink-0 text-[#152a2e]/40">
+          {caption}
+        </figcaption>
       )}
-    </div>
+    </figure>
   );
 }
+
+const H2 = `font-sans text-[30px] font-semibold leading-[1.15] tracking-[-0.02em] ${INK} sm:text-[34px]`;
 
 export default async function AboutPage() {
   const [about, contact] = await Promise.all([
@@ -71,188 +88,254 @@ export default async function AboutPage() {
     getSetting<ContactSettings>("contact", DEFAULT_CONTACT),
   ]);
 
-  const bioParagraphs = about.bio
-    .split(/\n\s*\n/)
-    .map((p) => p.trim())
-    .filter(Boolean);
-
   return (
-    <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 max-[600px]:px-6 max-[600px]:pt-10 max-[600px]:pb-12">
-      {/* I care about what makes a place worth living in. */}
+    <div
+      className={`${dmSans.className} mx-auto max-w-[1500px] px-12 pt-16 pb-20 max-[600px]:px-6 max-[600px]:pt-10 max-[600px]:pb-12`}
+    >
+      {/* Where it clicked: Vietnam and the human scale. */}
       <section>
         <div className="grid gap-12 lg:grid-cols-[36fr_64fr] lg:items-stretch">
           <div>
-            <p className="eyebrow text-gold">About</p>
-            <h1 className="mt-3 font-georgia text-[42px] font-normal leading-[1.1] text-navy max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-[48px]">
-              I care about what makes a place worth living in.
+            <Eyebrow>About</Eyebrow>
+            <h1
+              className={`mt-3 font-display text-[42px] font-normal leading-[1.05] ${INK} max-[600px]:text-[38px] sm:text-[50px]`}
+            >
+              The places we live shape how we show up in the world.
             </h1>
-            <p className="mt-5 max-w-sm text-navy/80">
-              I moved across the country to Encinitas for a pretty simple
-              reason: I wanted to live somewhere I actually loved.
+            <p className={`mt-5 max-w-sm ${BODY}`}>
+              A couple of months into traveling, I was in Vietnam, walking past
+              a row of huts with dirt floors that felt warmer than most homes
+              I&apos;d ever been in. Everyone was so friendly, and I realized
+              that kind of community starts at home.
             </p>
-            <p className="mt-4 max-w-sm text-navy/80">
-              The beaches are beautiful, sure. But it&apos;s also walkable
-              neighborhoods, local restaurants, people you run into twice in
-              the same week, and mountains and desert close enough for a
-              weekend. The things that make San Diego valuable aren&apos;t
-              contained within anybody&apos;s property lines.
+            <p className={`mt-4 max-w-sm ${BODY}`}>
+              I call it <span className={`font-semibold ${INK}`}>the human scale</span>:
+              the feeling that a place fits the way you actually live.
             </p>
-            <p className="mt-4 max-w-sm text-navy/80">
-              That&apos;s a big part of what drew me to real estate.
+            <p className={`mt-4 max-w-sm ${BODY}`}>
+              For the first time, I was ready to stop traveling and come home.
+              Those huts made me want to build places like that. I won&apos;t be
+              the one building them, but getting someone into the right home
+              matters just as much.
             </p>
 
             <div className="mt-10 flex items-center gap-4">
-              <div className="relative h-[104px] w-[104px] shrink-0 overflow-hidden">
-                {about.headshot_photo_url ? (
-                  <Image
-                    src={about.headshot_photo_url}
-                    alt={about.name}
-                    fill
-                    sizes="104px"
-                    className="object-cover"
-                  />
-                ) : (
-                  <ImagePlaceholder
-                    label="Headshot"
-                    className="absolute inset-0"
-                  />
-                )}
+              <div className="relative h-[104px] w-[104px] shrink-0 overflow-hidden rounded-[14px]">
+                <Image
+                  src="/images/about/mark-plaid.jpg"
+                  alt={about.name}
+                  fill
+                  sizes="104px"
+                  className="object-cover"
+                  style={{ objectPosition: "50% 38%" }}
+                />
               </div>
               <div>
-                <p className="eyebrow text-navy">{about.name}</p>
-                <p className="mt-1 text-sm text-navy/80">
-                  San Diego, California
-                </p>
-                <p className="text-sm text-navy/80">
-                  Residential + Commercial Real Estate
-                </p>
+                <p className={`eyebrow ${INK}`}>{about.name}</p>
+                <p className={`mt-1 text-sm ${BODY}`}>Encinitas, California</p>
+                <p className={`text-sm ${BODY}`}>Residential Real Estate · San Diego</p>
                 {contact.dre_number && (
-                  <p className="mt-1 text-xs text-navy/40">
-                    {contact.dre_number}
-                  </p>
+                  <p className="mt-1 text-xs text-[#152a2e]/40">{contact.dre_number}</p>
                 )}
               </div>
             </div>
           </div>
 
-          <EditorialPhoto
-            src={about.opening_photo_url}
-            alt={about.opening_photo_caption || "San Diego"}
-            caption={about.opening_photo_caption}
-            focal={about.opening_photo_focal}
-            placeholderLabel="Opening — San Diego Place"
+          <Photo
+            src="/images/about/surf-morning.jpg"
+            alt="Mark holding his surfboard with a friend on the coast after a morning surf"
+            caption="After a morning surf"
+            focal="50% 62%"
+            placeholderLabel="Opening"
             boxClassName="aspect-[1.7/1] w-full lg:aspect-auto lg:h-full"
             sizes="(min-width: 1024px) 64vw, 100vw"
           />
         </div>
       </section>
 
-      {/* Homes are where community starts. */}
-      <section className="mt-16 border-t border-sand pt-16">
-        <p className="eyebrow text-gold">Homes &amp; Community</p>
-        <h2 className="mt-3 font-georgia max-w-2xl text-[34px] font-normal leading-[1.1] text-navy max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-[40px]">
-          {about.quote}
-        </h2>
-
-        <div className="mt-5 flex flex-col gap-4 text-navy/80">
-          <p>
-            My work spans residential brokerage and commercial
-            acquisitions. On the commercial side, I source and evaluate
-            investment opportunities across multifamily and senior
-            housing. On the residential side, I help buyers and sellers
-            make better decisions about property, value, and place.
-          </p>
-          {bioParagraphs.slice(0, 3).map((paragraph, i) => (
-            <p key={i}>{paragraph}</p>
-          ))}
-        </div>
-
-        {/* The six-bedroom duplex Mark bought and renovated near Florida
-            State, kept DOM-adjacent to the paragraph that discusses it so
-            mobile never separates them from that story. */}
-        <div className="mt-8">
-          <EditorialPhoto
-            src={about.community_photo_url}
-            alt="The six-bedroom duplex Mark bought and renovated near Florida State University in Tallahassee, FL"
-            caption={about.community_photo_caption}
-            focal={about.community_photo_focal}
-            placeholderLabel="College Renovation — Tallahassee, FL"
-            boxClassName="aspect-[21/9] w-full"
-            sizes="(min-width: 1024px) 1400px, 100vw"
-          />
-        </div>
-
-        {bioParagraphs[3] && (
-          <div className="mt-8 text-navy/80">
-            <p>{bioParagraphs[3]}</p>
-          </div>
-        )}
-
-        <div className="mt-12 lg:mt-16">
-          <p className="eyebrow text-gold">How I Look at a Property</p>
-        </div>
-        <div className="mt-4 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
-          {ATTENTION_ITEMS.map((item) => (
-            <div
-              key={item.label}
-              className="py-5 first:pt-0 last:pb-0 lg:flex-1 lg:px-6 lg:py-0 lg:first:pl-0 lg:last:pr-0"
-            >
-              <p className="eyebrow whitespace-nowrap text-gold">
-                {item.n} &middot; {item.label}
-              </p>
-              <p className="mt-2 text-navy">{item.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* I've seen a lot of ways to build a good place. There isn't just one. */}
+      {/* How I ended up in Encinitas. */}
       <section className="mt-16 border-t border-sand pt-16">
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 lg:grid-cols-[38fr_31fr_31fr]">
-          <EditorialPhoto
-            src={about.travel_photo_1_url}
-            alt={about.travel_photo_1_caption || "A place Mark has traveled to"}
-            caption={about.travel_photo_1_caption}
-            focal={about.travel_photo_1_focal}
-            placeholderLabel="Travel — Giza"
+          <Photo
+            src="/images/about/white-temple.jpg"
+            alt="Mark at a white temple in Thailand"
+            caption="Thailand"
+            focal="40% 50%"
+            placeholderLabel="Travel"
             boxClassName="aspect-[4/5] w-full"
             sizes="(min-width: 1024px) 38vw, 100vw"
           />
-          <EditorialPhoto
+          <Photo
             src={about.travel_photo_2_url}
             alt={about.travel_photo_2_caption || "A place Mark has traveled to"}
             caption={about.travel_photo_2_caption}
             focal={about.travel_photo_2_focal}
-            placeholderLabel="Travel — Chiang Mai"
+            placeholderLabel="Travel"
             boxClassName="aspect-[4/5] w-full"
             sizes="(min-width: 1024px) 31vw, 100vw"
           />
-          <EditorialPhoto
-            src={about.travel_photo_3_url}
-            alt={about.travel_photo_3_caption || "A place Mark has traveled to"}
-            caption={about.travel_photo_3_caption}
-            focal={about.travel_photo_3_focal}
-            placeholderLabel="Travel — Casablanca"
+          <Photo
+            src="/images/about/quokka.jpg"
+            alt="Mark taking a selfie with a quokka"
+            caption="Western Australia"
+            focal="60% 40%"
+            placeholderLabel="Travel"
             boxClassName="aspect-[4/5] w-full"
             sizes="(min-width: 1024px) 31vw, 100vw"
           />
         </div>
 
         <div className="mt-10">
-          <p className="eyebrow text-gold">A Broader Perspective</p>
+          <Eyebrow>How I Ended Up in Encinitas</Eyebrow>
           <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-12">
-            <h2 className="font-georgia max-w-lg text-[30px] font-normal leading-[1.2] text-navy max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-[34px] lg:flex-1">
-              I&apos;ve seen a lot of ways to build a good place. There
-              isn&apos;t just one.
+            <h2 className={`max-w-lg lg:flex-1 ${H2}`}>
+              Back in Atlanta, though, life felt just okay.
             </h2>
-            <p className="max-w-sm text-sm text-navy/70 lg:flex-1 lg:pt-2">
-              Design taught me to notice buildings. Travel taught me to
-              notice how people use them. I&apos;ve felt completely at home
-              in places where the houses were smaller, streets were
-              tighter, cars were less important, and public space did more
-              of the work. Real estate taught me to understand the numbers
-              that make those places possible.
+            <div className={`flex max-w-xl flex-col gap-4 lg:flex-1 lg:pt-2 ${BODY}`}>
+              <p>
+                A friend I&apos;d met in Thailand had told me, &ldquo;You&apos;d
+                love Encinitas.&rdquo;
+              </p>
+              <p>
+                I wanted morning walks where I could see the water, an active
+                lifestyle, friends who would push me to be better, and a home
+                where I could set down roots and look forward to what&apos;s to
+                come. So I moved across the country.
+              </p>
+              <p>
+                When I got here, it was the first time in a long time that I
+                felt at home. The regulars at the American Legion knew me right
+                away. I found my church across the street and now volunteer
+                there, and I&apos;m joining the Chamber of Commerce and coaching
+                youth lacrosse this coming season.
+              </p>
+              <p>
+                Most mornings I walk to D Street and sit at the top of the
+                stairs looking out at the water. It&apos;s a small town with
+                world class amenities, and the mountains, the desert and a big
+                city airport are all close by. I even talked my sister into
+                moving out.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
+          <Photo
+            src="/images/about/living-room.jpg"
+            alt="Friends hanging out in a living room around a surfboard coffee table"
+            caption="Friends over at home"
+            focal="50% 55%"
+            placeholderLabel="Home"
+            boxClassName="aspect-[4/5] w-full"
+          />
+          <Photo
+            src="/images/about/beach-crew.jpg"
+            alt="Friends on the beach with surfboards lined up against the bluff"
+            caption="Beach day with the crew"
+            focal="50% 75%"
+            placeholderLabel="Beach"
+            boxClassName="aspect-[4/5] w-full"
+          />
+        </div>
+        <div className="mt-6">
+          <Photo
+            src="/images/about/sunset.jpg"
+            alt="Friends silhouetted on the beach at sunset"
+            caption="Sunset, North County"
+            placeholderLabel="Sunset"
+            boxClassName="aspect-[3/2] w-full sm:aspect-[21/8]"
+            sizes="(min-width: 1024px) 1400px, 100vw"
+          />
+        </div>
+      </section>
+
+      {/* Why I do this, and how I look at a home. */}
+      <section className="mt-16 border-t border-sand pt-16">
+        <Eyebrow>Homes &amp; Community</Eyebrow>
+        <h2
+          className={`mt-3 max-w-[16em] font-display text-[34px] font-normal leading-[1.1] ${INK} sm:text-[46px]`}
+        >
+          Helping other people find that same feeling is why I do this.
+        </h2>
+
+        <div className={`mt-5 flex flex-col gap-4 ${BODY}`}>
+          <p>
+            Now the human scale is how I look at every home in San Diego. I
+            majored in marketing at FSU with focuses in entrepreneurship and
+            interior design, renovated and managed a six bedroom property near
+            campus, and have underwritten investment deals ever since. So I can
+            walk into a house and tell you whether it has the human scale, what
+            it would take to get there, and whether the numbers make sense.
+            I&apos;m also part of San Diego&apos;s real estate community through
+            ULI and NAIOP.
+          </p>
+        </div>
+
+        <div className="mt-8">
+          <Photo
+            src={about.community_photo_url}
+            alt="The six bedroom property Mark renovated near Florida State University in Tallahassee, FL"
+            caption={about.community_photo_caption}
+            focal={about.community_photo_focal}
+            placeholderLabel="College Renovation"
+            boxClassName="aspect-[21/9] w-full"
+            sizes="(min-width: 1024px) 1400px, 100vw"
+          />
+        </div>
+
+        <div className="mt-12 lg:mt-16">
+          <Eyebrow>How I Look at a Home</Eyebrow>
+        </div>
+        <div className="mt-4 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
+          {LENS_ITEMS.map((item) => (
+            <div
+              key={item.label}
+              className="py-5 first:pt-0 last:pb-0 lg:flex-1 lg:px-6 lg:py-0 lg:first:pl-0 lg:last:pr-0"
+            >
+              <p className={`eyebrow whitespace-nowrap ${ACCENT}`}>
+                {item.n} &middot; {item.label}
+              </p>
+              <p className={`mt-2 text-[19px] font-medium ${INK}`}>{item.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Working with me + close. */}
+      <section className="mt-16 border-t border-sand pt-16">
+        <Eyebrow>Working With Me</Eyebrow>
+        <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-12">
+          <h2 className={`max-w-lg lg:flex-1 ${H2}`}>
+            It starts with how you want to live, not a list of houses.
+          </h2>
+          <div className={`flex max-w-xl flex-col gap-4 lg:flex-1 lg:pt-2 ${BODY}`}>
+            <p>
+              We&apos;ll talk about your budget, your mornings, your weekends
+              and what makes home feel like home to you. Then I&apos;ll show you
+              where that fits in San Diego, and help you find the right place
+              there.
             </p>
+            <p>
+              Whether you&apos;re moving across the country or across town,
+              I&apos;d love to help you find a place that prioritizes the human
+              scale. Take the quiz to see where you fit, or just ask me
+              anything.
+            </p>
+            <div className="mt-2 flex flex-wrap gap-3">
+              <Link
+                href="/discover"
+                className="rounded-full bg-[#c65213] px-7 py-3.5 text-sm font-bold tracking-[0.02em] text-white transition-colors hover:bg-[#a8440e]"
+              >
+                Find Your Neighborhood
+              </Link>
+              <Link
+                href="/contact"
+                className={`rounded-full border-[1.5px] border-[#dcd3c3] px-7 py-3.5 text-sm font-bold tracking-[0.02em] ${INK} transition-colors hover:border-[#c65213] hover:text-[#c65213]`}
+              >
+                Ask Me Anything
+              </Link>
+            </div>
           </div>
         </div>
       </section>

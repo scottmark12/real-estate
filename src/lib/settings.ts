@@ -96,10 +96,10 @@ export const DEFAULT_NEWSLETTER: NewsletterSettings = {
 
 export const DEFAULT_CONTACT: ContactSettings = {
   city_state: "San Diego, CA",
-  dre_number: "DRE# 01234567",
+  dre_number: "DRE# 02449646",
   instagram_url: "https://instagram.com",
   linkedin_url: "https://linkedin.com",
-  email: "hello@markscottre.com",
+  email: "Markascott@fastmail.com",
   phone: "(619) 555-0100",
   name: "Mark Scott",
   photo_url: "/images/mark-illustration-v2.png",
