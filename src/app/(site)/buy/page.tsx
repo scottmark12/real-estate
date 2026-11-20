@@ -174,7 +174,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         </button>
       </form>
         </div>
-        <p className="absolute right-3 top-3 text-[10px] text-white/60">
+        <p className="absolute bottom-3 right-3 text-[10px] text-white/60">
           Photo:{" "}
           <a
             href="https://unsplash.com/@kcwelch330?utm_source=markscott&utm_medium=referral"
