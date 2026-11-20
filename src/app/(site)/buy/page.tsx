@@ -86,14 +86,14 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
       {/* Photo header with the search on top of it */}
       <section className="full-bleed relative flex min-h-[88vh] items-end overflow-hidden max-[600px]:min-h-[80vh]">
         <Image
-          src="https://images.unsplash.com/photo-1611459711466-5926ba1a3d43?auto=format&fit=crop&w=2400&q=75"
-          alt="Sunset at Crystal Pier, Pacific Beach"
+          src="https://images.unsplash.com/photo-1779231926990-b54ca228c76b?auto=format&fit=crop&w=2400&q=85"
+          alt="Homes on the bluffs above a San Diego cove"
           fill
           priority
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/45" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/35" />
         <div className="relative mx-auto w-full max-w-[1400px] px-6 pb-12 pt-28 sm:px-10 lg:px-12 lg:pb-16">
       <p className="eyebrow text-white/75">Buy</p>
       <h1 className="mt-3 max-w-4xl font-georgia text-[42px] font-normal leading-[1] text-white sm:text-[64px] lg:text-[80px]">
@@ -177,12 +177,12 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         <p className="absolute bottom-3 right-3 text-[10px] text-white/60">
           Photo:{" "}
           <a
-            href="https://unsplash.com/@kcwelch330?utm_source=markscott&utm_medium=referral"
+            href="https://unsplash.com/@meanwhileinsandiego?utm_source=markscott&utm_medium=referral"
             target="_blank"
             rel="noreferrer"
             className="underline"
           >
-            KC Welch
+            Meanwhile In San Diego
           </a>{" "}
           / Unsplash
         </p>
