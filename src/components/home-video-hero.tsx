@@ -19,7 +19,7 @@ export default function HomeVideoHero() {
         src={POSTER.src}
         alt={POSTER.alt}
         fill
-        priority
+        preload
         sizes="100vw"
         className="object-cover"
       />

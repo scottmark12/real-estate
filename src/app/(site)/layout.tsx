@@ -1,16 +1,20 @@
+import { preconnect } from "react-dom";
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { DEFAULT_CONTACT, getSetting } from "@/lib/settings";
 import type { ContactSettings } from "@/lib/types";
 import { SITE_URL } from "@/lib/site";
 
-export const revalidate = 0;
+export const revalidate = 300;
 
 export default async function SiteLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Listing photos come straight from the MLS image host; open that
+  // connection early so the first photos don't wait on DNS and TLS.
+  preconnect("https://myoffice.premieragencyagents.com");
   const contact = await getSetting<ContactSettings>("contact", DEFAULT_CONTACT);
 
   // Local business info for Google ("Encinitas realtor" and similar).

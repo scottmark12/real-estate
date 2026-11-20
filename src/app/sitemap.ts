@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient as createClient } from "@/lib/supabase/public";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import { SITE_URL } from "@/lib/site";
 

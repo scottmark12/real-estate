@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient as createClient } from "@/lib/supabase/public";
 import MarketResearchExplorer from "@/components/market-research-explorer";
 import type { Article } from "@/lib/types";
 import MarketLetterBand from "@/components/market-letter-band";
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 
-export const revalidate = 0;
+export const revalidate = 300;
 
 export default async function InsightsPage() {
   const supabase = await createClient();

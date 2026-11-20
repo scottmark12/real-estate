@@ -38,7 +38,7 @@ export default function NeighborhoodsPage() {
           src="https://images.unsplash.com/photo-1628482348649-e77b92762a73?auto=format&fit=crop&w=2600&q=85"
           alt="The San Diego coastline and hillside neighborhoods on a clear day"
           fill
-          priority
+          preload
           sizes="100vw"
           className="object-cover"
         />

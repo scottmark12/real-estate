@@ -77,7 +77,7 @@ export default async function FeedListingPage({ params }: PageProps<"/buy/[id]">
       {photos.length > 0 && (
         <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-3">
           <div className="col-span-2 aspect-16/10 overflow-hidden bg-cream-deep sm:col-span-3">
-            <img src={photos[0]} alt={fullAddress} className="h-full w-full object-cover" />
+            <img src={photos[0]} alt={fullAddress} fetchPriority="high" className="h-full w-full object-cover" />
           </div>
           {photos.slice(1).map((url, i) => (
             <div key={url} className="aspect-4/3 overflow-hidden bg-cream-deep">
@@ -85,6 +85,7 @@ export default async function FeedListingPage({ params }: PageProps<"/buy/[id]">
                 src={url}
                 alt={`${l.address} photo ${i + 2}`}
                 loading="lazy"
+                decoding="async"
                 className="h-full w-full object-cover"
               />
             </div>

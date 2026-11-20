@@ -8,7 +8,7 @@ import { CATEGORY_LABELS } from "@/components/article-card";
 import ImagePlaceholder from "@/components/image-placeholder";
 import MarketChart from "@/components/market-chart";
 import NewsletterForm from "@/components/newsletter-form";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient as createClient } from "@/lib/supabase/public";
 import {
   DEFAULT_ABOUT,
   DEFAULT_HERO,
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
 };
 
 
-export const revalidate = 0;
+export const revalidate = 300;
 
 function ServiceIcon({
   icon,
@@ -179,7 +179,7 @@ export default async function HomePage() {
               src={hero.image_url}
               alt=""
               fill
-              priority
+              preload
               sizes="100vw"
               className="object-cover"
             />
@@ -228,7 +228,7 @@ export default async function HomePage() {
                   src={hero.image_url}
                   alt=""
                   fill
-                  priority
+                  preload
                   sizes="92vw"
                   className="object-cover"
                 />

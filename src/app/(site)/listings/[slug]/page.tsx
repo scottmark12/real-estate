@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import StatusBadge from "@/components/status-badge";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient as createClient } from "@/lib/supabase/public";
 import { formatPrice, formatStats } from "@/lib/format";
 import type { Listing } from "@/lib/types";
 
-export const revalidate = 0;
+export const revalidate = 300;
 
 export default async function ListingDetailPage({
   params,
@@ -57,7 +57,7 @@ export default async function ListingDetailPage({
               fill
               sizes="(min-width: 640px) 800px, 100vw"
               className="object-cover"
-              priority
+              preload
             />
           </div>
           {gallery.slice(1).map((url) => (

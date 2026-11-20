@@ -117,7 +117,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           src="https://images.unsplash.com/photo-1773099032238-6aaee4fb7f18?auto=format&fit=crop&w=2400&q=85"
           alt="A modern coastal home under palm trees and a clear blue sky"
           fill
-          priority
+          preload
           sizes="100vw"
           className="object-cover"
         />

@@ -45,7 +45,8 @@ export default function Header({ contact }: { contact: ContactSettings }) {
             alt="Mark Scott Real Estate"
             width={954}
             height={370}
-            priority
+            sizes="120px"
+            loading="eager"
             className={`mt-1.5 h-10 w-auto sm:h-11 ${clear ? "brightness-0 invert" : ""}`}
           />
         </Link>

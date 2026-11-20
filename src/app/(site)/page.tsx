@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient as createClient } from "@/lib/supabase/public";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { CATEGORY_LABELS } from "@/components/article-card";
 import MarketLetterBand from "@/components/market-letter-band";
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 
-export const revalidate = 0;
+export const revalidate = 300;
 
 const PRIMARY_PATHS = [
   {

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ValuationModal from "@/components/valuation-modal";
 import type { ContactSettings } from "@/lib/types";
 
@@ -123,6 +123,14 @@ export default function SellPageBody({
   const [heroAddress, setHeroAddress] = useState("");
   const [expandedStep, setExpandedStep] = useState<string | null>(null);
 
+  // Read the deep link in the browser so the page itself stays cached.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("value") === "1") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setValuationOpen(true);
+    }
+  }, []);
+
   return (
     <div>
       {/* Hero: full screen photo with the home value bar on top of it */}
@@ -133,7 +141,7 @@ export default function SellPageBody({
           fill
           sizes="100vw"
           className="object-cover"
-          priority
+          preload
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/15 to-black/35" />
         <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-black/15 to-transparent" />

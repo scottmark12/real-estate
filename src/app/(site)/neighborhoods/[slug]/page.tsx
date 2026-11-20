@@ -75,7 +75,7 @@ export default async function NeighborhoodPage({
               src={photoUrl(photo, 2000)}
               alt={n.name}
               fill
-              priority
+              preload
               sizes="100vw"
               className="object-cover"
             />

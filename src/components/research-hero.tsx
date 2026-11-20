@@ -7,7 +7,7 @@ export default function ResearchHero() {
         src="https://images.unsplash.com/photo-1641353190354-a1d4c14df4da?auto=format&fit=crop&w=2600&q=85"
         alt="The downtown San Diego skyline across the bay"
         fill
-        priority
+        preload
         sizes="100vw"
         className="object-cover"
       />

@@ -11,15 +11,15 @@ export const metadata: Metadata = {
 };
 
 
-export const revalidate = 0;
+export const revalidate = 300;
 
-export default async function SellPage({ searchParams }: PageProps<"/sell">) {
-  const sp = await searchParams;
-  const openValuation = sp.value === "1";
+// Static page. The ?value=1 deep link that opens the home value form is
+// read in the browser (SellPageBody) so this page can be cached.
+export default async function SellPage() {
   const contact = await getSetting<ContactSettings>(
     "contact",
     DEFAULT_CONTACT
   );
 
-  return <SellPageBody contact={contact} openValuation={openValuation} />;
+  return <SellPageBody contact={contact} />;
 }

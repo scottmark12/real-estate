@@ -2,11 +2,11 @@ import { redirect } from "next/navigation";
 import { LISTINGS_PAUSED } from "@/lib/listings-paused";
 import Link from "next/link";
 import ListingCard from "@/components/listing-card";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient as createClient } from "@/lib/supabase/public";
 import type { Listing, ListingCategory, ListingStatus } from "@/lib/types";
 import { STATUS_LABELS } from "@/lib/format";
 
-export const revalidate = 0;
+export const revalidate = 300;
 
 const STATUS_OPTIONS: ListingStatus[] = [
   "for_sale",

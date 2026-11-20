@@ -5,14 +5,14 @@ import MarketLetterBand from "@/components/market-letter-band";
 import ArticleNextSteps from "@/components/article-next-steps";
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-import { createClient } from "@/lib/supabase/server";
+import { createPublicClient as createClient } from "@/lib/supabase/public";
 import { formatDate } from "@/lib/format";
 import { CATEGORY_LABELS } from "@/components/article-card";
 import ArticleBlocks from "@/components/article-blocks";
 import type { Article } from "@/lib/types";
 import { JsonLd, SITE_URL, breadcrumbLd } from "@/lib/site";
 
-export const revalidate = 0;
+export const revalidate = 300;
 
 export async function generateMetadata({
   params,
@@ -114,7 +114,7 @@ export default async function ArticleDetailPage({
             fill
             sizes="(min-width: 640px) 700px, 100vw"
             className="object-cover"
-            priority
+            preload
           />
         </div>
       )}

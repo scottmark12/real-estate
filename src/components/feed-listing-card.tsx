@@ -23,6 +23,7 @@ export default function FeedListingCard({
             src={listing.primary_image_url}
             alt={`${listing.address}, ${listing.city}`}
             loading="lazy"
+            decoding="async"
             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (

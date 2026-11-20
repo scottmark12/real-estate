@@ -80,6 +80,7 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
           alt="Mark Scott Real Estate"
           width={1844}
           height={610}
+          sizes="120px"
           className="h-9 w-auto"
         />
         <p className="eyebrow mt-3 text-ink-muted">{contact.city_state}</p>
@@ -148,6 +149,7 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
             alt="Mark Scott Real Estate"
             width={1844}
             height={610}
+            sizes="180px"
             className="h-14 w-auto"
           />
           <p className="mt-4 max-w-xs text-sm text-ink-muted">
