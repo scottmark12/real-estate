@@ -57,7 +57,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`rounded-lg px-2.5 py-2 text-[16px] font-semibold transition-colors xl:px-3 ${
+                className={`rounded-lg px-2.5 py-2 text-[16px] font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-current xl:px-3 ${
                   clear
                     ? active
                       ? "text-white underline decoration-2 underline-offset-[10px]"
