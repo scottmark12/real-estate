@@ -32,17 +32,17 @@ export default function NeighborhoodsPage() {
   return (
     <div className="mx-auto max-w-[1500px] px-12 pb-20 max-[600px]:px-6 max-[600px]:pb-12">
       {/* Photo hero with search, Florida Coastal style */}
-      <section className="full-bleed relative z-10 flex min-h-[92vh] items-center justify-center pt-20 max-[600px]:min-h-[86vh]">
+      <section className="full-bleed relative z-10 flex min-h-[100svh] items-center justify-center pt-20">
         <div className="absolute inset-0 overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1706738021735-2d01e4e6312b?auto=format&fit=crop&w=2400&q=80"
-          alt="People walking the beach at La Jolla Cove"
+          src="https://images.unsplash.com/photo-1628482348649-e77b92762a73?auto=format&fit=crop&w=2600&q=85"
+          alt="The San Diego coastline and hillside neighborhoods on a clear day"
           fill
           priority
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/45" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/50" />
         </div>
         <div className="relative w-full px-6 py-24 text-center">
           <p className="eyebrow text-white/85">
@@ -70,12 +70,12 @@ export default function NeighborhoodsPage() {
         <p className="absolute bottom-3 right-3 text-[10px] text-white/60">
           Photo:{" "}
           <a
-            href="https://unsplash.com/@nhuenerfuerst?utm_source=markscott&utm_medium=referral"
+            href="https://unsplash.com/@nisargptel?utm_source=markscott&utm_medium=referral"
             target="_blank"
             rel="noreferrer"
             className="underline"
           >
-            Nils Huenerfuerst
+            Nisarg Patel
           </a>{" "}
           / Unsplash
         </p>
