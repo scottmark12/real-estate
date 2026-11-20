@@ -145,6 +145,7 @@ export default function ContactForm() {
           <input
             name={contextField.name}
             placeholder={contextField.placeholder}
+            defaultValue={contextField.name === "location" ? searchParams.get("location") ?? "" : ""}
             className="mt-2 w-full border-0 border-b border-navy/25 bg-transparent px-0 py-2 text-navy placeholder:text-navy/35 focus:border-navy focus:outline-none"
           />
         </label>

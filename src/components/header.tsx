@@ -10,6 +10,7 @@ import type { ContactSettings } from "@/lib/types";
 
 const NAV_LINKS = [
   { href: "/discover", label: "Discover" },
+  { href: "/neighborhoods", label: "Neighborhoods" },
   { href: "/buy", label: "Buy" },
   { href: "/sell", label: "Sell" },
   { href: "/insights", label: "Market Research" },

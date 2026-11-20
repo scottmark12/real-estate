@@ -306,7 +306,7 @@ export default async function AboutPage() {
             </p>
             <div className="mt-2 flex flex-wrap gap-3">
               <Link
-                href="/discover"
+                href="/quiz"
                 className="border border-blue bg-blue px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
               >
                 Find Your Neighborhood
