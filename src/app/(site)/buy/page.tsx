@@ -30,6 +30,14 @@ function short(n: number) {
 const field =
   "w-full bg-white px-5 py-4 text-sm text-navy placeholder:text-navy/40 focus:bg-cream-deep focus:outline-none";
 
+const SD_CITIES = [
+  "Alpine", "Bonita", "Bonsall", "Cardiff By The Sea", "Carlsbad", "Chula Vista",
+  "Coronado", "Del Mar", "El Cajon", "Encinitas", "Escondido", "Fallbrook",
+  "Imperial Beach", "Julian", "La Jolla", "La Mesa", "Lakeside", "Lemon Grove",
+  "National City", "Oceanside", "Poway", "Ramona", "Rancho Santa Fe", "San Diego",
+  "San Marcos", "Santee", "Solana Beach", "Spring Valley", "Valley Center", "Vista",
+];
+
 export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   const sp = await searchParams;
   // What the visitor typed wins over a neighborhood's pinned filters, and a
@@ -41,8 +49,11 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
     .replace(/,?\s*\b(CA|California)\b\.?/i, " ")
     .replace(/[,\s]+/g, " ")
     .trim();
-  const q = typedZip ? typedRest : typed.replace(/,?\s*\b(CA|California)\b\.?$/i, "").trim();
-  const city = typed ? "" : one(sp.city) ?? "";
+  const typedPlace = typedZip ? typedRest : typed.replace(/,?\s*\b(CA|California)\b\.?$/i, "").trim();
+  // A known city becomes an exact city filter; anything else stays a keyword.
+  const typedCity = SD_CITIES.find((c) => c.toLowerCase() === typedPlace.toLowerCase()) ?? "";
+  const q = typedCity ? "" : typedPlace;
+  const city = typedCity || (typed ? "" : one(sp.city) ?? "");
   const zip = typedZip || (typed ? "" : one(sp.zip) ?? "");
   const area = typed ? "" : one(sp.area) ?? "";
   const searchText = typed;
