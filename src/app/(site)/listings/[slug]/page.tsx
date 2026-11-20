@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+import { LISTINGS_PAUSED } from "@/lib/listings-paused";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -11,6 +13,7 @@ export const revalidate = 0;
 export default async function ListingDetailPage({
   params,
 }: PageProps<"/listings/[slug]">) {
+  if (LISTINGS_PAUSED) redirect("/buy");
   const { slug } = await params;
   const supabase = await createClient();
   const { data } = await supabase

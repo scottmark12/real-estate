@@ -4,6 +4,8 @@ import { createClient } from "@/lib/supabase/server";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { CATEGORY_LABELS } from "@/components/article-card";
 import type { Article, Listing } from "@/lib/types";
+import { LISTINGS_PAUSED } from "@/lib/listings-paused";
+
 
 export const revalidate = 0;
 
@@ -68,7 +70,7 @@ async function getElsewhere(): Promise<ElsewhereItem[]> {
   ]);
 
   const articles = (articlesRes.data as Article[] | null) ?? [];
-  const listings = (listingsRes.data as Listing[] | null) ?? [];
+  const listings = LISTINGS_PAUSED ? [] : ((listingsRes.data as Listing[] | null) ?? []);
 
   const items: ElsewhereItem[] = [
     ...articles.map((a) => ({

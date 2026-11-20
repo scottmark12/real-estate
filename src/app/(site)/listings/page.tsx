@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+import { LISTINGS_PAUSED } from "@/lib/listings-paused";
 import Link from "next/link";
 import ListingCard from "@/components/listing-card";
 import { createClient } from "@/lib/supabase/server";
@@ -22,6 +24,7 @@ const CATEGORY_LABELS: Record<ListingCategory, string> = {
 export default async function ListingsPage({
   searchParams,
 }: PageProps<"/listings">) {
+  if (LISTINGS_PAUSED) redirect("/buy");
   const params = await searchParams;
   const status = typeof params.status === "string" ? params.status : undefined;
   const category =

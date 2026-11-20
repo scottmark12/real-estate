@@ -5,6 +5,8 @@ import ListingCard from "@/components/listing-card";
 import { createClient } from "@/lib/supabase/server";
 import { formatPrice, formatStats } from "@/lib/format";
 import type { Listing } from "@/lib/types";
+import { LISTINGS_PAUSED } from "@/lib/listings-paused";
+import ListingsComingSoon from "@/components/listings-coming-soon";
 
 export const revalidate = 0;
 
@@ -20,6 +22,7 @@ function heroMetadata(listing: Listing) {
 }
 
 export default async function BuyPage() {
+  if (LISTINGS_PAUSED) return <ListingsComingSoon />;
   const supabase = await createClient();
   const { data } = await supabase
     .from("listings")
