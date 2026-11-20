@@ -191,6 +191,25 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
           </div>
         </div>
 
+        {socials.length === 0 && (
+          <div className="hidden items-end justify-end lg:flex">
+            <Link
+              href="/about"
+              aria-label="About Mark"
+              className="group flex h-40 w-40 items-end justify-center overflow-hidden rounded-full bg-cream ring-1 ring-ink-cream/20 transition-transform hover:-rotate-3"
+            >
+              <Image
+                src="/images/mark-headshot-illustration.png"
+                alt="Drawing of Mark Scott"
+                width={993}
+                height={866}
+                sizes="160px"
+                className="w-[118%] max-w-none translate-y-1"
+              />
+            </Link>
+          </div>
+        )}
+
         {socials.length > 0 && (
           <div className="lg:border-l lg:border-ink-cream/10 lg:pl-8">
             <p className="eyebrow text-ink-muted">Follow</p>
