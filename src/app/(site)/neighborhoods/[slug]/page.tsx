@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
+import NeighborhoodCard from "@/components/neighborhood-card";
+import { NEIGHBORHOOD_PHOTOS, photoCredit, photoUrl } from "@/lib/neighborhood-photos";
 import RecentSalesForm from "@/components/recent-sales-form";
 import FeedListingCard from "@/components/feed-listing-card";
 import { searchListings } from "@/lib/premier-feed";
@@ -47,38 +50,66 @@ export default async function NeighborhoodPage({
   if (!n) notFound();
 
   const nearby = nearbyNeighborhoods(n);
+  const photo = NEIGHBORHOOD_PHOTOS[n.slug];
+  const credit = photo ? photoCredit(photo) : null;
   const area = NEIGHBORHOOD_FEED[n.slug] ?? { q: n.name };
   const homes = await searchListings({ ...area, sort: "recent", limit: 6 });
   const homesHref = buyHref(n.slug, n.name);
 
   return (
-    <div className="mx-auto max-w-[1500px] px-12 pt-12 pb-20 max-[600px]:px-6 max-[600px]:pt-8 max-[600px]:pb-12">
-      <p className="text-sm text-navy/60">
-        <Link href="/neighborhoods" className="hover:text-navy">
-          Neighborhoods
-        </Link>{" "}
-        / {n.region}
-      </p>
-
-      {/* Header */}
-      <section className="mt-8 grid gap-10 lg:grid-cols-[60fr_40fr] lg:items-end">
-        <div>
-          <p className="eyebrow text-gold">{n.region}</p>
-          <h1 className="mt-3 font-georgia text-[48px] font-normal leading-[1.05] text-navy max-[600px]:text-[40px] sm:text-[60px]">
-            {n.name}
-          </h1>
-          <p className="mt-5 max-w-xl text-lg leading-snug text-navy">{n.tagline}</p>
-          <p className="eyebrow mt-5 text-navy/50">{n.tags.join(" · ")}</p>
+    <div className="mx-auto max-w-[1500px] px-12 pb-20 max-[600px]:px-6 max-[600px]:pb-12">
+      {/* Photo hero */}
+      <section className="relative -mx-12 overflow-hidden max-[600px]:-mx-6">
+        <div className="relative aspect-[4/3] w-full sm:aspect-[21/9]">
+          {photo && (
+            <Image
+              src={photoUrl(photo, 2000)}
+              alt={n.name}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
+          <div className="absolute inset-x-0 bottom-0 px-12 pb-10 max-[600px]:px-6 max-[600px]:pb-6">
+            <p className="text-sm text-white/70">
+              <Link href="/neighborhoods" className="hover:text-white">
+                Neighborhoods
+              </Link>{" "}
+              / {n.region}
+            </p>
+            <h1 className="mt-2 font-georgia text-[48px] font-normal leading-[1.02] text-white max-[600px]:text-[38px] sm:text-[72px]">
+              {n.name}
+            </h1>
+            <p className="mt-3 max-w-xl text-lg leading-snug text-white/90 max-[600px]:text-base">
+              {n.tagline}
+            </p>
+          </div>
         </div>
-        <div className="border-t-2 border-navy pt-4">
+        {credit && (
+          <p className="px-12 pt-2 text-right text-[11px] text-navy/40 max-[600px]:px-6">
+            Photo by{" "}
+            <a href={credit.href} target="_blank" rel="noreferrer" className="underline">
+              {credit.name}
+            </a>{" "}
+            on{" "}
+            <a href={credit.unsplash} target="_blank" rel="noreferrer" className="underline">
+              Unsplash
+            </a>
+          </p>
+        )}
+      </section>
+
+      {/* Quick facts */}
+      <section className="mt-10 grid gap-8 sm:grid-cols-[1fr_auto] sm:items-end">
+        <p className="eyebrow text-navy/50">{n.tags.join(" · ")}</p>
+        <div className="border-t-2 border-navy pt-3 sm:min-w-[260px]">
           <p className="eyebrow text-navy/50">Typical house</p>
-          <p className="mt-2 font-georgia text-[28px] leading-tight text-navy">
+          <p className="mt-1 font-georgia text-[26px] leading-tight text-navy">
             {PRICE_TIERS[n.priceTier]}
           </p>
-          <p className="mt-2 text-xs leading-relaxed text-navy/50">
-            A rough range, not a median. Prices vary a lot by street, so ask me
-            for recent sales.
-          </p>
+          <p className="mt-1 text-xs text-navy/50">A rough range, not a median.</p>
         </div>
       </section>
 
@@ -197,12 +228,9 @@ export default async function NeighborhoodPage({
       {nearby.length > 0 && (
         <section className="mt-12 border-t border-sand pt-12">
           <p className="eyebrow text-gold">Nearby in {n.region}</p>
-          <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-3">
             {nearby.map((o) => (
-              <Link key={o.slug} href={`/neighborhoods/${o.slug}`} className="group border-t-2 border-navy pt-4">
-                <h3 className="font-georgia text-[22px] text-navy group-hover:text-blue">{o.name}</h3>
-                <p className="mt-2 text-sm text-navy/80">{o.tagline}</p>
-              </Link>
+              <NeighborhoodCard key={o.slug} n={o} />
             ))}
           </div>
         </section>

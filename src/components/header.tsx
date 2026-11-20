@@ -59,7 +59,16 @@ export default function Header({ contact }: { contact: ContactSettings }) {
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
-          <span className="eyebrow text-navy/60">{contact.city_state}</span>
+          {contact.phone ? (
+            <a
+              href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
+              className="text-sm font-medium text-navy hover:text-blue"
+            >
+              {contact.phone}
+            </a>
+          ) : (
+            <span className="eyebrow text-navy/60">{contact.city_state}</span>
+          )}
           <button
             type="button"
             onClick={() => setNewsletterOpen(true)}

@@ -12,6 +12,7 @@ import { type FeedListing, getFeaturedListings, searchListings } from "@/lib/pre
 import { DEFAULT_MARKET_CHART, getSetting } from "@/lib/settings";
 import type { MarketChartSettings } from "@/lib/types";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
+import NeighborhoodCard from "@/components/neighborhood-card";
 
 
 export const revalidate = 0;
@@ -123,7 +124,9 @@ async function getHomeListings(): Promise<{ featured: boolean; listings: FeedLis
   return { featured: false, listings: result?.listings.slice(0, 4) ?? [] };
 }
 
-const REGION_COUNT = new Set(NEIGHBORHOODS.map((n) => n.region)).size;
+const HOME_NEIGHBORHOODS = ["encinitas", "la-jolla", "north-park", "coronado"]
+  .map((slug) => NEIGHBORHOODS.find((n) => n.slug === slug))
+  .filter((n) => n != null);
 
 export default async function HomePage() {
   const [radar, elsewhere, homeListings, marketChart] = await Promise.all([
@@ -425,28 +428,24 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Neighborhoods teaser */}
+      {/* Neighborhoods — photo cards */}
       <section className="mt-14 px-4 max-[600px]:px-6 lg:px-0">
-        <Link
-          href="/neighborhoods"
-          className="group grid gap-6 border border-sand p-8 transition-colors hover:border-blue sm:grid-cols-[1fr_auto] sm:items-center"
-        >
-          <div>
-            <p className="eyebrow text-gold">Neighborhood Guide</p>
-            <h2 className="mt-2 font-display text-[30px] font-normal leading-[1.1] text-navy max-[600px]:text-[24px]">
-              {NEIGHBORHOODS.length} places across San Diego County, on one map.
-            </h2>
-            <p className="mt-2 max-w-xl text-navy/70">
-              What each one is actually like, roughly what it costs, and the
-              honest trade offs. {REGION_COUNT} regions, from the coast to the
-              backcountry.
-            </p>
-          </div>
-          <span className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4">
-            Explore the Map
-            <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">&rarr;</span>
-          </span>
-        </Link>
+        <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
+          <p className="eyebrow text-gold">Neighborhoods</p>
+          <Link
+            href="/neighborhoods"
+            className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
+          >
+            All {NEIGHBORHOODS.length} &rarr;
+          </Link>
+        </div>
+        <div className="-mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 max-[600px]:-mx-6 max-[600px]:scroll-px-6 max-[600px]:px-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-6 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+          {HOME_NEIGHBORHOODS.map((n) => (
+            <div key={n.slug} className="w-[78%] shrink-0 snap-start sm:w-auto">
+              <NeighborhoodCard n={n} />
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Elsewhere */}
