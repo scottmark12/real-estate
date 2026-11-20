@@ -196,15 +196,14 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
             <Link
               href="/about"
               aria-label="About Mark"
-              className="group flex h-40 w-40 items-end justify-center overflow-hidden rounded-full bg-cream ring-1 ring-ink-cream/20 transition-transform hover:-rotate-3"
+              className="relative block h-40 w-40 overflow-hidden rounded-full ring-1 ring-ink-cream/20 transition-opacity hover:opacity-90"
             >
               <Image
-                src="/images/mark-headshot-illustration.png"
-                alt="Drawing of Mark Scott"
-                width={993}
-                height={866}
+                src="/images/mark-headshot.jpeg"
+                alt="Mark Scott"
+                fill
                 sizes="160px"
-                className="w-[118%] max-w-none translate-y-1"
+                className="object-cover"
               />
             </Link>
           </div>
