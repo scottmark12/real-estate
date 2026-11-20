@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import NeighborhoodMap from "@/components/neighborhood-map";
 import { NEIGHBORHOODS, PRICE_TIERS, REGIONS } from "@/lib/neighborhoods";
 
 export const metadata: Metadata = {
@@ -30,6 +31,10 @@ export default function NeighborhoodsPage() {
           Where Should I Live? Take the Quiz
         </Link>
       </div>
+
+      <section className="mt-12">
+        <NeighborhoodMap />
+      </section>
 
       {REGIONS.map((region) => (
         <section key={region} className="mt-16 border-t border-sand pt-10">

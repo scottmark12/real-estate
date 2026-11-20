@@ -46,6 +46,8 @@ export type Neighborhood = {
   tradeoffs: string;
   tags: string[];
   traits: Traits;
+  lat: number;
+  lng: number;
   markTake?: string;
 };
 
@@ -97,6 +99,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   // Coastal North County
   {
     slug: "oceanside",
+    lat: 33.1959,
+    lng: -117.3795,
     name: "Oceanside",
     region: "Coastal North County",
     priceTier: 1,
@@ -112,6 +116,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "carlsbad",
+    lat: 33.1581,
+    lng: -117.3506,
     name: "Carlsbad",
     region: "Coastal North County",
     priceTier: 3,
@@ -127,6 +133,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "leucadia",
+    lat: 33.067,
+    lng: -117.303,
     name: "Leucadia",
     region: "Coastal North County",
     priceTier: 3,
@@ -142,6 +150,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "encinitas",
+    lat: 33.0459,
+    lng: -117.293,
     name: "Encinitas",
     region: "Coastal North County",
     priceTier: 3,
@@ -157,6 +167,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "cardiff",
+    lat: 33.0197,
+    lng: -117.2797,
     name: "Cardiff by the Sea",
     region: "Coastal North County",
     priceTier: 4,
@@ -172,6 +184,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "solana-beach",
+    lat: 32.9912,
+    lng: -117.2711,
     name: "Solana Beach",
     region: "Coastal North County",
     priceTier: 4,
@@ -187,6 +201,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "del-mar",
+    lat: 32.9595,
+    lng: -117.2653,
     name: "Del Mar",
     region: "Coastal North County",
     priceTier: 4,
@@ -204,6 +220,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   // Inland North County
   {
     slug: "rancho-santa-fe",
+    lat: 33.0203,
+    lng: -117.2028,
     name: "Rancho Santa Fe",
     region: "Inland North County",
     priceTier: 4,
@@ -219,6 +237,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "carmel-valley",
+    lat: 32.944,
+    lng: -117.216,
     name: "Carmel Valley",
     region: "Inland North County",
     priceTier: 3,
@@ -234,6 +254,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "4s-ranch",
+    lat: 33.016,
+    lng: -117.108,
     name: "4S Ranch",
     region: "Inland North County",
     priceTier: 3,
@@ -249,6 +271,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "san-marcos",
+    lat: 33.1434,
+    lng: -117.1661,
     name: "San Marcos",
     region: "Inland North County",
     priceTier: 2,
@@ -264,6 +288,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "escondido",
+    lat: 33.1192,
+    lng: -117.0864,
     name: "Escondido",
     region: "Inland North County",
     priceTier: 1,
@@ -281,6 +307,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   // Central Coast
   {
     slug: "la-jolla",
+    lat: 32.8328,
+    lng: -117.2713,
     name: "La Jolla",
     region: "Central Coast",
     priceTier: 4,
@@ -296,6 +324,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "pacific-beach",
+    lat: 32.7978,
+    lng: -117.24,
     name: "Pacific Beach",
     region: "Central Coast",
     priceTier: 3,
@@ -311,6 +341,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "mission-beach",
+    lat: 32.77,
+    lng: -117.252,
     name: "Mission Beach",
     region: "Central Coast",
     priceTier: 4,
@@ -326,6 +358,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "point-loma",
+    lat: 32.728,
+    lng: -117.238,
     name: "Point Loma",
     region: "Central Coast",
     priceTier: 3,
@@ -341,6 +375,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "ocean-beach",
+    lat: 32.749,
+    lng: -117.248,
     name: "Ocean Beach",
     region: "Central Coast",
     priceTier: 3,
@@ -358,6 +394,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   // Urban Core
   {
     slug: "little-italy",
+    lat: 32.723,
+    lng: -117.169,
     name: "Little Italy",
     region: "Urban Core",
     priceTier: 2,
@@ -373,6 +411,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "north-park",
+    lat: 32.748,
+    lng: -117.13,
     name: "North Park",
     region: "Urban Core",
     priceTier: 2,
@@ -388,6 +428,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "south-park",
+    lat: 32.724,
+    lng: -117.129,
     name: "South Park",
     region: "Urban Core",
     priceTier: 2,
@@ -403,6 +445,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "hillcrest",
+    lat: 32.748,
+    lng: -117.164,
     name: "Hillcrest",
     region: "Urban Core",
     priceTier: 1,
@@ -418,6 +462,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "kensington",
+    lat: 32.764,
+    lng: -117.106,
     name: "Kensington",
     region: "Urban Core",
     priceTier: 3,
@@ -433,6 +479,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "mission-hills",
+    lat: 32.752,
+    lng: -117.184,
     name: "Mission Hills",
     region: "Urban Core",
     priceTier: 3,
@@ -450,6 +498,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   // South Bay & Coronado
   {
     slug: "coronado",
+    lat: 32.6859,
+    lng: -117.1831,
     name: "Coronado",
     region: "South Bay & Coronado",
     priceTier: 4,
@@ -465,6 +515,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "imperial-beach",
+    lat: 32.5839,
+    lng: -117.1131,
     name: "Imperial Beach",
     region: "South Bay & Coronado",
     priceTier: 1,
@@ -480,6 +532,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "chula-vista",
+    lat: 32.6401,
+    lng: -117.0842,
     name: "Chula Vista",
     region: "South Bay & Coronado",
     priceTier: 1,
@@ -495,6 +549,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "eastlake",
+    lat: 32.643,
+    lng: -116.969,
     name: "Eastlake",
     region: "South Bay & Coronado",
     priceTier: 2,
@@ -512,6 +568,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   // East County
   {
     slug: "la-mesa",
+    lat: 32.7678,
+    lng: -117.0231,
     name: "La Mesa",
     region: "East County",
     priceTier: 1,
@@ -527,6 +585,8 @@ export const NEIGHBORHOODS: Neighborhood[] = [
   },
   {
     slug: "alpine",
+    lat: 32.8351,
+    lng: -116.7664,
     name: "Alpine",
     region: "East County",
     priceTier: 1,
