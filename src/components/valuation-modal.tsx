@@ -1,5 +1,7 @@
 "use client";
 
+import ReplyNote from "@/components/reply-note";
+
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { createPortal } from "react-dom";
 
@@ -269,6 +271,7 @@ export default function ValuationModal({
                 >
                   {status === "loading" ? "Sending…" : "Request My Valuation →"}
                 </button>
+                <ReplyNote text="Mark prepares every valuation himself and replies the same day." />
               </div>
               {status === "error" && (
                 <p className="text-sm text-red-700">{message}</p>

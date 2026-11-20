@@ -1,5 +1,7 @@
 "use client";
 
+import ReplyNote from "@/components/reply-note";
+
 import { useState, type FormEvent } from "react";
 
 // "Get recent sales in X" — the lead capture on each neighborhood page.
@@ -59,6 +61,7 @@ export default function RecentSalesForm({ place }: { place: string }) {
         {status === "loading" ? "Sending…" : `Send Me ${place} Sales`}
       </button>
       {status === "error" && <p className="text-xs text-red-600 sm:col-span-2">{error}</p>}
+      <ReplyNote className="sm:col-span-2" text="Mark pulls these himself and sends them the same day." />
     </form>
   );
 }

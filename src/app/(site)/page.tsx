@@ -15,6 +15,7 @@ import type { MarketChartSettings } from "@/lib/types";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import NeighborhoodCard from "@/components/neighborhood-card";
 import HomeVideoHero from "@/components/home-video-hero";
+import MeetMark from "@/components/meet-mark";
 
 
 export const revalidate = 0;
@@ -166,6 +167,8 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      <MeetMark />
 
       {/* Primary paths — mobile */}
       <section className="border-b border-sand py-3 lg:hidden">

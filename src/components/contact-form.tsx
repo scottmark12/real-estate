@@ -1,5 +1,7 @@
 "use client";
 
+import ReplyNote from "@/components/reply-note";
+
 import { useSearchParams } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
@@ -170,10 +172,7 @@ export default function ContactForm() {
         >
           {status === "loading" ? "Sending…" : "Send to Mark →"}
         </button>
-        <p className="text-sm italic text-navy/50">
-          I&apos;ll get back to you personally, usually within one business
-          day.
-        </p>
+        <ReplyNote />
       </div>
       {status === "error" && (
         <p className="text-sm text-red-700">{message}</p>

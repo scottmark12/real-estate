@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Suspense } from "react";
 import ContactForm from "@/components/contact-form";
-import ImagePlaceholder from "@/components/image-placeholder";
 import { DEFAULT_CONTACT, getSetting } from "@/lib/settings";
 import type { ContactSettings } from "@/lib/types";
 
@@ -82,23 +81,15 @@ export default async function ContactPage() {
             )}
           </div>
 
-          <div className="relative mt-6 lg:absolute lg:inset-x-0 lg:bottom-0 lg:z-20">
-            <div className="relative ml-[8%] w-[101%] max-w-[546px]">
-              {contact.photo_url ? (
-                <Image
-                  src={contact.photo_url}
-                  alt={contact.photo_caption || "Mark Scott"}
-                  width={993}
-                  height={866}
-                  sizes="(min-width: 1024px) 22vw, 78vw"
-                  className="h-auto w-full"
-                />
-              ) : (
-                <ImagePlaceholder
-                  label="Contact — Editorial Photograph"
-                  className="aspect-[993/866] w-full"
-                />
-              )}
+          <div className="relative mt-8 lg:mt-10">
+            <div className="relative aspect-square w-full max-w-[360px] overflow-hidden bg-cream-deep">
+              <Image
+                src="/images/mark-headshot.jpeg"
+                alt="Mark Scott"
+                fill
+                sizes="(min-width: 1024px) 360px, 80vw"
+                className="object-cover"
+              />
               {contact.handwritten_note && (
                 <p className="font-[family-name:var(--font-hand)] absolute left-0 top-[64%] max-w-[7rem] -translate-x-[40%] text-xl leading-snug text-navy/80">
                   {contact.handwritten_note}
