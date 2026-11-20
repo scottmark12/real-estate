@@ -4,7 +4,7 @@ import NeighborhoodQuiz from "@/components/neighborhood-quiz";
 export const metadata: Metadata = {
   title: "Find Your San Diego Neighborhood | Mark Scott Real Estate",
   description:
-    "Eight quick questions about how you want to live, and your top three San Diego neighborhoods.",
+    "A few quick questions about how you want to live, and your top three San Diego neighborhoods.",
 };
 
 export default function QuizPage() {
@@ -15,7 +15,7 @@ export default function QuizPage() {
         <h1 className="mt-3 font-georgia text-[42px] font-normal leading-[1.1] text-navy max-[600px]:text-[34px] sm:text-[48px]">
           Find the part of San Diego that fits how you live.
         </h1>
-        <p className="mt-4 text-navy/70">Eight questions, about two minutes.</p>
+        <p className="mt-4 text-navy/70">A few questions, about two minutes.</p>
       </div>
       <div className="mt-12">
         <NeighborhoodQuiz />

@@ -10,8 +10,11 @@ type Question = {
   title: string;
   help?: string;
   multi?: number; // max picks
+  showIf?: (a: Answers) => boolean;
   options: Option[];
 };
+
+type Answers = Record<string, string[]>;
 
 // Every question is about the place someone wants, never about who they are.
 const QUESTIONS: Question[] = [
@@ -36,44 +39,58 @@ const QUESTIONS: Question[] = [
     ],
   },
   {
-    id: "urban",
-    title: "How much going on around you?",
+    id: "street",
+    title: "What do you want right outside your door?",
     options: [
-      { value: "3", label: "City energy" },
-      { value: "2", label: "A walkable village" },
-      { value: "1", label: "Suburban and calm" },
-      { value: "0", label: "As quiet as it gets" },
+      { value: "3", label: "A downtown core: high rises, restaurants, nightlife" },
+      { value: "2", label: "A walkable village main street" },
+      { value: "1", label: "Quiet neighborhood streets" },
+      { value: "0", label: "Space, trees and privacy" },
     ],
   },
   {
     id: "beach",
-    title: "How close to the beach?",
+    title: "How close to the ocean?",
     options: [
+      { value: "front", label: "Oceanfront. I want to see it from my window" },
       { value: "walk", label: "Walk to the sand" },
       { value: "drive", label: "A short drive is fine" },
-      { value: "none", label: "Doesn't matter" },
+      { value: "none", label: "Doesn't matter to me" },
     ],
   },
   {
     id: "work",
     title: "Where's work?",
     options: [
-      { value: "remote", label: "Remote" },
+      { value: "remote", label: "Remote, or I don't commute" },
       { value: "downtown", label: "Downtown San Diego" },
       { value: "north", label: "Carlsbad, Sorrento Valley or UTC" },
       { value: "other", label: "Somewhere else" },
     ],
   },
   {
+    id: "commute",
+    title: "How long a commute are you okay with, each way?",
+    showIf: (a) => ["downtown", "north"].includes(a.work?.[0] ?? ""),
+    options: [
+      { value: "3", label: "Under 20 minutes" },
+      { value: "2", label: "Up to 30 minutes" },
+      { value: "1", label: "Up to 45 minutes" },
+      { value: "0", label: "It doesn't bother me" },
+    ],
+  },
+  {
     id: "weekend",
-    title: "Your perfect weekend?",
+    title: "What does a perfect Saturday look like?",
     help: "Pick up to two",
     multi: 2,
     options: [
-      { value: "surf", label: "Surfing" },
-      { value: "trails", label: "Hiking and trails" },
-      { value: "dining", label: "Restaurants and bars" },
-      { value: "golf", label: "Golf and horses" },
+      { value: "surf", label: "Dawn patrol surf, then a breakfast burrito" },
+      { value: "trails", label: "A long hike or mountain bike ride in the hills" },
+      { value: "market", label: "Farmers market, then a long lunch on a patio" },
+      { value: "night", label: "Live music, cocktails and a late night out" },
+      { value: "golf", label: "A tee time, or a trail ride on horseback" },
+      { value: "home", label: "Garden projects and a quiet morning at home" },
     ],
   },
   {
@@ -81,56 +98,64 @@ const QUESTIONS: Question[] = [
     title: "What kind of home?",
     options: [
       { value: "condo", label: "Condo or townhome" },
-      { value: "house", label: "A house" },
-      { value: "land", label: "Land and space" },
+      { value: "house", label: "A house with a yard" },
+      { value: "land", label: "Land, room for a shop, horses or a garden" },
     ],
   },
   {
-    id: "priority",
-    title: "If you had to pick one, what matters most?",
+    id: "tradeoff",
+    title: "Smaller place in the perfect spot, or more space a little farther out?",
     options: [
-      { value: "price", label: "Price" },
-      { value: "beach", label: "The beach" },
-      { value: "walk", label: "Walkability" },
-      { value: "space", label: "Space" },
+      { value: "spot", label: "Smaller place, perfect spot" },
+      { value: "middle", label: "Somewhere in the middle" },
+      { value: "space", label: "More space, farther out" },
     ],
   },
 ];
 
-type Answers = Record<string, string[]>;
-
 function scoreNeighborhood(n: Neighborhood, a: Answers): number | null {
   const one = (id: string) => a[id]?.[0];
-  const priority = one("priority");
-  const w = (key: string) => (priority === key ? 2 : 1);
   const tr = n.traits;
   let score = 0;
 
   const budget = one("budget");
-  if (budget && budget !== "any") {
-    const b = Number(budget);
+  const b = budget && budget !== "any" ? Number(budget) : null;
+  if (b !== null) {
     if (n.priceTier > b + 1) return null;
-    if (n.priceTier === b) score += 3 * w("price");
-    else if (n.priceTier === b - 1) score += 1 * w("price");
+    if (n.priceTier === b) score += 3;
+    else if (n.priceTier === b - 1) score += 1;
   }
 
-  const urban = one("urban");
-  if (urban) score += (3 - Math.abs(tr.urban - Number(urban))) * w("walk");
+  const street = one("street");
+  if (street) score += 2 * (3 - Math.abs(tr.urban - Number(street)));
 
   const beach = one("beach");
-  if (beach === "walk") score += 2 * tr.beach * w("beach");
-  if (beach === "drive") score += 1 * tr.beach * w("beach");
+  if (beach === "front") score += tr.beach === 3 ? 9 : tr.beach;
+  if (beach === "walk") score += 2 * tr.beach;
+  if (beach === "drive") score += tr.beach;
 
   const work = one("work");
-  if (work === "downtown") score += 2 * tr.commuteDowntown;
-  if (work === "north") score += 2 * tr.commuteNorth;
+  if (work === "downtown" || work === "north") {
+    const c = work === "downtown" ? tr.commuteDowntown : tr.commuteNorth;
+    const ok = Number(one("commute") ?? "1");
+    score += c >= ok ? 3 : -4 * (ok - c);
+  }
 
   for (const pick of a.weekend ?? []) {
-    score += 2 * tr[pick as "surf" | "trails" | "dining" | "golf"];
+    if (pick === "surf") score += 2 * tr.surf;
+    if (pick === "trails") score += 2 * tr.trails;
+    if (pick === "market") score += 2 * tr.dining + (tr.urban === 2 ? 2 : 0);
+    if (pick === "night") score += tr.dining + tr.urban;
+    if (pick === "golf") score += 2 * tr.golf;
+    if (pick === "home") score += 2 * tr.land + (3 - tr.urban);
   }
 
   const home = one("home");
-  if (home) score += 2 * tr[home as "condo" | "house" | "land"] * w("space");
+  if (home) score += 2 * tr[home as "condo" | "house" | "land"];
+
+  const tradeoff = one("tradeoff");
+  if (tradeoff === "spot") score += tr.beach + tr.dining;
+  if (tradeoff === "space") score += tr.house + 2 * tr.land + (b !== null && n.priceTier < b ? 2 : 0);
 
   return score;
 }
@@ -138,7 +163,8 @@ function scoreNeighborhood(n: Neighborhood, a: Answers): number | null {
 export default function NeighborhoodQuiz() {
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
-  const done = step >= QUESTIONS.length;
+  const visible = QUESTIONS.filter((q) => !q.showIf || q.showIf(answers));
+  const done = step >= visible.length;
 
   const results = useMemo(() => {
     if (!done) return [];
@@ -160,7 +186,9 @@ export default function NeighborhoodQuiz() {
       setAnswers({ ...answers, [q.id]: next });
       return;
     }
-    setAnswers({ ...answers, [q.id]: [value] });
+    const next: Answers = { ...answers, [q.id]: [value] };
+    if (q.id === "work" && !["downtown", "north"].includes(value)) delete next.commute;
+    setAnswers(next);
     setStep(step + 1);
   }
 
@@ -171,14 +199,14 @@ export default function NeighborhoodQuiz() {
 
   if (done) return <Results results={results} answers={answers} onRestart={restart} />;
 
-  const q = QUESTIONS[step];
+  const q = visible[step];
   const picked = answers[q.id] ?? [];
 
   return (
     <div className="mx-auto max-w-2xl">
       <div className="flex items-center justify-between">
         <p className="eyebrow text-gold">
-          Question {step + 1} of {QUESTIONS.length}
+          Question {step + 1} of {visible.length}
         </p>
         {step > 0 && (
           <button
@@ -193,7 +221,7 @@ export default function NeighborhoodQuiz() {
       <div className="mt-3 h-1 w-full bg-sand">
         <div
           className="h-1 bg-blue transition-all"
-          style={{ width: `${(step / QUESTIONS.length) * 100}%` }}
+          style={{ width: `${(step / visible.length) * 100}%` }}
         />
       </div>
 
@@ -250,7 +278,7 @@ function Results({
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.currentTarget)) as Record<string, string>;
     setStatus("sending");
-    const summary = QUESTIONS.map(
+    const summary = QUESTIONS.filter((q) => answers[q.id]?.length).map(
       (q) =>
         `${q.title} ${(answers[q.id] ?? [])
           .map((v) => q.options.find((o) => o.value === v)?.label ?? v)
