@@ -32,10 +32,10 @@ export default function NewsletterCta({ className = "" }: { className?: string }
   return (
     <section className={`bg-white px-6 py-20 text-center sm:px-10 lg:py-24 ${className}`}>
       <h2 className="font-georgia text-[38px] font-normal leading-[1.05] text-navy sm:text-[52px]">
-        The San Diego <em className="italic">Market Letter</em>
+        Know the Market <em className="italic">Before It Moves</em>
       </h2>
       <p className="mt-5 text-[13px] uppercase tracking-[0.22em] text-gold">
-        One email a month &middot; What&apos;s selling and what it means
+        The San Diego Market Letter &middot; One email a month
       </p>
 
       {status === "done" ? (
