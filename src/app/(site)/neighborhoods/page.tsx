@@ -25,12 +25,20 @@ export default function NeighborhoodsPage() {
             like, roughly what it costs, and the honest trade offs.
           </p>
         </div>
-        <Link
-          href="/quiz"
-          className="shrink-0 self-start border border-blue bg-blue px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark lg:self-auto"
-        >
-          Not Sure? Take the Quiz
-        </Link>
+        <div className="flex shrink-0 flex-wrap gap-3 self-start lg:self-auto">
+          <Link
+            href="/quiz"
+            className="border border-blue bg-blue px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
+          >
+            Not Sure? Take the Quiz
+          </Link>
+          <Link
+            href="/tools/cost-calculator"
+            className="border border-navy px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
+          >
+            Cost Calculator
+          </Link>
+        </div>
       </div>
 
       {/* Jump to a region */}

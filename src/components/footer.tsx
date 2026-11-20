@@ -6,6 +6,9 @@ import FooterNewsletter from "@/components/footer-newsletter";
 const FOOTER_NAV = [
   { href: "/buy", label: "Buy" },
   { href: "/sell", label: "Sell" },
+  { href: "/neighborhoods", label: "Neighborhoods" },
+  { href: "/quiz", label: "Where Should I Live?" },
+  { href: "/tools/cost-calculator", label: "Cost Calculator" },
   { href: "/insights", label: "Market Research" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
@@ -18,6 +21,9 @@ const FOOTER_NAV = [
 const MOBILE_FOOTER_NAV = [
   { href: "/buy", label: "Buy" },
   { href: "/sell", label: "Sell" },
+  { href: "/neighborhoods", label: "Neighborhoods" },
+  { href: "/quiz", label: "Neighborhood Quiz" },
+  { href: "/tools/cost-calculator", label: "Cost Calculator" },
   { href: "/insights", label: "Market Research" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },

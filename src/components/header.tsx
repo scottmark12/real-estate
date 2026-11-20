@@ -11,7 +11,7 @@ import type { ContactSettings } from "@/lib/types";
 const NAV_LINKS = [
   { href: "/buy", label: "Buy" },
   { href: "/sell", label: "Sell" },
-  { href: "/tools", label: "Tools" },
+  { href: "/neighborhoods", label: "Neighborhoods" },
   { href: "/insights", label: "Market Research" },
   { href: "/discover", label: "Discover" },
   { href: "/about", label: "About" },
