@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
-import ListingCard from "@/components/listing-card";
+import FeedListingCard from "@/components/feed-listing-card";
+import { type FeedListing, searchListings } from "@/lib/premier-feed";
 import { CATEGORY_LABELS } from "@/components/article-card";
 import ImagePlaceholder from "@/components/image-placeholder";
 import MarketChart from "@/components/market-chart";
@@ -14,12 +15,10 @@ import {
   DEFAULT_SERVICES,
   getSetting,
 } from "@/lib/settings";
-import { LISTINGS_PAUSED } from "@/lib/listings-paused";
 import type {
   AboutSettings,
   Article,
   HeroSettings,
-  Listing,
   MarketChartSettings,
   NewsletterSettings,
   ServiceItem,
@@ -82,31 +81,9 @@ function renderHeadline(headline: string) {
   );
 }
 
-async function getFeaturedListings(): Promise<Listing[]> {
-  if (LISTINGS_PAUSED) return [];
-  const supabase = await createClient();
-
-  const featured = await supabase
-    .from("listings")
-    .select("*")
-    .eq("published", true)
-    .eq("featured", true)
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false })
-    .limit(4);
-
-  if (featured.data && featured.data.length > 0) {
-    return featured.data as Listing[];
-  }
-
-  const fallback = await supabase
-    .from("listings")
-    .select("*")
-    .eq("published", true)
-    .order("created_at", { ascending: false })
-    .limit(4);
-
-  return (fallback.data as Listing[]) ?? [];
+async function getFeaturedListings(): Promise<FeedListing[]> {
+  const result = await searchListings({ sort: "recent" });
+  return result?.listings.slice(0, 4) ?? [];
 }
 
 async function getMarketReportArticle(): Promise<Article | null> {
@@ -282,32 +259,27 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Listings */}
-      {!LISTINGS_PAUSED && (
+      {featuredListings.length > 0 && (
       <section className="px-[4vw] pb-12 pt-12 lg:pt-6">
         <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
-          <p className="eyebrow text-gold">Featured Listings</p>
+          <p className="eyebrow text-gold">Just Listed</p>
           <Link
-            href="/listings"
+            href="/buy"
             className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4 lg:hidden"
           >
-            View All Listings &rarr;
+            See All Homes for Sale &rarr;
           </Link>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featuredListings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} />
+            <FeedListingCard key={listing.id} listing={listing} />
           ))}
-          {featuredListings.length === 0 && (
-            <p className="text-navy/60">
-              Listings will appear here once added in the admin panel.
-            </p>
-          )}
         </div>
         <Link
-          href="/listings"
+          href="/buy"
           className="eyebrow mt-6 hidden text-navy underline decoration-gold decoration-2 underline-offset-4 lg:block lg:w-fit"
         >
-          View All Listings &rarr;
+          See All Homes for Sale &rarr;
         </Link>
       </section>
       )}
