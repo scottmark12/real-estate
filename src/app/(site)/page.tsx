@@ -272,7 +272,7 @@ export default async function HomePage() {
             </Link>
           </div>
           {/* Swipe row on phones, grid from tablet up */}
-          <div className="-mx-4 mt-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-2 max-[600px]:-mx-6 max-[600px]:px-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+          <div className="-mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 max-[600px]:scroll-px-6 max-[600px]:-mx-6 max-[600px]:px-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 lg:grid-cols-4">
             {homeListings.listings.map((listing) => (
               <div key={listing.id} className="w-[78%] shrink-0 snap-start sm:w-auto">
                 <FeedListingCard listing={listing} />
