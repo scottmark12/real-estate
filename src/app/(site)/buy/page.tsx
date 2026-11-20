@@ -84,7 +84,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   return (
     <div className="mx-auto max-w-[1400px] px-6 pb-20 max-[600px]:pb-12 sm:px-10 lg:px-12">
       {/* Photo header with the search on top of it */}
-      <section className="full-bleed relative flex min-h-[78vh] items-end overflow-hidden max-[600px]:min-h-[70vh]">
+      <section className="full-bleed relative flex min-h-[88vh] items-end overflow-hidden max-[600px]:min-h-[80vh]">
         <Image
           src="https://images.unsplash.com/photo-1611459711466-5926ba1a3d43?auto=format&fit=crop&w=2400&q=75"
           alt="Sunset at Crystal Pier, Pacific Beach"
@@ -93,7 +93,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/45" />
         <div className="relative mx-auto w-full max-w-[1400px] px-6 pb-12 pt-28 sm:px-10 lg:px-12 lg:pb-16">
       <p className="eyebrow text-white/75">Buy</p>
       <h1 className="mt-3 max-w-4xl font-georgia text-[42px] font-normal leading-[1] text-white sm:text-[64px] lg:text-[80px]">
