@@ -9,8 +9,12 @@ import {
   SORTS,
   formatFeedPrice,
   formatFeedStats,
+  getFeaturedIds,
+  getFeaturedListings,
   searchListings,
 } from "@/lib/premier-feed";
+import HeartButton from "@/components/admin/heart-button";
+import { toggleFeatured } from "./featured-actions";
 
 export const revalidate = 0;
 
@@ -27,14 +31,17 @@ export default async function AdminListingsPage({
   const page = Math.max(1, Math.floor(Number(one(sp.page)) || 1));
 
   const supabase = await createClient();
-  const [feed, manual] = await Promise.all([
+  const [feed, manual, featuredIds, featured] = await Promise.all([
     searchListings({ q, sort, page }),
     supabase
       .from("listings")
       .select("*")
       .order("sort_order", { ascending: true })
       .order("created_at", { ascending: false }),
+    getFeaturedIds(),
+    getFeaturedListings(),
   ]);
+  const featuredSet = new Set(featuredIds);
   const manualListings = (manual.data as Listing[]) ?? [];
 
   const hasNext = feed ? page * PAGE_SIZE < feed.total : false;
@@ -61,6 +68,46 @@ export default async function AdminListingsPage({
         . Pulled from Premier Agency&apos;s MLS feed every 5 minutes, all of San
         Diego County, rentals filtered out.
       </p>
+
+      <section className="mt-8 border border-sand bg-white/60 p-5">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <p className="eyebrow text-gold">Featured ({featured.length})</p>
+          <p className="text-xs text-navy/50">
+            Heart a home below to feature it. Featured homes show first on
+            Discover and at the top of Buy. Sold homes drop off on their own.
+          </p>
+        </div>
+        {featured.length === 0 ? (
+          <p className="mt-3 text-sm text-navy/60">
+            Nothing featured yet, so Discover shows the newest listings.
+          </p>
+        ) : (
+          <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {featured.map((l) => (
+              <li key={l.id} className="flex items-center gap-3">
+                <div className="h-12 w-16 shrink-0 overflow-hidden bg-sand">
+                  {l.primary_image_url && (
+                    <img src={l.primary_image_url} alt="" className="h-full w-full object-cover" />
+                  )}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <Link
+                    href={`/buy/${l.id}`}
+                    target="_blank"
+                    className="block truncate text-sm font-medium text-navy hover:underline"
+                  >
+                    {l.address}
+                  </Link>
+                  <p className="text-xs text-navy/50">
+                    {l.city} &middot; {formatFeedPrice(l.price)}
+                  </p>
+                </div>
+                <HeartButton id={l.id} on action={toggleFeatured} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
 
       {!feed ? (
         <p className="mt-8 border border-sand p-4 text-sm text-navy/70">
@@ -98,6 +145,7 @@ export default async function AdminListingsPage({
             <table className="w-full min-w-[820px] text-left text-sm">
               <thead className="border-b border-sand text-navy/40">
                 <tr>
+                  <th className="w-10 py-3 pr-2 font-medium" />
                   <th className="py-3 pr-4 font-medium">Home</th>
                   <th className="py-3 pr-4 font-medium">City</th>
                   <th className="py-3 pr-4 font-medium">Details</th>
@@ -109,6 +157,9 @@ export default async function AdminListingsPage({
               <tbody>
                 {feed.listings.map((l) => (
                   <tr key={l.id} className="border-b border-sand/60 align-middle">
+                    <td className="py-3 pr-2">
+                      <HeartButton id={l.id} on={featuredSet.has(l.id)} action={toggleFeatured} />
+                    </td>
                     <td className="py-3 pr-4">
                       <div className="flex items-center gap-3">
                         <div className="h-12 w-16 shrink-0 overflow-hidden bg-sand">
@@ -145,7 +196,7 @@ export default async function AdminListingsPage({
                 ))}
                 {feed.listings.length === 0 && (
                   <tr>
-                    <td colSpan={6} className="py-6 text-navy/60">
+                    <td colSpan={7} className="py-6 text-navy/60">
                       No homes match that search.
                     </td>
                   </tr>

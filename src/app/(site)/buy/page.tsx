@@ -7,6 +7,7 @@ import {
   PAGE_SIZE,
   PROPERTY_TYPES,
   SORTS,
+  getFeaturedListings,
   searchListings,
 } from "@/lib/premier-feed";
 
@@ -41,15 +42,11 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   const sort = one(sp.sort) ?? "recent";
   const page = Math.max(1, Math.floor(Number(one(sp.page)) || 1));
 
-  const result = await searchListings({
-    q,
-    min_price,
-    max_price,
-    min_beds,
-    property_type,
-    sort,
-    page,
-  });
+  const filtering = Boolean(q || min_price || max_price || min_beds || property_type);
+  const [result, featured] = await Promise.all([
+    searchListings({ q, min_price, max_price, min_beds, property_type, sort, page }),
+    !filtering && page === 1 ? getFeaturedListings(6) : Promise.resolve([]),
+  ]);
 
   // Feed down: fall back to the coming soon page rather than an error.
   if (!result) return <ListingsComingSoon />;
@@ -132,6 +129,20 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           Search
         </button>
       </form>
+
+      {featured.length > 0 && (
+        <section className="mt-12">
+          <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
+            <p className="eyebrow text-gold">Featured</p>
+            <p className="text-xs text-navy/50">Hand picked by Mark.</p>
+          </div>
+          <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+            {featured.map((listing) => (
+              <FeedListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <div className="mt-10 border-t border-sand pt-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
