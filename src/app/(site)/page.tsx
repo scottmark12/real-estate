@@ -3,9 +3,15 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { CATEGORY_LABELS } from "@/components/article-card";
-import NewsletterForm from "@/components/newsletter-form";
+import MarketLetterBand from "@/components/market-letter-band";
 import type { Article, Listing } from "@/lib/types";
 import { LISTINGS_PAUSED } from "@/lib/listings-paused";
+import FeedListingCard from "@/components/feed-listing-card";
+import MarketChart from "@/components/market-chart";
+import { type FeedListing, getFeaturedListings, searchListings } from "@/lib/premier-feed";
+import { DEFAULT_MARKET_CHART, getSetting } from "@/lib/settings";
+import type { MarketChartSettings } from "@/lib/types";
+import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 
 
 export const revalidate = 0;
@@ -40,6 +46,7 @@ const LISTING_STATUS_LABELS: Record<string, string> = {
 
 type ElsewhereItem = {
   order: number;
+  date: string | null;
   category: string;
   title: string;
   cta: string;
@@ -53,6 +60,7 @@ async function getOnMyRadar(): Promise<Article | null> {
     .select("*")
     .eq("published", true)
     .eq("on_my_radar", true)
+    .order("published_at", { ascending: false })
     .limit(1)
     .maybeSingle();
   return data as Article | null;
@@ -79,6 +87,7 @@ async function getElsewhere(): Promise<ElsewhereItem[]> {
   const items: ElsewhereItem[] = [
     ...articles.map((a) => ({
       order: a.homepage_elsewhere_order,
+      date: a.published_at,
       category: a.eyebrow || CATEGORY_LABELS[a.category] || a.category,
       title: a.title,
       cta: "Read →",
@@ -86,6 +95,7 @@ async function getElsewhere(): Promise<ElsewhereItem[]> {
     })),
     ...listings.map((l) => ({
       order: l.homepage_elsewhere_order,
+      date: null,
       category: LISTING_STATUS_LABELS[l.status] || "Listing",
       title: l.title,
       cta: "View Homes →",
@@ -96,10 +106,31 @@ async function getElsewhere(): Promise<ElsewhereItem[]> {
   return items.sort((a, b) => a.order - b.order).slice(0, 3);
 }
 
+function formatDate(iso: string | null | undefined) {
+  if (!iso) return null;
+  return new Date(iso).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "America/Los_Angeles",
+  });
+}
+
+async function getHomeListings(): Promise<{ featured: boolean; listings: FeedListing[] }> {
+  const hearted = await getFeaturedListings(4);
+  if (hearted.length > 0) return { featured: true, listings: hearted };
+  const result = await searchListings({ sort: "recent" });
+  return { featured: false, listings: result?.listings.slice(0, 4) ?? [] };
+}
+
+const REGION_COUNT = new Set(NEIGHBORHOODS.map((n) => n.region)).size;
+
 export default async function HomePage() {
-  const [radar, elsewhere] = await Promise.all([
+  const [radar, elsewhere, homeListings, marketChart] = await Promise.all([
     getOnMyRadar(),
     getElsewhere(),
+    getHomeListings(),
+    getSetting<MarketChartSettings>("market_chart", DEFAULT_MARKET_CHART),
   ]);
 
   return (
@@ -107,13 +138,13 @@ export default async function HomePage() {
       {/* Hero / cover — mobile */}
       <section className="overflow-hidden pt-8 lg:hidden">
         <div className="px-4 max-[600px]:px-6">
-          <p className="eyebrow text-gold">Real Estate</p>
+          <p className="eyebrow text-gold">San Diego Real Estate</p>
           <h1 className="relative z-20 mt-2 font-georgia text-[32px] font-normal leading-[0.95] text-navy max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em]">
             <span className="block">Real Estate,</span>
             <span className="block">Real Different.</span>
           </h1>
           <p className="relative z-20 mt-[65px] max-w-[37%] text-[15px] text-navy/70">
-            Putting you in the right home, not just any home.
+            Homes picked with a designer&apos;s eye.
           </p>
 
           <div className="relative z-20 mt-[68px] w-[42%] max-w-[165px] -rotate-2">
@@ -149,7 +180,7 @@ export default async function HomePage() {
               <span className="block whitespace-nowrap">Real Different.</span>
             </h1>
             <p className="mt-5 max-w-[560px] text-[22.8px] text-navy/70">
-              Putting you in the right home, not just any home.
+              San Diego homes, picked with a designer&apos;s eye and an investor&apos;s math.
             </p>
           </div>
 
@@ -226,6 +257,28 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Homes — from the live feed (hearted in the admin, else newest) */}
+      {homeListings.listings.length > 0 && (
+        <section className="mt-14 px-4 max-[600px]:px-6 lg:mt-6 lg:px-0">
+          <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
+            <p className="eyebrow text-gold">
+              {homeListings.featured ? "Featured Listings" : "Just Listed"}
+            </p>
+            <Link
+              href="/buy"
+              className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
+            >
+              See All Homes &rarr;
+            </Link>
+          </div>
+          <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+            {homeListings.listings.map((listing) => (
+              <FeedListingCard key={listing.id} listing={listing} />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* On My Radar — mobile */}
       {radar && (
         <section className="mt-[54px] lg:hidden">
@@ -260,6 +313,9 @@ export default async function HomePage() {
           <div className="mt-5 flex flex-col px-4 max-[600px]:px-6">
             <p className="eyebrow text-gold">
               {radar.eyebrow || CATEGORY_LABELS[radar.category] || radar.category}
+              {formatDate(radar.published_at) && (
+                <span className="text-navy/40"> &middot; {formatDate(radar.published_at)}</span>
+              )}
             </p>
             <h2 className="mt-2.5 font-display text-[30px] font-normal leading-[1.1] text-navy max-[600px]:text-[26px] max-[600px]:leading-[1.12]">
               {radar.title}
@@ -318,6 +374,9 @@ export default async function HomePage() {
             <div className="flex flex-col justify-center">
               <p className="eyebrow text-gold">
                 {radar.eyebrow || CATEGORY_LABELS[radar.category] || radar.category}
+                {formatDate(radar.published_at) && (
+                  <span className="text-navy/40"> &middot; {formatDate(radar.published_at)}</span>
+                )}
               </p>
               <h2 className="mt-3 font-display text-[36px] font-normal leading-[1.1] text-navy">
                 {radar.title}
@@ -338,14 +397,66 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* The numbers — market chart */}
+      <section className="mt-14 bg-cream-deep px-4 py-12 max-[600px]:px-6 lg:px-12">
+        <div className="grid gap-10 lg:grid-cols-[38fr_62fr] lg:items-center">
+          <div>
+            <p className="eyebrow text-gold">The Market, Right Now</p>
+            <h2 className="mt-3 font-display text-[32px] font-normal leading-[1.1] text-navy max-[600px]:text-[26px]">
+              More new households than new homes.
+            </h2>
+            <p className="mt-3 max-w-md text-navy/70">
+              San Diego County keeps adding households faster than it adds
+              places to live. That gap is the story behind prices here.
+            </p>
+            <Link
+              href="/insights"
+              className="eyebrow mt-5 inline-block text-navy underline decoration-gold decoration-2 underline-offset-4"
+            >
+              More Market Research &rarr;
+            </Link>
+          </div>
+          <div className="lg:border-l lg:border-navy/15 lg:pl-10">
+            <MarketChart data={marketChart} />
+          </div>
+        </div>
+      </section>
+
+      {/* Neighborhoods teaser */}
+      <section className="mt-14 px-4 max-[600px]:px-6 lg:px-0">
+        <Link
+          href="/neighborhoods"
+          className="group grid gap-6 border border-sand p-8 transition-colors hover:border-blue sm:grid-cols-[1fr_auto] sm:items-center"
+        >
+          <div>
+            <p className="eyebrow text-gold">Neighborhood Guide</p>
+            <h2 className="mt-2 font-display text-[30px] font-normal leading-[1.1] text-navy max-[600px]:text-[24px]">
+              {NEIGHBORHOODS.length} places across San Diego County, on one map.
+            </h2>
+            <p className="mt-2 max-w-xl text-navy/70">
+              What each one is actually like, roughly what it costs, and the
+              honest trade offs. {REGION_COUNT} regions, from the coast to the
+              backcountry.
+            </p>
+          </div>
+          <span className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4">
+            Explore the Map
+            <span className="ml-2 inline-block transition-transform group-hover:translate-x-1">&rarr;</span>
+          </span>
+        </Link>
+      </section>
+
       {/* Elsewhere */}
       {elsewhere.length > 0 && (
         <section className="mt-14 border-t border-sand px-4 pb-16 pt-10 max-[600px]:px-6 lg:px-0">
-          <p className="eyebrow text-gold">Elsewhere</p>
+          <p className="eyebrow text-gold">More From the Research</p>
           <div className="mt-6 grid gap-10 sm:grid-cols-3 sm:divide-x sm:divide-sand">
             {elsewhere.map((item, i) => (
               <div key={i} className="sm:px-8 sm:first:pl-0 sm:last:pr-0">
-                <p className="eyebrow text-navy/50">{item.category}</p>
+                <p className="eyebrow text-navy/50">
+                  {item.category}
+                  {formatDate(item.date) && <span> &middot; {formatDate(item.date)}</span>}
+                </p>
                 <h3 className="mt-2 font-display text-xl font-normal leading-snug text-navy">
                   {item.title}
                 </h3>
@@ -362,21 +473,7 @@ export default async function HomePage() {
       )}
 
       {/* Newsletter */}
-      <section className="mt-16 bg-ink px-12 py-14 text-ink-cream max-[600px]:px-6 lg:mb-16">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-xl">
-            <p className="eyebrow text-ink-muted">The San Diego Market Letter</p>
-            <h2 className="mt-3 font-georgia text-[34px] leading-[1.15] text-ink-cream max-[600px]:text-[28px]">
-              One email a month. What&apos;s selling, what it means, and one
-              neighborhood worth a look.
-            </h2>
-          </div>
-          <div className="w-full max-w-lg">
-            <NewsletterForm />
-            <p className="mt-3 text-xs text-ink-muted">No spam. Unsubscribe anytime.</p>
-          </div>
-        </div>
-      </section>
+      <MarketLetterBand className="mt-16 lg:mb-16" />
     </div>
   );
 }

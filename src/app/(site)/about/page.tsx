@@ -1,8 +1,16 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { DEFAULT_ABOUT, DEFAULT_CONTACT, getSetting } from "@/lib/settings";
 import type { AboutSettings, ContactSettings } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "About Mark Scott",
+  description:
+    "Encinitas based real estate agent helping people buy and sell homes across San Diego, with a background in design and multifamily underwriting.",
+};
+
 
 export const revalidate = 0;
 

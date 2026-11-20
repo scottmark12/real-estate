@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ContactSettings } from "@/lib/types";
+import FooterNewsletter from "@/components/footer-newsletter";
 
 const FOOTER_NAV = [
   { href: "/buy", label: "Buy" },
@@ -42,12 +43,29 @@ function Brokerage({ className = "" }: { className?: string }) {
   );
 }
 
+// A bare instagram.com or linkedin.com is a placeholder, not a profile.
+function isProfileUrl(url: string | null | undefined) {
+  if (!url) return false;
+  try {
+    return new URL(url).pathname.replace(/\/+$/, "").length > 0;
+  } catch {
+    return false;
+  }
+}
+
 export default function Footer({ contact }: { contact: ContactSettings }) {
+  const socials = [
+    { label: "Instagram", url: contact.instagram_url },
+    { label: "LinkedIn", url: contact.linkedin_url },
+  ].filter((l) => isProfileUrl(l.url));
+
   return (
     <footer
       className="border-t border-ink-cream/10 bg-ink text-ink-cream"
       style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
     >
+      <FooterNewsletter />
+
       {/* Compact mobile colophon — sm: and up render the unchanged
           desktop footer below instead. */}
       <div className="px-[4vw] pt-9 pb-7 sm:hidden">
@@ -93,25 +111,18 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
           )}
         </div>
 
-        <p className="mt-5 text-sm text-ink-cream/80">
-          <a
-            href={contact.instagram_url}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-ink-cream"
-          >
-            Instagram
-          </a>
-          <span className="mx-2 text-ink-cream/30">&middot;</span>
-          <a
-            href={contact.linkedin_url}
-            target="_blank"
-            rel="noreferrer"
-            className="hover:text-ink-cream"
-          >
-            LinkedIn
-          </a>
-        </p>
+        {socials.length > 0 && (
+          <p className="mt-5 text-sm text-ink-cream/80">
+            {socials.map((link, i) => (
+              <span key={link.label}>
+                {i > 0 && <span className="mx-2 text-ink-cream/30">&middot;</span>}
+                <a href={link.url} target="_blank" rel="noreferrer" className="hover:text-ink-cream">
+                  {link.label}
+                </a>
+              </span>
+            ))}
+          </p>
+        )}
 
         <div className="mt-5 space-y-1 text-xs text-ink-muted">
           <p>{contact.dre_number}</p>
@@ -174,31 +185,20 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
           </div>
         </div>
 
-        <div className="lg:border-l lg:border-ink-cream/10 lg:pl-8">
-          <p className="eyebrow text-ink-muted">Follow</p>
-          <ul className="mt-4 space-y-2 text-sm text-ink-cream/80">
-            <li>
-              <a
-                href={contact.instagram_url}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-ink-cream"
-              >
-                Instagram
-              </a>
-            </li>
-            <li>
-              <a
-                href={contact.linkedin_url}
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-ink-cream"
-              >
-                LinkedIn
-              </a>
-            </li>
-          </ul>
-        </div>
+        {socials.length > 0 && (
+          <div className="lg:border-l lg:border-ink-cream/10 lg:pl-8">
+            <p className="eyebrow text-ink-muted">Follow</p>
+            <ul className="mt-4 space-y-2 text-sm text-ink-cream/80">
+              {socials.map((link) => (
+                <li key={link.label}>
+                  <a href={link.url} target="_blank" rel="noreferrer" className="hover:text-ink-cream">
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
 
       <div className="border-t border-ink-cream/10 px-[4vw] py-5">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Tools | Mark Scott Real Estate",
+  title: "Tools",
   description:
     "Free tools for buying and selling in San Diego: the Where Should I Live quiz, a true cost of owning calculator, home values and market research.",
 };

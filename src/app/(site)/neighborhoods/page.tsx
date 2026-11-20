@@ -4,7 +4,7 @@ import NeighborhoodMap from "@/components/neighborhood-map";
 import { NEIGHBORHOODS, PRICE_TIERS, REGIONS } from "@/lib/neighborhoods";
 
 export const metadata: Metadata = {
-  title: "San Diego Neighborhoods | Mark Scott Real Estate",
+  title: "San Diego Neighborhoods",
   description:
     "A local's guide to San Diego neighborhoods, from the North County coast to the urban core: what each place is like, what it costs and the honest trade offs.",
 };

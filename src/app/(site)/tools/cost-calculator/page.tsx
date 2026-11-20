@@ -3,7 +3,7 @@ import Link from "next/link";
 import CostCalculator from "@/components/cost-calculator";
 
 export const metadata: Metadata = {
-  title: "True Cost of Owning Calculator | Mark Scott Real Estate",
+  title: "True Cost of Owning Calculator",
   description:
     "What a San Diego home really costs each month: mortgage, property tax, Mello Roos, insurance and HOA, plus cash to close.",
 };

@@ -1,6 +1,14 @@
+import type { Metadata } from "next";
 import SellPageBody from "@/components/sell-page-body";
 import { DEFAULT_CONTACT, getSetting } from "@/lib/settings";
 import type { ContactSettings } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "Sell Your San Diego Home",
+  description:
+    "Selling a home in San Diego? Get a real value from recent sales and a simple four step plan: evaluate, prepare, market, close.",
+};
+
 
 export const revalidate = 0;
 

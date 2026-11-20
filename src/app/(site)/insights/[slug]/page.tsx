@@ -1,5 +1,7 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import MarketLetterBand from "@/components/market-letter-band";
 import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { createClient } from "@/lib/supabase/server";
@@ -9,6 +11,25 @@ import ArticleBlocks from "@/components/article-blocks";
 import type { Article } from "@/lib/types";
 
 export const revalidate = 0;
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/insights/[slug]">): Promise<Metadata> {
+  const { slug } = await params;
+  const supabase = await createClient();
+  const { data } = await supabase
+    .from("articles")
+    .select("title, excerpt, image_url")
+    .eq("slug", slug)
+    .eq("published", true)
+    .maybeSingle();
+  if (!data) return { title: "Market Research" };
+  return {
+    title: data.title,
+    description: data.excerpt ?? undefined,
+    openGraph: data.image_url ? { images: [data.image_url] } : undefined,
+  };
+}
 
 export default async function ArticleDetailPage({
   params,
@@ -29,6 +50,7 @@ export default async function ArticleDetailPage({
   const html = !hasBlocks && article.body ? await marked.parse(article.body) : "";
 
   return (
+    <>
     <article className="mx-auto max-w-3xl px-6 py-16 sm:px-10">
       <Link href="/insights" className="text-sm text-navy/60 hover:text-navy">
         ← Back to Insights
@@ -68,5 +90,9 @@ export default async function ArticleDetailPage({
         />
       )}
     </article>
+    <div className="mx-auto max-w-5xl sm:px-10">
+      <MarketLetterBand className="mb-16" />
+    </div>
+    </>
   );
 }

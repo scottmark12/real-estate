@@ -1,9 +1,17 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { Suspense } from "react";
 import ContactForm from "@/components/contact-form";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { DEFAULT_CONTACT, getSetting } from "@/lib/settings";
 import type { ContactSettings } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "Contact Mark Scott",
+  description:
+    "Buying, selling or investing in San Diego? Call (850) 363-6057 or send Mark a note. He reads everything himself.",
+};
+
 
 export const revalidate = 0;
 

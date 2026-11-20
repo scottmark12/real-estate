@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import RecentSalesForm from "@/components/recent-sales-form";
 import { notFound } from "next/navigation";
 import {
   NEIGHBORHOODS,
@@ -20,7 +21,7 @@ export async function generateMetadata({
   const n = getNeighborhood(slug);
   if (!n) return {};
   return {
-    title: `Living in ${n.name}, San Diego | Mark Scott Real Estate`,
+    title: `Living in ${n.name}, San Diego`,
     description: n.tagline,
   };
 }
@@ -130,29 +131,34 @@ export default async function NeighborhoodPage({
         </p>
       </section>
 
-      {/* Ask Mark */}
+      {/* Recent sales — lead capture */}
       <section className="mt-12 bg-cream-deep px-12 py-12 max-[600px]:-mx-6 max-[600px]:px-6">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1fr] lg:items-center">
           <div>
             <p className="eyebrow text-gold">Thinking about {n.name}?</p>
             <h2 className="mt-3 max-w-xl font-georgia text-[30px] leading-[1.2] text-navy">
-              Ask me anything about living here, or what&apos;s selling right now.
+              Get the recent sales in {n.name}.
             </h2>
+            <p className="mt-3 max-w-md text-navy/70">
+              What actually sold, for how much, and how fast. Straight from me,
+              not an automated alert.
+            </p>
+            <p className="mt-4 text-sm text-navy/60">
+              Or{" "}
+              <Link
+                href={`/contact?intent=buying&location=${encodeURIComponent(n.name)}`}
+                className="underline decoration-gold decoration-2 underline-offset-4"
+              >
+                ask me anything
+              </Link>{" "}
+              about living here, or{" "}
+              <Link href="/quiz" className="underline decoration-gold decoration-2 underline-offset-4">
+                take the quiz
+              </Link>
+              .
+            </p>
           </div>
-          <div className="flex flex-wrap gap-3">
-            <Link
-              href={`/contact?intent=buying&location=${encodeURIComponent(n.name)}`}
-              className="border border-blue bg-blue px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
-            >
-              Ask Mark
-            </Link>
-            <Link
-              href="/quiz"
-              className="border border-navy px-6 py-3 text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
-            >
-              Take the Quiz
-            </Link>
-          </div>
+          <RecentSalesForm place={n.name} />
         </div>
       </section>
 

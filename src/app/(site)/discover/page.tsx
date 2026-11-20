@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import FeedListingCard from "@/components/feed-listing-card";
@@ -23,6 +24,13 @@ import type {
   NewsletterSettings,
   ServiceItem,
 } from "@/lib/types";
+
+export const metadata: Metadata = {
+  title: "Discover San Diego Homes",
+  description:
+    "Featured homes, the latest San Diego market data and research from Mark Scott Real Estate.",
+};
+
 
 export const revalidate = 0;
 

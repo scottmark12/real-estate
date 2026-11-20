@@ -16,8 +16,12 @@ const libreCaslonDisplay = Libre_Caslon_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://markscott.co"),
-  title: "Mark Scott Real Estate | San Diego",
-  description: "Homes, market research, and real estate across San Diego.",
+  title: {
+    default: "Mark Scott | San Diego Real Estate Agent in Encinitas",
+    template: "%s | Mark Scott Real Estate",
+  },
+  description:
+    "Mark Scott helps people buy and sell homes across San Diego County, with a designer's eye and an investor's math. Based in Encinitas.",
   openGraph: {
     title: "Mark Scott Real Estate | San Diego",
     description: "Homes, market research, and real estate across San Diego.",

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import NeighborhoodQuiz from "@/components/neighborhood-quiz";
 
 export const metadata: Metadata = {
-  title: "Where Should I Live in San Diego? | Mark Scott Real Estate",
+  title: "Where Should I Live in San Diego?",
   description:
     "A few quick questions about how you want to live, and your top three San Diego neighborhoods.",
 };
