@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import FeedListingCard from "@/components/feed-listing-card";
-import { type FeedListing, searchListings } from "@/lib/premier-feed";
+import { type FeedListing, getFeaturedListings, searchListings } from "@/lib/premier-feed";
 import { CATEGORY_LABELS } from "@/components/article-card";
 import ImagePlaceholder from "@/components/image-placeholder";
 import MarketChart from "@/components/market-chart";
@@ -81,9 +81,11 @@ function renderHeadline(headline: string) {
   );
 }
 
-async function getFeaturedListings(): Promise<FeedListing[]> {
+async function getDiscoverListings(): Promise<{ featured: boolean; listings: FeedListing[] }> {
+  const hearted = await getFeaturedListings(4);
+  if (hearted.length > 0) return { featured: true, listings: hearted };
   const result = await searchListings({ sort: "recent" });
-  return result?.listings.slice(0, 4) ?? [];
+  return { featured: false, listings: result?.listings.slice(0, 4) ?? [] };
 }
 
 async function getMarketReportArticle(): Promise<Article | null> {
@@ -134,7 +136,7 @@ export default async function HomePage() {
     about,
     newsletter,
     marketChart,
-    featuredListings,
+    discoverListings,
     marketReport,
     featureStory,
   ] = await Promise.all([
@@ -143,7 +145,7 @@ export default async function HomePage() {
     getSetting<AboutSettings>("about", DEFAULT_ABOUT),
     getSetting<NewsletterSettings>("newsletter", DEFAULT_NEWSLETTER),
     getSetting<MarketChartSettings>("market_chart", DEFAULT_MARKET_CHART),
-    getFeaturedListings(),
+    getDiscoverListings(),
     getMarketReportArticle(),
     getFeatureStoryArticle(),
   ]);
@@ -259,10 +261,12 @@ export default async function HomePage() {
       </section>
 
       {/* Featured Listings */}
-      {featuredListings.length > 0 && (
+      {discoverListings.listings.length > 0 && (
       <section className="px-[4vw] pb-12 pt-12 lg:pt-6">
         <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
-          <p className="eyebrow text-gold">Just Listed</p>
+          <p className="eyebrow text-gold">
+            {discoverListings.featured ? "Featured Listings" : "Just Listed"}
+          </p>
           <Link
             href="/buy"
             className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4 lg:hidden"
@@ -271,7 +275,7 @@ export default async function HomePage() {
           </Link>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {featuredListings.map((listing) => (
+          {discoverListings.listings.map((listing) => (
             <FeedListingCard key={listing.id} listing={listing} />
           ))}
         </div>
