@@ -30,10 +30,12 @@ function ArticleImage({
   article,
   imgClassName = "object-cover",
   placeholderLabel,
+  sizes = "(min-width: 1024px) 50vw, 100vw",
 }: {
   article: Article;
   imgClassName?: string;
   placeholderLabel?: string;
+  sizes?: string;
 }) {
   if (!article.image_url) {
     return (
@@ -51,7 +53,7 @@ function ArticleImage({
       src={article.image_url}
       alt={article.image_caption || article.title}
       fill
-      sizes="(min-width: 1024px) 50vw, 100vw"
+      sizes={sizes}
       className={imgClassName}
       style={
         article.image_position
@@ -87,22 +89,12 @@ function StatInline({ value }: { value: string }) {
 function FeaturedBlock({ featured }: { featured: Article }) {
   return (
     <div>
-      {/* Masthead — utilitarian, not a headline. The articles do the
-          talking; this just says what the section is. */}
-      <div className="max-w-lg lg:pt-5">
-        <h1 className="eyebrow text-gold">Market Research</h1>
-        <p className="mt-3 max-w-[26rem] text-sm text-navy/80">
-          Real estate, development, architecture and the forces shaping
-          Southern California and beyond.
-        </p>
-      </div>
-
       {/* Image is inset from the left margin rather than sitting beside
           the masthead, so an editorial axis runs down the page instead
           of a conventional two-column split. */}
       <div className="relative mt-8 lg:ml-[22%] lg:w-[78%]">
         <div className="relative h-[235px] w-full overflow-hidden sm:h-[310px] lg:h-[400px]">
-          <ArticleImage article={featured} placeholderLabel="Featured Article Image" />
+          <ArticleImage article={featured} placeholderLabel="Featured Article Image" sizes="(min-width: 1024px) 80vw, 100vw" />
         </div>
 
         {(featured.stat || featured.secondary_stat) && (
@@ -296,13 +288,13 @@ export default function MarketResearchExplorer({
   const archiveList = isAll ? [] : pool;
 
   return (
-    <div className="mx-auto max-w-[1500px] px-12 max-[600px]:px-6">
-      <section className="pt-6 lg:pt-8">
+    <div id="research" className="mx-auto max-w-[1500px] scroll-mt-4 px-12 max-[600px]:px-6">
+      <section className="pt-12 lg:pt-16">
         {featured ? (
           <FeaturedBlock featured={featured} />
         ) : (
           <div className="max-w-lg">
-            <h1 className="eyebrow text-gold">Market Research</h1>
+            <p className="eyebrow text-gold">Market Research</p>
             <p className="mt-3 max-w-[26rem] text-sm text-navy/80">
               Real estate, development, architecture and the forces shaping
               Southern California and beyond.

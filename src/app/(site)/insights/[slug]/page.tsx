@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import MarketLetterBand from "@/components/market-letter-band";
+import ArticleNextSteps from "@/components/article-next-steps";
 import { notFound } from "next/navigation";
 import { marked } from "marked";
 import { createClient } from "@/lib/supabase/server";
@@ -50,6 +51,20 @@ export default async function ArticleDetailPage({
 
   const article = data as Article | null;
   if (!article) notFound();
+
+  // Three more to read: same topic first, then the newest.
+  const { data: others } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("published", true)
+    .neq("slug", slug)
+    .order("published_at", { ascending: false })
+    .limit(12);
+  const pool = (others as Article[] | null) ?? [];
+  const related = [
+    ...pool.filter((a) => a.category === article.category),
+    ...pool.filter((a) => a.category !== article.category),
+  ].slice(0, 3);
 
   const hasBlocks = article.blocks && article.blocks.length > 0;
   const html = !hasBlocks && article.body ? await marked.parse(article.body) : "";
@@ -115,7 +130,8 @@ export default async function ArticleDetailPage({
         />
       )}
     </article>
-    <div className="mx-auto max-w-5xl sm:px-10">
+    <ArticleNextSteps related={related} />
+    <div className="mx-auto mt-16 max-w-5xl sm:px-10">
       <MarketLetterBand className="mb-16" />
     </div>
     </>
