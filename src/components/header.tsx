@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import MobileNav from "@/components/mobile-nav";
 import NewsletterModal from "@/components/newsletter-modal";
+import SavedLink from "@/components/saved-link";
 import type { ContactSettings } from "@/lib/types";
 
 const NAV_LINKS = [
@@ -13,7 +14,6 @@ const NAV_LINKS = [
   { href: "/sell", label: "Sell" },
   { href: "/neighborhoods", label: "Neighborhoods" },
   { href: "/insights", label: "Market Research" },
-  { href: "/discover", label: "Discover" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -59,6 +59,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
         </nav>
 
         <div className="hidden items-center gap-4 lg:flex">
+          <SavedLink />
           {contact.phone ? (
             <a
               href={`tel:${contact.phone.replace(/[^\d+]/g, "")}`}
@@ -78,11 +79,14 @@ export default function Header({ contact }: { contact: ContactSettings }) {
           </button>
         </div>
 
+        <div className="flex items-center gap-1 lg:hidden">
+        <SavedLink />
         <MobileNav
           links={NAV_LINKS}
           phone={contact.phone}
           onOpenNewsletter={() => setNewsletterOpen(true)}
         />
+        </div>
       </div>
 
       <NewsletterModal

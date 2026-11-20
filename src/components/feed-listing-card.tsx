@@ -1,4 +1,5 @@
 import Link from "next/link";
+import HeartToggle from "@/components/heart-toggle";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { type FeedListing, formatFeedPrice, formatFeedStats } from "@/lib/premier-feed";
 
@@ -11,6 +12,7 @@ export default function FeedListingCard({
 }) {
   const dark = tone === "dark";
   return (
+    <div className="relative">
     <Link href={`/buy/${listing.id}`} className="group flex flex-col">
       <div className="relative aspect-4/3 w-full overflow-hidden bg-cream-deep">
         {listing.primary_image_url ? (
@@ -40,5 +42,7 @@ export default function FeedListingCard({
         </div>
       </div>
     </Link>
+    <HeartToggle id={listing.id} className="absolute right-3 top-3" />
+    </div>
   );
 }

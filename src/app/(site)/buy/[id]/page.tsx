@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- MLS photos load straight from the feed's image host */
 import type { Metadata } from "next";
 import Link from "next/link";
+import HeartToggle from "@/components/heart-toggle";
 import { notFound } from "next/navigation";
 import {
   BROKERAGE_CREDIT,
@@ -52,7 +53,10 @@ export default async function FeedListingPage({ params }: PageProps<"/buy/[id]">
         &larr; Back to search
       </Link>
 
-      <p className="eyebrow mt-6 text-gold">For Sale</p>
+      <div className="mt-6 flex items-center justify-between gap-4">
+        <p className="eyebrow text-gold">For Sale</p>
+        <HeartToggle id={l.id} withLabel />
+      </div>
       <h1 className="mt-2 font-display text-4xl font-normal text-navy max-[600px]:text-[28px] max-[600px]:leading-[1.1]">
         {l.address}
       </h1>

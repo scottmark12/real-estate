@@ -2,6 +2,9 @@ import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import FeedListingCard from "@/components/feed-listing-card";
+import FilterToggle from "@/components/filter-toggle";
+import SaveSearchForm from "@/components/save-search-form";
+import { type AlertParams, describeParams } from "@/lib/listing-alerts";
 import ListingsComingSoon from "@/components/listings-coming-soon";
 import {
   BROKERAGE_CREDIT,
@@ -58,6 +61,16 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   if (!result) return <ListingsComingSoon />;
 
   const hasNext = page * PAGE_SIZE < result.total;
+  const alertParams: AlertParams = {
+    q: q || undefined,
+    city: city || undefined,
+    zip: zip || undefined,
+    area: area || undefined,
+    min_price: min_price || undefined,
+    max_price: max_price || undefined,
+    min_beds: min_beds || undefined,
+    property_type: property_type || undefined,
+  };
   const pageHref = (p: number) => {
     const params = new URLSearchParams();
     if (q) params.set("q", q);
@@ -124,6 +137,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           placeholder="City, zip or address"
           className={field}
         />
+        <FilterToggle active={[min_price, max_price, min_beds, property_type, sort !== "recent" ? sort : ""].filter(Boolean).length}>
         <label className="sr-only" htmlFor="min_price">Min price</label>
         <select id="min_price" name="min_price" defaultValue={min_price} className={field}>
           <option value="">Min price</option>
@@ -157,6 +171,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
             <option key={s.value} value={s.value}>{s.label}</option>
           ))}
         </select>
+        </FilterToggle>
         <button
           type="submit"
           className="bg-ink px-8 py-4 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-blue"
@@ -178,6 +193,10 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           / Unsplash
         </p>
       </section>
+
+      <div className="mt-10">
+        <SaveSearchForm params={alertParams} label={describeParams(alertParams)} />
+      </div>
 
       {featured.length > 0 && (
         <section className="mt-16">

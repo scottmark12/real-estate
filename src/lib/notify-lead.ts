@@ -1,7 +1,7 @@
 import { after } from "next/server";
 
 export type LeadAlert = {
-  source: "contact" | "valuation" | "quiz" | "newsletter";
+  source: "contact" | "valuation" | "quiz" | "newsletter" | "alert" | "saved";
   name?: string | null;
   email: string;
   phone?: string | null;

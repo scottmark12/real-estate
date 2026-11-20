@@ -5,6 +5,7 @@ import NeighborhoodCard from "@/components/neighborhood-card";
 import { NEIGHBORHOOD_PHOTOS, photoCredit, photoUrl } from "@/lib/neighborhood-photos";
 import RecentSalesForm from "@/components/recent-sales-form";
 import FeedListingCard from "@/components/feed-listing-card";
+import SaveSearchForm from "@/components/save-search-form";
 import { searchListings } from "@/lib/premier-feed";
 import { NEIGHBORHOOD_FEED, buyHref } from "@/lib/neighborhood-feed";
 import { notFound } from "next/navigation";
@@ -189,6 +190,12 @@ export default async function NeighborhoodPage({
             {homes.listings.slice(0, 3).map((listing) => (
               <FeedListingCard key={listing.id} listing={listing} />
             ))}
+          </div>
+          <div className="mt-10">
+            <SaveSearchForm
+              params={{ ...area, area: n.name }}
+              label={`Homes in ${n.name}`}
+            />
           </div>
         </section>
       )}
