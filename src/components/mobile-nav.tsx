@@ -7,10 +7,12 @@ export default function MobileNav({
   links,
   phone,
   onOpenNewsletter,
+  light = false,
 }: {
   links: { href: string; label: string }[];
   phone?: string | null;
   onOpenNewsletter: () => void;
+  light?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const digits = phone?.replace(/[^\d+]/g, "") || "";
@@ -22,20 +24,20 @@ export default function MobileNav({
         aria-label="Toggle menu"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full border border-navy/20"
+        className={`flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-full border ${light ? "border-white/50" : "border-navy/20"}`}
       >
         <span
-          className={`h-0.5 w-5 bg-navy transition-transform ${
+          className={`h-0.5 w-5 ${light ? "bg-white" : "bg-navy"} transition-transform ${
             open ? "translate-y-2 rotate-45" : ""
           }`}
         />
         <span
-          className={`h-0.5 w-5 bg-navy transition-opacity ${
+          className={`h-0.5 w-5 ${light ? "bg-white" : "bg-navy"} transition-opacity ${
             open ? "opacity-0" : ""
           }`}
         />
         <span
-          className={`h-0.5 w-5 bg-navy transition-transform ${
+          className={`h-0.5 w-5 ${light ? "bg-white" : "bg-navy"} transition-transform ${
             open ? "-translate-y-2 -rotate-45" : ""
           }`}
         />
