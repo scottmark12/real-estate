@@ -4,14 +4,14 @@ import Link from "next/link";
 export const metadata: Metadata = {
   title: "Tools | Mark Scott Real Estate",
   description:
-    "Free tools for buying and selling in San Diego: the neighborhood quiz, a true cost of owning calculator, home values and market research.",
+    "Free tools for buying and selling in San Diego: the Where Should I Live quiz, a true cost of owning calculator, home values and market research.",
 };
 
 const TOOLS = [
   {
     href: "/quiz",
     eyebrow: "Quiz",
-    title: "Find your neighborhood",
+    title: "Where should I live in San Diego?",
     body: "A few questions about how you want to live, and the three San Diego neighborhoods that fit you best.",
     cta: "Take the quiz",
   },

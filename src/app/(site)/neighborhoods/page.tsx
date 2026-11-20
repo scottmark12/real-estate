@@ -27,7 +27,7 @@ export default function NeighborhoodsPage() {
           href="/quiz"
           className="shrink-0 self-start border border-blue bg-blue px-6 py-3 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark lg:self-auto"
         >
-          Take the Neighborhood Quiz
+          Where Should I Live? Take the Quiz
         </Link>
       </div>
 
