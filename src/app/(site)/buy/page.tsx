@@ -31,7 +31,7 @@ function short(n: number) {
 }
 
 const field =
-  "w-full border border-sand bg-white px-3 py-2.5 text-sm text-navy focus:border-blue focus:outline-none";
+  "w-full bg-white px-5 py-4 text-sm text-navy placeholder:text-navy/40 focus:bg-cream-deep focus:outline-none";
 
 export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   const sp = await searchParams;
@@ -75,9 +75,9 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   };
 
   return (
-    <div className="mx-auto max-w-6xl overflow-x-clip px-6 pb-20 max-[600px]:pb-12 sm:px-10">
+    <div className="mx-auto max-w-[1400px] px-6 pb-20 max-[600px]:pb-12 sm:px-10 lg:px-12">
       {/* Photo header with the search on top of it */}
-      <section className="full-bleed relative overflow-hidden">
+      <section className="full-bleed relative flex min-h-[78vh] items-end overflow-hidden max-[600px]:min-h-[70vh]">
         <Image
           src="https://images.unsplash.com/photo-1611459711466-5926ba1a3d43?auto=format&fit=crop&w=2400&q=75"
           alt="Sunset at Crystal Pier, Pacific Beach"
@@ -86,11 +86,11 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/20" />
-        <div className="relative mx-auto max-w-6xl px-6 pb-8 pt-24 sm:px-10 lg:pt-32">
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
+        <div className="relative mx-auto w-full max-w-[1400px] px-6 pb-12 pt-28 sm:px-10 lg:px-12 lg:pb-16">
       <p className="eyebrow text-white/75">Buy</p>
-      <h1 className="mt-2 font-georgia text-[40px] font-normal leading-[1.02] text-white sm:text-[60px]">
-        {area ? `Homes for sale in ${area}.` : "Homes for sale across San Diego County."}
+      <h1 className="mt-3 max-w-4xl font-georgia text-[42px] font-normal leading-[1] text-white sm:text-[64px] lg:text-[80px]">
+        {area ? `Homes for sale in ${area}.` : "Find your place in San Diego."}
       </h1>
       {area && (
         <p className="mt-3 text-sm text-white/75">
@@ -103,15 +103,15 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           </Link>
         </p>
       )}
-      <p className="mt-4 max-w-xl text-white/85">
-        Live from the MLS and updated through the day. See one you like? Ask me
-        about it and I&apos;ll tell you what the listing doesn&apos;t.
+      <p className="mt-5 max-w-xl text-lg text-white/85 max-[600px]:text-base">
+        Every home for sale in San Diego County, live from the MLS. See one you
+        like? I&apos;ll tell you what the listing doesn&apos;t.
       </p>
 
       <form
         action="/buy"
         method="get"
-        className="mt-8 grid gap-3 bg-white/95 p-4 shadow-xl sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_auto]"
+        className="mt-10 grid gap-px bg-navy/10 shadow-2xl sm:grid-cols-2 lg:grid-cols-[2.2fr_1fr_1fr_1fr_1fr_1fr_auto]"
       >
         {city && <input type="hidden" name="city" value={city} />}
         {zip && <input type="hidden" name="zip" value={zip} />}
@@ -159,7 +159,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         </select>
         <button
           type="submit"
-          className="bg-blue px-6 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
+          className="bg-ink px-8 py-4 text-sm font-semibold tracking-wide text-white transition-colors hover:bg-blue"
         >
           Search
         </button>
@@ -180,12 +180,12 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
       </section>
 
       {featured.length > 0 && (
-        <section className="mt-12">
-          <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
-            <p className="eyebrow text-gold">Featured</p>
-            <p className="text-xs text-navy/50">Hand picked by Mark.</p>
+        <section className="mt-16">
+          <div className="flex items-end justify-between gap-4">
+            <h2 className="font-georgia text-[36px] leading-none text-navy sm:text-[44px]">Featured</h2>
+            <p className="text-sm text-navy/50">Hand picked by Mark</p>
           </div>
-          <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
             {featured.map((listing) => (
               <FeedListingCard key={listing.id} listing={listing} />
             ))}
@@ -193,13 +193,18 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         </section>
       )}
 
-      <div className="mt-10 border-t border-sand pt-8">
+      <div className="mt-20">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <p className="text-sm text-navy/60">
+          <div>
+          <h2 className="font-georgia text-[36px] leading-none text-navy sm:text-[44px]">
+            {area ? `In ${area}` : "All homes for sale"}
+          </h2>
+          <p className="mt-3 text-sm text-navy/50">
             {result.listings.length === 0
               ? "No homes match that search."
-              : `Showing page ${page}${area ? ` in ${area}` : q ? ` for “${q}”` : ""}`}
+              : `Page ${page}${q && !area ? ` for “${q}”` : ""}`}
           </p>
+          </div>
           <Link
             href="/contact?intent=buying"
             className="eyebrow shrink-0 text-navy underline decoration-gold decoration-2 underline-offset-4"
@@ -208,7 +213,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
           </Link>
         </div>
 
-        <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {result.listings.map((listing) => (
             <FeedListingCard key={listing.id} listing={listing} />
           ))}

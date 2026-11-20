@@ -137,7 +137,7 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="mx-auto max-w-[1500px] overflow-x-clip px-0 lg:px-12">
+    <div className="mx-auto max-w-[1500px] px-0 lg:px-12">
       {/* Hero / cover — mobile */}
       <section className="overflow-hidden pt-8 lg:hidden">
         <div className="px-4 max-[600px]:px-6">
@@ -448,11 +448,11 @@ export default async function HomePage() {
       )}
 
       {/* The numbers — market chart */}
-      <section className="full-bleed mt-12 bg-cream-deep px-4 py-12 max-[600px]:px-6 lg:px-12">
-        <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[38fr_62fr] lg:items-center lg:px-12">
+      <section className="full-bleed mt-14 border-y border-navy/10 bg-white px-4 py-14 max-[600px]:px-6 lg:px-12 lg:py-20">
+        <div className="mx-auto grid max-w-[1400px] gap-12 lg:grid-cols-[40fr_60fr] lg:items-center lg:gap-20">
           <div>
             <p className="eyebrow text-gold">The Market, Right Now</p>
-            <h2 className="mt-3 font-display text-[32px] font-normal leading-[1.1] text-navy max-[600px]:text-[26px]">
+            <h2 className="mt-4 font-georgia text-[40px] font-normal leading-[1.05] text-navy max-[600px]:text-[30px] lg:text-[52px]">
               More new households than new homes.
             </h2>
             <p className="mt-3 max-w-md text-navy/70">
@@ -466,7 +466,7 @@ export default async function HomePage() {
               More Market Research &rarr;
             </Link>
           </div>
-          <div className="lg:border-l lg:border-navy/15 lg:pl-10">
+          <div>
             <MarketChart data={marketChart} />
           </div>
         </div>
