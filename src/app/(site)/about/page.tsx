@@ -27,6 +27,25 @@ const EXPERTISE = [
   },
 ];
 
+const CLIENTS = [
+  {
+    title: "Moving to San Diego",
+    body: "I made the same move. I'll help you figure out which neighborhood fits how you want to live before you ever book a tour.",
+  },
+  {
+    title: "First time buyers",
+    body: "What you can afford, what a house will really cost to own, and which compromises are worth making.",
+  },
+  {
+    title: "Selling a home",
+    body: "Pricing grounded in real numbers, and knowing which updates pay for themselves before you list.",
+  },
+  {
+    title: "Investors",
+    body: "Underwriting, rent and resale math, and an eye for what a property could become.",
+  },
+];
+
 function EditorialPhoto({
   src,
   alt,
@@ -80,41 +99,32 @@ export default async function AboutPage() {
     <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 max-[600px]:px-6 max-[600px]:pt-10 max-[600px]:pb-12">
       {/* Where it clicked. */}
       <section>
-        <div className="grid gap-12 lg:grid-cols-[36fr_64fr] lg:items-stretch">
+        <div className="grid gap-12 lg:grid-cols-[55fr_45fr] lg:items-center">
           <div>
             <p className="eyebrow text-gold">About</p>
             <h1 className={H1}>The places we live shape how we show up in the world.</h1>
-            <p className="mt-5 max-w-sm text-navy/80">
+            <p className="mt-5 max-w-md text-lg leading-snug text-navy">
+              I help people buy and sell homes across San Diego, with a
+              designer&apos;s eye and an investor&apos;s math.
+            </p>
+            <p className="mt-6 max-w-md text-navy/80">
               A couple of months into traveling, I was in Vietnam, walking past
               a row of huts with dirt floors that felt warmer than most homes
               I&apos;d ever been in. Everyone was so friendly, and I realized
               that kind of community starts at home.
             </p>
-            <p className="mt-4 max-w-sm text-navy/80">
+            <p className="mt-4 max-w-md text-navy/80">
               I call it <span className="text-navy">the human scale</span>: the
               feeling that a place fits the way you actually live.
             </p>
-            <p className="mt-4 max-w-sm text-navy/80">
+            <p className="mt-4 max-w-md text-navy/80">
               For the first time, I was ready to stop traveling and come home.
               Those huts made me want to build places like that. I won&apos;t be
               the one building them, but getting someone into the right home
               matters just as much.
             </p>
 
-            <div className="mt-10 flex items-center gap-4">
-              <div className="relative h-[104px] w-[104px] shrink-0 overflow-hidden">
-                {about.headshot_photo_url ? (
-                  <Image
-                    src={about.headshot_photo_url}
-                    alt={about.name}
-                    fill
-                    sizes="104px"
-                    className="object-cover"
-                  />
-                ) : (
-                  <ImagePlaceholder label="Headshot" className="absolute inset-0" />
-                )}
-              </div>
+            <div className="mt-8 border-t border-sand pt-5">
               <div>
                 <p className="eyebrow text-navy">{about.name}</p>
                 <p className="mt-1 text-sm text-navy/80">Encinitas, California</p>
@@ -127,13 +137,12 @@ export default async function AboutPage() {
           </div>
 
           <EditorialPhoto
-            src="/images/about/surf-morning.jpg"
-            alt="Mark holding his surfboard with a friend on the coast after a morning surf"
-            caption="After a morning surf"
-            focal="50% 62%"
-            placeholderLabel="Opening"
-            boxClassName="aspect-[1.7/1] w-full lg:aspect-auto lg:h-full"
-            sizes="(min-width: 1024px) 64vw, 100vw"
+            src={about.headshot_photo_url}
+            alt={about.name}
+            focal="50% 30%"
+            placeholderLabel="Headshot"
+            boxClassName="aspect-[4/5] w-full"
+            sizes="(min-width: 1024px) 45vw, 100vw"
           />
         </div>
       </section>
@@ -181,6 +190,19 @@ export default async function AboutPage() {
         <p className="eyebrow mt-8 text-navy/60">
           Part of San Diego&apos;s real estate community through ULI and NAIOP
         </p>
+      </section>
+
+      {/* Who I work with. */}
+      <section className="mt-16 border-t border-sand pt-16">
+        <p className="eyebrow text-gold">Who I Work With</p>
+        <div className="mt-6 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          {CLIENTS.map((c) => (
+            <div key={c.title} className="border-t-2 border-navy pt-4">
+              <h3 className="font-georgia text-[20px] leading-[1.25] text-navy">{c.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-navy/80">{c.body}</p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* One real market take, tied to the Market Research. */}
@@ -239,17 +261,17 @@ export default async function AboutPage() {
           <EditorialPhoto
             src="/images/about/living-room.jpg"
             alt="Friends hanging out in a living room around a surfboard coffee table"
-            caption="Friends over at home"
+            caption="A small living room that fits everyone. That's the human scale."
             focal="50% 55%"
             placeholderLabel="Home"
             boxClassName="aspect-[4/3] w-full"
           />
           <EditorialPhoto
-            src="/images/about/beach-crew.jpg"
-            alt="Friends on the beach with surfboards lined up against the bluff"
-            caption="Beach day with the crew"
-            focal="50% 78%"
-            placeholderLabel="Beach"
+            src="/images/about/surf-morning.jpg"
+            alt="Mark holding his surfboard with a friend on the coast after a morning surf"
+            caption="After a morning surf"
+            focal="50% 55%"
+            placeholderLabel="Surf"
             boxClassName="aspect-[4/3] w-full"
           />
         </div>
