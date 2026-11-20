@@ -34,14 +34,14 @@ export default function NeighborhoodsPage() {
       <section className="full-bleed relative z-10 flex min-h-[82vh] items-center justify-center max-[600px]:min-h-[78vh]">
         <div className="absolute inset-0 overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1647670545038-84090e69c79b?auto=format&fit=crop&w=2400&q=75"
-          alt="Torrey Pines and the coast north of La Jolla"
+          src="https://images.unsplash.com/photo-1780293470436-4a88bf466091?auto=format&fit=crop&w=2400&q=75"
+          alt="An evening walk along the coast path in San Diego"
           fill
           priority
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/35 to-black/55" />
         </div>
         <div className="relative w-full px-6 py-24 text-center">
           <p className="eyebrow text-white/85">
@@ -69,12 +69,12 @@ export default function NeighborhoodsPage() {
         <p className="absolute bottom-3 right-3 text-[10px] text-white/60">
           Photo:{" "}
           <a
-            href="https://unsplash.com/@kcwelch330?utm_source=markscott&utm_medium=referral"
+            href="https://unsplash.com/@femartines_?utm_source=markscott&utm_medium=referral"
             target="_blank"
             rel="noreferrer"
             className="underline"
           >
-            KC Welch
+            Felipe Oliveira
           </a>{" "}
           / Unsplash
         </p>
