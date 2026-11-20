@@ -5,8 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import type { CircleMarker, Map as LeafletMap } from "leaflet";
 import { NEIGHBORHOODS, PRICE_TIERS, REGIONS, type Region } from "@/lib/neighborhoods";
 
+// Florida Coastal map look: warm light land, soft blue water, dark pins.
+const PIN = "#152a2e";
 const BLUE = "#3262a6";
-const GRAY = "#a3a3a3";
+const GRAY = "#9aa3a5";
 
 function escape(text: string) {
   return text.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -36,7 +38,7 @@ export default function NeighborhoodMap() {
           radius: 8,
           color: "#ffffff",
           weight: 2,
-          fillColor: BLUE,
+          fillColor: PIN,
           fillOpacity: 1,
         })
           .bindTooltip(escape(n.name), { direction: "top", offset: [0, -8] })
@@ -72,7 +74,7 @@ export default function NeighborhoodMap() {
       const m = markers.current[n.slug];
       if (!m) continue;
       const on = region === "All" || n.region === region;
-      m.setStyle({ fillColor: on ? BLUE : GRAY, fillOpacity: on ? 1 : 0.5, radius: on ? 8 : 5 });
+      m.setStyle({ fillColor: on ? PIN : GRAY, fillOpacity: on ? 1 : 0.55, radius: on ? 8 : 5 });
       if (on) m.bringToFront();
     }
     map.closePopup();
@@ -100,11 +102,11 @@ export default function NeighborhoodMap() {
       </div>
       <div
         ref={el}
-        className="relative z-0 mt-4 h-[520px] w-full border border-sand bg-cream-deep max-[600px]:h-[420px]"
+        className="relative z-0 mt-4 h-[520px] w-full border border-sand bg-[#8ab9d8] max-[600px]:h-[420px]"
         aria-label="Map of San Diego neighborhoods"
       />
       <style>{`
-        .ms-map-tiles { filter: grayscale(1) contrast(0.95) brightness(1.04); }
+        .ms-map-tiles { filter: saturate(0.45) hue-rotate(6deg) brightness(1.02); }
         .leaflet-container { font: inherit; }
         .leaflet-popup-content-wrapper { border-radius: 0; box-shadow: 0 8px 24px rgba(0,0,0,.12); }
         .leaflet-popup-content { margin: 14px 16px; }
