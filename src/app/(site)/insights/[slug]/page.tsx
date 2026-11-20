@@ -26,7 +26,8 @@ export async function generateMetadata({
     .maybeSingle();
   if (!data) return { title: "Market Research" };
   return {
-    title: data.title,
+    // Long research titles drop the brand suffix so the headline isn't cut off.
+    title: { absolute: data.title.length > 45 ? `${data.title} | Mark Scott` : `${data.title} | Mark Scott Real Estate` },
     description: data.excerpt ?? undefined,
     alternates: { canonical: `/insights/${slug}` },
     openGraph: data.image_url

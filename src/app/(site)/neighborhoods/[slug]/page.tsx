@@ -29,7 +29,7 @@ export async function generateMetadata({
   const n = getNeighborhood(slug);
   if (!n) return {};
   return {
-    title: `${n.name} Homes for Sale & Neighborhood Guide`,
+    title: { absolute: `${n.name} Homes for Sale & Guide | Mark Scott` },
     description: `${n.tagline} Homes for sale, prices and the honest trade offs from a local agent.`,
     alternates: { canonical: `/neighborhoods/${n.slug}` },
   };
