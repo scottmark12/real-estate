@@ -34,8 +34,8 @@ export default function NeighborhoodsPage() {
       <section className="full-bleed relative z-10 flex min-h-[92vh] items-center justify-center pt-20 max-[600px]:min-h-[86vh]">
         <div className="absolute inset-0 overflow-hidden">
         <Image
-          src="https://images.unsplash.com/photo-1654054413716-0a2986b9cd3d?auto=format&fit=crop&w=2400&q=80"
-          alt="Waves rolling into La Jolla Cove under a blue sky"
+          src="https://images.unsplash.com/photo-1706738021735-2d01e4e6312b?auto=format&fit=crop&w=2400&q=80"
+          alt="People walking the beach at La Jolla Cove"
           fill
           priority
           sizes="100vw"
@@ -69,12 +69,12 @@ export default function NeighborhoodsPage() {
         <p className="absolute bottom-3 right-3 text-[10px] text-white/60">
           Photo:{" "}
           <a
-            href="https://unsplash.com/@ccfrancisbooks?utm_source=markscott&utm_medium=referral"
+            href="https://unsplash.com/@nhuenerfuerst?utm_source=markscott&utm_medium=referral"
             target="_blank"
             rel="noreferrer"
             className="underline"
           >
-            C.C. Francis
+            Nils Huenerfuerst
           </a>{" "}
           / Unsplash
         </p>
