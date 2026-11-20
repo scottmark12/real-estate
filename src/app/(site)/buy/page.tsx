@@ -32,10 +32,20 @@ const field =
 
 export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   const sp = await searchParams;
-  const q = one(sp.q) ?? "";
-  const city = one(sp.city) ?? "";
-  const zip = one(sp.zip) ?? "";
-  const area = one(sp.area) ?? "";
+  // What the visitor typed wins over a neighborhood's pinned filters, and a
+  // zip anywhere in it ("Encinitas, CA 92024") becomes a real zip filter.
+  const typed = (one(sp.q) ?? "").trim();
+  const typedZip = typed.match(/\b(9\d{4})(?:-\d{4})?\b/)?.[1] ?? "";
+  const typedRest = typed
+    .replace(/\b9\d{4}(?:-\d{4})?\b/, " ")
+    .replace(/,?\s*\b(CA|California)\b\.?/i, " ")
+    .replace(/[,\s]+/g, " ")
+    .trim();
+  const q = typedZip ? typedRest : typed.replace(/,?\s*\b(CA|California)\b\.?$/i, "").trim();
+  const city = typed ? "" : one(sp.city) ?? "";
+  const zip = typedZip || (typed ? "" : one(sp.zip) ?? "");
+  const area = typed ? "" : one(sp.area) ?? "";
+  const searchText = typed;
   const min_price = one(sp.min_price) ?? "";
   const max_price = one(sp.max_price) ?? "";
   const min_beds = one(sp.min_beds) ?? "";
@@ -67,10 +77,12 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
   };
   const pageHref = (p: number) => {
     const params = new URLSearchParams();
-    if (q) params.set("q", q);
-    if (city) params.set("city", city);
-    if (zip) params.set("zip", zip);
-    if (area) params.set("area", area);
+    if (searchText) params.set("q", searchText);
+    else {
+      if (city) params.set("city", city);
+      if (zip) params.set("zip", zip);
+      if (area) params.set("area", area);
+    }
     if (min_price) params.set("min_price", min_price);
     if (max_price) params.set("max_price", max_price);
     if (min_beds) params.set("min_beds", min_beds);
@@ -127,7 +139,7 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         <input
           id="q"
           name="q"
-          defaultValue={q}
+          defaultValue={searchText}
           placeholder="City, zip or address"
           className={field}
         />
@@ -210,12 +222,12 @@ export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
           <h2 className="font-georgia text-[36px] leading-none text-navy sm:text-[44px]">
-            {area ? `In ${area}` : "All homes for sale"}
+            {area ? `In ${area}` : searchText ? `Homes in ${searchText}` : "All homes for sale"}
           </h2>
           <p className="mt-3 text-sm text-navy/50">
             {result.listings.length === 0
               ? "No homes match that search."
-              : `Page ${page}${q && !area ? ` for “${q}”` : ""}`}
+              : `${result.total.toLocaleString()} homes${page > 1 ? `, page ${page}` : ""}`}
           </p>
           </div>
           <Link

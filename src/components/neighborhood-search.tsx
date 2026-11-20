@@ -38,10 +38,17 @@ export default function NeighborhoodSearch({ items }: { items: SearchItem[] }) {
       .map((m) => m.it);
   }, [q, items]);
 
+  const term = q.trim();
+  const isZip = /^9\d{4}$/.test(term);
+  const homesHref = `/buy?q=${encodeURIComponent(term)}`;
+
   function onSubmit(e: FormEvent) {
     e.preventDefault();
+    // A ZIP with no neighborhood of its own goes straight to homes there.
     if (matches[0]) {
       router.push(`/neighborhoods/${matches[0].slug}`);
+    } else if (term) {
+      router.push(homesHref);
     } else {
       setMiss(true);
     }
@@ -82,7 +89,7 @@ export default function NeighborhoodSearch({ items }: { items: SearchItem[] }) {
         </button>
       </form>
 
-      {open && matches.length > 0 && (
+      {open && (matches.length > 0 || isZip) && (
         <ul className="absolute inset-x-4 top-full z-20 mt-2 overflow-hidden rounded-2xl bg-white py-2 shadow-2xl">
           {matches.map((m) => (
             <li key={m.slug}>
@@ -97,11 +104,24 @@ export default function NeighborhoodSearch({ items }: { items: SearchItem[] }) {
               </button>
             </li>
           ))}
+          {term && (
+            <li className={matches.length ? "mt-1 border-t border-navy/10 pt-1" : ""}>
+              <button
+                type="button"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => router.push(homesHref)}
+                className="flex w-full items-baseline justify-between gap-4 px-5 py-2.5 text-left hover:bg-cream-deep"
+              >
+                <span className="text-navy">Homes for sale in {term}</span>
+                <span className="text-xs text-navy/45">Search homes &rarr;</span>
+              </button>
+            </li>
+          )}
         </ul>
       )}
       {miss && (
         <p className="mt-3 text-center text-sm text-white/85">
-          No neighborhood matches that yet. Try a city like Encinitas, or a ZIP.
+          Type a neighborhood, city or ZIP to get started.
         </p>
       )}
     </div>
