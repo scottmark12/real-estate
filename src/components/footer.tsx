@@ -23,6 +23,25 @@ const MOBILE_FOOTER_NAV = [
   { href: "/invest", label: "Invest" },
 ];
 
+function Brokerage({ className = "" }: { className?: string }) {
+  return (
+    <div className={className}>
+      <p className="eyebrow text-ink-muted">Brokered by</p>
+      <Image
+        src="https://www.premieragencyre.com/images/branding/logo-pa-wide-white.png"
+        alt="Premier Agency Real Estate"
+        width={8334}
+        height={1667}
+        sizes="200px"
+        className="mt-2 h-8 w-auto opacity-90"
+      />
+      <p className="mt-2 text-xs text-ink-muted">
+        Premier Agency Real Estate &middot; CalDRE# 02240990
+      </p>
+    </div>
+  );
+}
+
 export default function Footer({ contact }: { contact: ContactSettings }) {
   return (
     <footer
@@ -100,6 +119,8 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
             &copy; {new Date().getFullYear()} Mark Scott Real Estate
           </p>
         </div>
+
+        <Brokerage className="mt-6 border-t border-ink-cream/10 pt-5" />
       </div>
 
       <div className="hidden sm:block">
@@ -116,6 +137,7 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
             Residential, commercial, and investment real estate across{" "}
             {contact.city_state}.
           </p>
+          <Brokerage className="mt-8" />
         </div>
 
         <div className="grid grid-cols-2 gap-8 lg:contents">
