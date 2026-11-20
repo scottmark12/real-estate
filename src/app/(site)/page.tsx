@@ -216,8 +216,33 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* Homes — from the live feed (hearted in the admin, else newest) */}
+      {homeListings.listings.length > 0 && (
+        <section className="mt-6 px-4 max-[600px]:px-6 lg:mt-16 lg:px-0">
+          <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
+            <p className="eyebrow text-gold">
+              {homeListings.featured ? "Featured Listings" : "Just Listed"}
+            </p>
+            <Link
+              href="/buy"
+              className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
+            >
+              See All Homes &rarr;
+            </Link>
+          </div>
+          {/* Swipe row on phones, grid from tablet up */}
+          <div className="-mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 max-[600px]:scroll-px-6 max-[600px]:-mx-6 max-[600px]:px-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+            {homeListings.listings.map((listing) => (
+              <div key={listing.id} className="w-[78%] shrink-0 snap-start sm:w-auto">
+                <FeedListingCard listing={listing} />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Primary paths — mobile */}
-      <section className="mt-6 border-y border-sand py-3 lg:hidden">
+      <section className="mt-10 border-y border-sand py-3 lg:hidden">
         <div className="relative grid grid-cols-3 divide-x divide-sand">
           {PRIMARY_PATHS.map((p) => (
             <Link
@@ -233,7 +258,7 @@ export default async function HomePage() {
       </section>
 
       {/* Primary paths — desktop */}
-      <section className="mt-20 hidden border-t border-sand py-9 lg:block">
+      <section className="mt-14 hidden border-t border-sand py-9 lg:block">
         <div className="relative grid grid-cols-3 divide-y-0">
           <span className="pointer-events-none absolute left-1/3 top-1/2 h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand" />
           <span className="pointer-events-none absolute left-2/3 top-1/2 h-[56px] w-px -translate-x-1/2 -translate-y-1/2 bg-sand" />
@@ -256,31 +281,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-      {/* Homes — from the live feed (hearted in the admin, else newest) */}
-      {homeListings.listings.length > 0 && (
-        <section className="mt-14 px-4 max-[600px]:px-6 lg:mt-6 lg:px-0">
-          <div className="flex items-end justify-between gap-4 border-b border-sand pb-3">
-            <p className="eyebrow text-gold">
-              {homeListings.featured ? "Featured Listings" : "Just Listed"}
-            </p>
-            <Link
-              href="/buy"
-              className="eyebrow text-navy underline decoration-gold decoration-2 underline-offset-4"
-            >
-              See All Homes &rarr;
-            </Link>
-          </div>
-          {/* Swipe row on phones, grid from tablet up */}
-          <div className="-mx-4 mt-6 flex snap-x snap-mandatory scroll-px-4 gap-4 overflow-x-auto px-4 pb-2 max-[600px]:scroll-px-6 max-[600px]:-mx-6 max-[600px]:px-6 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 sm:overflow-visible sm:px-0 lg:grid-cols-4">
-            {homeListings.listings.map((listing) => (
-              <div key={listing.id} className="w-[78%] shrink-0 snap-start sm:w-auto">
-                <FeedListingCard listing={listing} />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
 
       {/* On My Radar — mobile */}
       {radar && (
