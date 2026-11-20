@@ -10,6 +10,11 @@ import type { Listing } from "@/lib/types";
 
 export const revalidate = 300;
 
+// Render each page on first visit, then serve it cached (ISR).
+export function generateStaticParams() {
+  return [];
+}
+
 export default async function ListingDetailPage({
   params,
 }: PageProps<"/listings/[slug]">) {

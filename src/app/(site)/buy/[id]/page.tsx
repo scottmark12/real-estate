@@ -12,6 +12,13 @@ import {
 } from "@/lib/premier-feed";
 import { JsonLd, breadcrumbLd } from "@/lib/site";
 
+// Listing pages render on first visit and stay cached for 5 minutes, so
+// price and status changes from the MLS still show up quickly.
+export const revalidate = 300;
+export function generateStaticParams() {
+  return [];
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<"/buy/[id]">): Promise<Metadata> {

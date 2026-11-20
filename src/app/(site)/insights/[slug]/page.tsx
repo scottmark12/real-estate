@@ -14,6 +14,11 @@ import { JsonLd, SITE_URL, breadcrumbLd } from "@/lib/site";
 
 export const revalidate = 300;
 
+// Render each page on first visit, then serve it cached (ISR).
+export function generateStaticParams() {
+  return [];
+}
+
 export async function generateMetadata({
   params,
 }: PageProps<"/insights/[slug]">): Promise<Metadata> {
