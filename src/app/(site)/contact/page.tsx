@@ -8,7 +8,8 @@ import type { ContactSettings } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Contact Mark Scott",
   description:
-    "Buying, selling or investing in San Diego? Call (850) 363-6057 or send Mark a note. He reads everything himself.",
+    "Buying, selling or investing in San Diego? Call or text (850) 363-6057 or send Mark a note. He replies the same day.",
+  alternates: { canonical: "/contact" },
 };
 
 

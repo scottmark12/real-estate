@@ -9,6 +9,7 @@ import { formatDate } from "@/lib/format";
 import { CATEGORY_LABELS } from "@/components/article-card";
 import ArticleBlocks from "@/components/article-blocks";
 import type { Article } from "@/lib/types";
+import { JsonLd, SITE_URL, breadcrumbLd } from "@/lib/site";
 
 export const revalidate = 0;
 
@@ -27,7 +28,10 @@ export async function generateMetadata({
   return {
     title: data.title,
     description: data.excerpt ?? undefined,
-    openGraph: data.image_url ? { images: [data.image_url] } : undefined,
+    alternates: { canonical: `/insights/${slug}` },
+    openGraph: data.image_url
+      ? { type: "article", images: [data.image_url] }
+      : { type: "article" },
   };
 }
 
@@ -51,6 +55,26 @@ export default async function ArticleDetailPage({
 
   return (
     <>
+    <JsonLd
+      data={breadcrumbLd([
+        { name: "Market Research", path: "/insights" },
+        { name: article.title, path: `/insights/${article.slug}` },
+      ])}
+    />
+    <JsonLd
+      data={{
+        "@context": "https://schema.org",
+        "@type": "Article",
+        headline: article.title,
+        description: article.excerpt ?? undefined,
+        image: article.image_url ?? undefined,
+        datePublished: article.published_at ?? undefined,
+        dateModified: article.updated_at ?? article.published_at ?? undefined,
+        mainEntityOfPage: `${SITE_URL}/insights/${article.slug}`,
+        author: { "@type": "Person", name: "Mark Scott", url: `${SITE_URL}/about` },
+        publisher: { "@id": `${SITE_URL}/#agent` },
+      }}
+    />
     <article className="mx-auto max-w-3xl px-6 py-16 sm:px-10">
       <Link href="/insights" className="text-sm text-navy/60 hover:text-navy">
         ← Back to Insights

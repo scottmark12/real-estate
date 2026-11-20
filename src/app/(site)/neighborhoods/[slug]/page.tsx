@@ -16,6 +16,7 @@ import {
   getNeighborhood,
   nearbyNeighborhoods,
 } from "@/lib/neighborhoods";
+import { JsonLd, breadcrumbLd } from "@/lib/site";
 
 export function generateStaticParams() {
   return NEIGHBORHOODS.map((n) => ({ slug: n.slug }));
@@ -28,8 +29,9 @@ export async function generateMetadata({
   const n = getNeighborhood(slug);
   if (!n) return {};
   return {
-    title: `Living in ${n.name}, San Diego`,
-    description: n.tagline,
+    title: `${n.name} Homes for Sale & Neighborhood Guide`,
+    description: `${n.tagline} Homes for sale, prices and the honest trade offs from a local agent.`,
+    alternates: { canonical: `/neighborhoods/${n.slug}` },
   };
 }
 
@@ -59,6 +61,12 @@ export default async function NeighborhoodPage({
 
   return (
     <div className="mx-auto max-w-[1500px] px-12 pb-20 max-[600px]:px-6 max-[600px]:pb-12">
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Neighborhoods", path: "/neighborhoods" },
+          { name: n.name, path: `/neighborhoods/${n.slug}` },
+        ])}
+      />
       {/* Photo hero */}
       <section className="relative -mx-12 overflow-hidden max-[600px]:-mx-6">
         <div className="relative aspect-[4/3] w-full sm:aspect-[21/9]">

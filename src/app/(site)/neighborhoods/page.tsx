@@ -7,9 +7,10 @@ import NeighborhoodCard from "@/components/neighborhood-card";
 import { NEIGHBORHOODS, REGIONS } from "@/lib/neighborhoods";
 
 export const metadata: Metadata = {
-  title: "San Diego Neighborhoods",
+  title: "San Diego Neighborhood Guide: 41 Places to Live",
   description:
-    "A local's guide to San Diego neighborhoods, from the North County coast to the urban core: what each place is like, what it costs and the honest trade offs.",
+    "A local's guide to 41 San Diego neighborhoods, from the North County coast to the urban core: what each place is like, what it costs, homes for sale and the honest trade offs.",
+  alternates: { canonical: "/neighborhoods" },
 };
 
 const regionId = (r: string) => r.toLowerCase().replace(/[^a-z]+/g, "-");

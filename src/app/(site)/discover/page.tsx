@@ -30,6 +30,9 @@ export const metadata: Metadata = {
   title: "Discover San Diego Homes",
   description:
     "Featured homes, the latest San Diego market data and research from Mark Scott Real Estate.",
+  // Mostly the same as the homepage now, so keep it out of Google.
+  robots: { index: false, follow: true },
+  alternates: { canonical: "/discover" },
 };
 
 
@@ -244,9 +247,9 @@ export default async function HomePage() {
           <div className="mt-8 grid grid-cols-[65fr_35fr] items-start gap-x-16">
             <div>
               <p className="eyebrow-sm text-gold">{hero.location_label}</p>
-              <h1 className="font-georgia mt-3 text-[clamp(54px,4vw,69px)] font-bold leading-[0.95] tracking-[-0.025em] text-navy">
+              <h2 className="font-georgia mt-3 text-[clamp(54px,4vw,69px)] font-bold leading-[0.95] tracking-[-0.025em] text-navy">
                 {renderHeadline(hero.headline)}
-              </h1>
+              </h2>
             </div>
             <div className="pt-14">
               <p className="text-lg text-navy/70">{hero.subhead}</p>

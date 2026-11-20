@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Caveat, Libre_Caslon_Display } from "next/font/google";
 import "./globals.css";
+import { SITE_URL } from "@/lib/site";
 
 const caveat = Caveat({
   subsets: ["latin"],
@@ -15,7 +16,7 @@ const libreCaslonDisplay = Libre_Caslon_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://markscott.co"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Mark Scott | San Diego Real Estate Agent in Encinitas",
     template: "%s | Mark Scott Real Estate",
@@ -25,7 +26,6 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mark Scott Real Estate | San Diego",
     description: "Homes, market research, and real estate across San Diego.",
-    url: "https://markscott.co",
     siteName: "Mark Scott Real Estate",
     locale: "en_US",
     type: "website",

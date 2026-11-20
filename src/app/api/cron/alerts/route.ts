@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { alertEmailHtml, buyUrl, cleanParams, describeParams } from "@/lib/listing-alerts";
 import { type FeedListing, searchListings } from "@/lib/premier-feed";
+import { SITE_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -69,7 +70,7 @@ export async function GET(request: Request) {
       label,
       listings: fresh,
       seeAllUrl: buyUrl(params),
-      unsubscribeUrl: `https://markscott.co/alerts/unsubscribe?token=${row.unsubscribe_token}`,
+      unsubscribeUrl: `${SITE_URL}/alerts/unsubscribe?token=${row.unsubscribe_token}`,
     });
     const subject = `${fresh.length} new ${fresh.length === 1 ? "home" : "homes"}: ${label}`;
 

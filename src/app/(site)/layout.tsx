@@ -2,6 +2,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { DEFAULT_CONTACT, getSetting } from "@/lib/settings";
 import type { ContactSettings } from "@/lib/types";
+import { SITE_URL } from "@/lib/site";
 
 export const revalidate = 0;
 
@@ -17,8 +18,9 @@ export default async function SiteLayout({
     "@context": "https://schema.org",
     "@type": "RealEstateAgent",
     name: "Mark Scott Real Estate",
-    url: "https://markscott.co",
-    image: "https://markscott.co/images/mark-headshot.jpeg",
+    "@id": `${SITE_URL}/#agent`,
+    url: SITE_URL,
+    image: `${SITE_URL}/images/mark-headshot.jpeg`,
     telephone: contact.phone || undefined,
     email: contact.email || undefined,
     address: {

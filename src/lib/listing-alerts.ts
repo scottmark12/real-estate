@@ -1,4 +1,5 @@
 import { type FeedListing, formatFeedPrice, formatFeedStats } from "@/lib/premier-feed";
+import { SITE_URL } from "@/lib/site";
 
 // A saved search: the Buy filters someone wants to hear about.
 export type AlertParams = {
@@ -54,7 +55,7 @@ export function describeParams(p: AlertParams) {
   return [`Homes in ${where}`, ...bits].join(", ");
 }
 
-export function buyUrl(p: AlertParams, base = "https://markscott.co") {
+export function buyUrl(p: AlertParams, base = SITE_URL) {
   const qs = new URLSearchParams();
   if (p.q) qs.set("q", p.q);
   if (p.city) qs.set("city", p.city);
@@ -79,7 +80,7 @@ export function alertEmailHtml(opts: {
   seeAllUrl: string;
   unsubscribeUrl: string;
 }) {
-  const base = "https://markscott.co";
+  const base = SITE_URL;
   const shown = opts.listings.slice(0, 8);
   const rows = shown
     .map((l) => {

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
@@ -16,6 +17,10 @@ import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import NeighborhoodCard from "@/components/neighborhood-card";
 import HomeVideoHero from "@/components/home-video-hero";
 import MeetMark from "@/components/meet-mark";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 
 export const revalidate = 0;

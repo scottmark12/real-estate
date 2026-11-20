@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   title: "Investing in San Diego Real Estate",
   description:
     "Duplexes, small multifamily, ADU and lot split potential across San Diego County, underwritten with real numbers before you make an offer.",
+  alternates: { canonical: "/invest" },
 };
 
 const WHAT_I_RUN = [

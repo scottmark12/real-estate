@@ -12,7 +12,9 @@ import { getFeaturedListings } from "@/lib/featured-listings";
 export const metadata: Metadata = {
   title: "Homes for Sale in San Diego County",
   description:
-    "Search homes for sale across San Diego County, updated through the day. Ask Mark about any of them.",
+    "Search every home for sale in San Diego County, live from the MLS: Encinitas, Carlsbad, La Jolla, Del Mar and beyond. Save homes and get new listings by email.",
+  // Every filtered or searched version points Google back to the main page.
+  alternates: { canonical: "/buy" },
 };
 
 const PRICE_OPTIONS = [

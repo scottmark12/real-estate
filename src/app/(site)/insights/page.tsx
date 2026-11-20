@@ -8,6 +8,7 @@ export const metadata: Metadata = {
   title: "San Diego Market Research",
   description:
     "Data driven reporting on San Diego real estate: households vs housing, rates, ADU costs, condos and development.",
+  alternates: { canonical: "/insights" },
 };
 
 

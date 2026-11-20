@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "True Cost of Owning Calculator",
   description:
     "What a San Diego home really costs each month: mortgage, property tax, Mello Roos, insurance and HOA, plus cash to close.",
+  alternates: { canonical: "/tools/cost-calculator" },
 };
 
 export default function CostCalculatorPage() {

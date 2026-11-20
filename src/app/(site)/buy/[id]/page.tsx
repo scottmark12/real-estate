@@ -10,16 +10,20 @@ import {
   getListing,
   listingImages,
 } from "@/lib/premier-feed";
+import { JsonLd, breadcrumbLd } from "@/lib/site";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/buy/[id]">): Promise<Metadata> {
   const { id } = await params;
   const l = await getListing(id);
-  if (!l) return { title: "Home for Sale" };
+  if (!l) return { title: "Home for Sale", robots: { index: false } };
+  const photo = listingImages(l)[0];
   return {
-    title: `${l.address}, ${l.city} | ${formatFeedPrice(l.price)}`,
-    description: `${formatFeedStats(l)} in ${l.city}, CA. Ask Mark Scott about this home.`,
+    title: { absolute: `${l.address}, ${l.city}, CA ${l.zip} | ${formatFeedPrice(l.price)}` },
+    description: `${formatFeedStats(l)} home for sale at ${l.address}, ${l.city}, CA ${l.zip}, listed at ${formatFeedPrice(l.price)}. Ask Mark Scott for comps, condition and what he would offer.`,
+    alternates: { canonical: `/buy/${l.id}` },
+    openGraph: photo ? { images: [photo] } : undefined,
   };
 }
 
@@ -49,6 +53,12 @@ export default async function FeedListingPage({ params }: PageProps<"/buy/[id]">
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-16 sm:px-10">
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Homes for Sale", path: "/buy" },
+          { name: fullAddress, path: `/buy/${l.id}` },
+        ])}
+      />
       <Link href="/buy" className="text-sm text-navy/60 hover:text-navy">
         &larr; Back to search
       </Link>
