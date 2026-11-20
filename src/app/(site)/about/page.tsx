@@ -6,10 +6,25 @@ import type { AboutSettings, ContactSettings } from "@/lib/types";
 
 export const revalidate = 0;
 
-const LENS_ITEMS = [
-  { n: "01", label: "Human Scale", body: "Does it fit the way you'll actually live?" },
-  { n: "02", label: "Potential", body: "What would it take to get there?" },
-  { n: "03", label: "Numbers", body: "Do the numbers make sense?" },
+const EXPERTISE = [
+  {
+    n: "01",
+    label: "The Eye",
+    title: "Does it have the human scale?",
+    body: "I majored in marketing at FSU with focuses in entrepreneurship and interior design. I notice light, layout and flow, the things you feel in a house before you can name them.",
+  },
+  {
+    n: "02",
+    label: "The Work",
+    title: "What would it take to get there?",
+    body: "I renovated and managed a six bedroom property near campus, and I work alongside a team that buys and renovates homes. I know what a fix really costs and which ones are worth it.",
+  },
+  {
+    n: "03",
+    label: "The Math",
+    title: "Do the numbers make sense?",
+    body: "I've underwritten multifamily and senior housing acquisitions, from cash flow to IRR. I look at a home the way an investor would, so you know what it's really worth, not just what it's listed at.",
+  },
 ];
 
 function EditorialPhoto({
@@ -123,70 +138,100 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      {/* How I ended up in Encinitas. */}
+      {/* How I look at a home: the expertise, right after the story. */}
       <section className="mt-16 border-t border-sand pt-16">
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 lg:grid-cols-[38fr_31fr_31fr]">
-          <EditorialPhoto
-            src="/images/about/white-temple.jpg"
-            alt="Mark at a white temple in Thailand"
-            caption="Thailand"
-            focal="40% 50%"
-            placeholderLabel="Travel"
-            boxClassName="aspect-[4/5] w-full"
-            sizes="(min-width: 1024px) 38vw, 100vw"
-          />
-          <EditorialPhoto
-            src={about.travel_photo_2_url}
-            alt={about.travel_photo_2_caption || "A place Mark has traveled to"}
-            caption={about.travel_photo_2_caption}
-            focal={about.travel_photo_2_focal}
-            placeholderLabel="Travel"
-            boxClassName="aspect-[4/5] w-full"
-            sizes="(min-width: 1024px) 31vw, 100vw"
-          />
-          <EditorialPhoto
-            src="/images/about/quokka.jpg"
-            alt="Mark taking a selfie with a quokka"
-            caption="Western Australia"
-            focal="60% 40%"
-            placeholderLabel="Travel"
-            boxClassName="aspect-[4/5] w-full"
-            sizes="(min-width: 1024px) 31vw, 100vw"
-          />
+        <p className="eyebrow text-gold">How I Look at a Home</p>
+        <h2 className="mt-3 font-georgia max-w-2xl text-[34px] font-normal leading-[1.1] text-navy max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-[40px]">
+          A designer&apos;s eye and an investor&apos;s math.
+        </h2>
+        <p className="mt-5 max-w-2xl text-navy/80">
+          Now the human scale is how I look at every home in San Diego. I can
+          walk into a house and tell you whether it has it, what it would take
+          to get there, and whether the numbers make sense.
+        </p>
+
+        <div className="mt-10 grid grid-cols-1 divide-y divide-sand lg:grid-cols-3 lg:divide-x lg:divide-y-0">
+          {EXPERTISE.map((item) => (
+            <div
+              key={item.label}
+              className="py-6 first:pt-0 last:pb-0 lg:px-8 lg:py-0 lg:first:pl-0 lg:last:pr-0"
+            >
+              <p className="eyebrow whitespace-nowrap text-gold">
+                {item.n} &middot; {item.label}
+              </p>
+              <h3 className="mt-3 font-georgia text-[22px] leading-[1.25] text-navy">
+                {item.title}
+              </h3>
+              <p className="mt-3 text-sm leading-relaxed text-navy/80">{item.body}</p>
+            </div>
+          ))}
         </div>
 
-        <div className="mt-10">
-          <p className="eyebrow text-gold">How I Ended Up in Encinitas</p>
-          <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-12">
-            <h2 className={`max-w-lg lg:flex-1 ${H2}`}>
-              Back in Atlanta, though, life felt just okay.
-            </h2>
-            <div className="flex max-w-xl flex-col gap-4 text-navy/80 lg:flex-1 lg:pt-2">
-              <p>
-                A friend I&apos;d met in Thailand had told me, &ldquo;You&apos;d
-                love Encinitas.&rdquo;
-              </p>
-              <p>
-                I wanted morning walks where I could see the water, an active
-                lifestyle, friends who would push me to be better, and a home
-                where I could set down roots and look forward to what&apos;s to
-                come. So I moved across the country.
-              </p>
-              <p>
-                When I got here, it was the first time in a long time that I
-                felt at home. The regulars at the American Legion knew me right
-                away. I found my church across the street and now volunteer
-                there, and I&apos;m joining the Chamber of Commerce and coaching
-                youth lacrosse this coming season.
-              </p>
-              <p>
-                Most mornings I walk to D Street and sit at the top of the
-                stairs looking out at the water. It&apos;s a small town with
-                world class amenities, and the mountains, the desert and a big
-                city airport are all close by. I even talked my sister into
-                moving out.
-              </p>
-            </div>
+        <div className="mt-12">
+          <EditorialPhoto
+            src={about.community_photo_url}
+            alt="The six bedroom property Mark renovated near Florida State University in Tallahassee, FL"
+            caption={about.community_photo_caption}
+            focal={about.community_photo_focal}
+            placeholderLabel="College Renovation"
+            boxClassName="aspect-[21/8] w-full"
+            sizes="(min-width: 1024px) 1400px, 100vw"
+          />
+        </div>
+        <p className="eyebrow mt-8 text-navy/60">
+          Part of San Diego&apos;s real estate community through ULI and NAIOP
+        </p>
+      </section>
+
+      {/* One real market take, tied to the Market Research. */}
+      <section className="mt-16 bg-cream-deep px-12 py-14 max-[600px]:-mx-6 max-[600px]:px-6">
+        <p className="eyebrow text-gold">What I&apos;m Watching</p>
+        <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-12">
+          <h2 className={`max-w-lg lg:flex-1 ${H2}`}>
+            San Diego keeps adding households faster than it adds homes.
+          </h2>
+          <div className="flex max-w-xl flex-col gap-4 text-navy/80 lg:flex-1 lg:pt-2">
+            <p>
+              That gap is why prices have held up even with high rates, and
+              why knowing which neighborhoods still have room to grow matters
+              more than ever. I dig into the data in my market research.
+            </p>
+            <Link
+              href="/insights"
+              className="eyebrow text-gold underline decoration-1 underline-offset-4"
+            >
+              Read the Market Research
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Encinitas: community as local knowledge. */}
+      <section className="mt-16 border-t border-sand pt-16">
+        <p className="eyebrow text-gold">Why Encinitas</p>
+        <div className="mt-3 flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-12">
+          <h2 className={`max-w-lg lg:flex-1 ${H2}`}>
+            I know these neighborhoods because I live in them.
+          </h2>
+          <div className="flex max-w-xl flex-col gap-4 text-navy/80 lg:flex-1 lg:pt-2">
+            <p>
+              Back in Atlanta, life felt just okay. A friend I&apos;d met in
+              Thailand told me, &ldquo;You&apos;d love Encinitas.&rdquo; I
+              wanted morning walks by the water, an active lifestyle, friends
+              who would push me to be better, and a home where I could set down
+              roots. So I moved across the country.
+            </p>
+            <p>
+              It was the first time in a long time that I felt at home. The
+              regulars at the American Legion knew me right away, I volunteer
+              at my church across the street, and I&apos;m joining the Chamber
+              of Commerce and coaching youth lacrosse this coming season. Most
+              mornings I sit at the top of the D Street stairs looking out at
+              the water.
+            </p>
+            <p className="text-navy">
+              Helping other people find that same feeling is why I do this.
+            </p>
           </div>
         </div>
 
@@ -197,66 +242,16 @@ export default async function AboutPage() {
             caption="Friends over at home"
             focal="50% 55%"
             placeholderLabel="Home"
-            boxClassName="aspect-[4/5] w-full"
+            boxClassName="aspect-[4/3] w-full"
           />
           <EditorialPhoto
             src="/images/about/beach-crew.jpg"
             alt="Friends on the beach with surfboards lined up against the bluff"
             caption="Beach day with the crew"
-            focal="50% 75%"
+            focal="50% 78%"
             placeholderLabel="Beach"
-            boxClassName="aspect-[4/5] w-full"
+            boxClassName="aspect-[4/3] w-full"
           />
-        </div>
-      </section>
-
-      {/* Why I do this, and how I look at a home. */}
-      <section className="mt-16 border-t border-sand pt-16">
-        <p className="eyebrow text-gold">Homes &amp; Community</p>
-        <h2 className="mt-3 font-georgia max-w-2xl text-[34px] font-normal leading-[1.1] text-navy max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-[40px]">
-          Helping other people find that same feeling is why I do this.
-        </h2>
-
-        <div className="mt-5 flex flex-col gap-4 text-navy/80">
-          <p>
-            Now the human scale is how I look at every home in San Diego. I
-            majored in marketing at FSU with focuses in entrepreneurship and
-            interior design, renovated and managed a six bedroom property near
-            campus, and have underwritten investment deals ever since. So I can
-            walk into a house and tell you whether it has the human scale, what
-            it would take to get there, and whether the numbers make sense.
-            I&apos;m also part of San Diego&apos;s real estate community through
-            ULI and NAIOP.
-          </p>
-        </div>
-
-        <div className="mt-8">
-          <EditorialPhoto
-            src={about.community_photo_url}
-            alt="The six bedroom property Mark renovated near Florida State University in Tallahassee, FL"
-            caption={about.community_photo_caption}
-            focal={about.community_photo_focal}
-            placeholderLabel="College Renovation"
-            boxClassName="aspect-[21/9] w-full"
-            sizes="(min-width: 1024px) 1400px, 100vw"
-          />
-        </div>
-
-        <div className="mt-12 lg:mt-16">
-          <p className="eyebrow text-gold">How I Look at a Home</p>
-        </div>
-        <div className="mt-4 flex flex-col divide-y divide-sand lg:flex-row lg:divide-x lg:divide-y-0">
-          {LENS_ITEMS.map((item) => (
-            <div
-              key={item.label}
-              className="py-5 first:pt-0 last:pb-0 lg:flex-1 lg:px-6 lg:py-0 lg:first:pl-0 lg:last:pr-0"
-            >
-              <p className="eyebrow whitespace-nowrap text-gold">
-                {item.n} &middot; {item.label}
-              </p>
-              <p className="mt-2 text-navy">{item.body}</p>
-            </div>
-          ))}
         </div>
       </section>
 
