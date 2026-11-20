@@ -21,9 +21,10 @@ export default function MeetMark() {
           I&apos;m Mark Scott. I work for you, not the listing.
         </h2>
         <p className="mt-6 text-lg text-navy/70">
-          I studied interior design and marketing at Florida State, then spent
-          years underwriting multifamily acquisitions. So I see a home two ways:
-          how it feels to live in, and what it&apos;s really worth.
+          I studied interior design and marketing at Florida State. Before
+          residential, I worked on $40M+ in multifamily deals, from underwriting
+          offers to raising capital. So I see a home two ways: how it feels to
+          live in, and what it&apos;s really worth.
         </p>
         <p className="mt-4 text-lg text-navy/70">
           Based in Encinitas, helping buyers and sellers across San Diego County

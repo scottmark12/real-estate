@@ -34,9 +34,8 @@ export default function InvestPage() {
         Buy it with the numbers already run.
       </h1>
       <p className="mt-5 max-w-2xl text-navy/75">
-        Before residential, I worked in multifamily acquisitions: sourcing
-        deals, building the underwriting and putting together investor
-        packages. I bring that same math to San Diego investment properties,
+        Before residential, I worked on $40M+ in multifamily deals, from
+        underwriting offers to raising capital. I bring that same math to San Diego investment properties,
         so you know what a place earns before you write an offer.
       </p>
 
