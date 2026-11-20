@@ -260,7 +260,7 @@ export default function SellPageBody({ contact }: { contact: ContactSettings }) 
               className="object-cover"
             />
           </div>
-          <div className="flex flex-col justify-center bg-[#f7f3ea] px-[8%] py-12 lg:py-0">
+          <div className="flex flex-col justify-center bg-cream-deep px-[8%] py-12 lg:py-0">
             <p className="eyebrow text-gold">Ready When You Are</p>
             <h2 className="mt-3 font-display text-4xl font-normal leading-[1.05] text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[30px] max-[600px]:font-bold max-[600px]:leading-[1.02] max-[600px]:tracking-[-0.015em] sm:text-5xl">
               Thinking about

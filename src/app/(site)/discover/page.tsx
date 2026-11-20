@@ -309,7 +309,7 @@ export default async function HomePage() {
       </section>
 
       {/* Market, Right Now */}
-      <section className="bg-[#f7f3ea] py-16">
+      <section className="bg-cream-deep py-16">
         <div className="px-[4vw]">
           <p className="eyebrow text-gold">The Market, Right Now</p>
           <div className="mt-6 grid lg:grid-cols-[35fr_30fr_35fr]">
