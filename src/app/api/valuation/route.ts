@@ -1,3 +1,4 @@
+import { notifyLead } from "@/lib/notify-lead";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
@@ -32,6 +33,8 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+
+  notifyLead({ source: "valuation", name, email, phone: phone || null, intent: "Selling", context: address, timeline });
 
   return Response.json({ ok: true });
 }

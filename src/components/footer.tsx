@@ -113,7 +113,7 @@ export default function Footer({ contact }: { contact: ContactSettings }) {
             className="h-14 w-auto"
           />
           <p className="mt-4 max-w-xs text-sm text-ink-muted">
-            Residential, commercial, and investment real estate across{" "}
+            Residential real estate across{" "}
             {contact.city_state}.
           </p>
         </div>

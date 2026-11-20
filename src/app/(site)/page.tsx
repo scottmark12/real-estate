@@ -3,23 +3,27 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import ImagePlaceholder from "@/components/image-placeholder";
 import { CATEGORY_LABELS } from "@/components/article-card";
+import NewsletterForm from "@/components/newsletter-form";
 import type { Article, Listing } from "@/lib/types";
 
 export const revalidate = 0;
 
 const PRIMARY_PATHS = [
   {
-    title: "Buy",
-    body: "Homes, investments & opportunities.",
-    href: "/buy",
+    title: "Where should I live?",
+    short: "Find Your Fit",
+    body: "Take the two minute San Diego neighborhood quiz.",
+    href: "/quiz",
   },
   {
-    title: "Sell",
-    body: "A thoughtful approach.",
+    title: "What's my home worth?",
+    short: "Home Value",
+    body: "A real value from recent sales, not a robot.",
     href: "/sell",
   },
   {
-    title: "Learn",
+    title: "Market Research",
+    short: "Research",
     body: "Markets, buildings & places.",
     href: "/insights",
   },
@@ -171,7 +175,7 @@ export default async function HomePage() {
 
           <div className="col-start-1 row-start-2 self-end">
             <p className="eyebrow text-navy/40">
-              Residential &middot; Commercial &middot; Research
+              Residential Real Estate &middot; Market Research
               <br />
               San Diego, California
             </p>
@@ -186,9 +190,9 @@ export default async function HomePage() {
             <Link
               key={p.title}
               href={p.href}
-              className="flex items-center justify-center gap-1.5 py-1 font-display text-[17px] text-navy"
+              className="flex items-center justify-center gap-1.5 py-1 text-center font-display text-[15px] text-navy"
             >
-              {p.title}
+              {p.short}
               <span>&rarr;</span>
             </Link>
           ))}
@@ -354,6 +358,23 @@ export default async function HomePage() {
           </div>
         </section>
       )}
+
+      {/* Newsletter */}
+      <section className="mt-16 bg-ink px-12 py-14 text-ink-cream max-[600px]:px-6 lg:mb-16">
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+          <div className="max-w-xl">
+            <p className="eyebrow text-ink-muted">The San Diego Market Letter</p>
+            <h2 className="mt-3 font-georgia text-[34px] leading-[1.15] text-ink-cream max-[600px]:text-[28px]">
+              One email a month. What&apos;s selling, what it means, and one
+              neighborhood worth a look.
+            </h2>
+          </div>
+          <div className="w-full max-w-lg">
+            <NewsletterForm />
+            <p className="mt-3 text-xs text-ink-muted">No spam. Unsubscribe anytime.</p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

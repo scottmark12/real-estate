@@ -1,3 +1,4 @@
+import { notifyLead } from "@/lib/notify-lead";
 import { createClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
@@ -14,6 +15,8 @@ export async function POST(request: Request) {
   if (error && !error.message.includes("duplicate")) {
     return Response.json({ error: "Could not subscribe right now." }, { status: 500 });
   }
+
+  if (!error) notifyLead({ source: "newsletter", email });
 
   return Response.json({ ok: true });
 }

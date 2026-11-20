@@ -1,3 +1,4 @@
+import { notifyLead } from "@/lib/notify-lead";
 import { createClient } from "@/lib/supabase/server";
 
 const VALID_INTENTS = ["Buying", "Selling", "Investing", "Something else"];
@@ -39,6 +40,16 @@ export async function POST(request: Request) {
       { status: 500 }
     );
   }
+
+  notifyLead({
+    source: message.startsWith("Neighborhood quiz") ? "quiz" : "contact",
+    name,
+    email,
+    phone: phone || null,
+    intent,
+    context,
+    message,
+  });
 
   return Response.json({ ok: true });
 }

@@ -132,7 +132,7 @@ export default function ContactForm() {
         <span className="eyebrow text-navy/50">Phone (optional)</span>
         <input
           name="phone"
-          placeholder="(619) 555-0100"
+          placeholder="Phone number"
           className="mt-2 w-full border-0 border-b border-navy/25 bg-transparent px-0 py-2 text-navy placeholder:text-navy/35 focus:border-navy focus:outline-none"
         />
       </label>
