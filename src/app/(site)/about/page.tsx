@@ -99,7 +99,7 @@ export default async function AboutPage() {
     <div className="mx-auto max-w-[1500px] px-12 pt-16 pb-20 max-[600px]:px-6 max-[600px]:pt-10 max-[600px]:pb-12">
       {/* Where it clicked. */}
       <section>
-        <div className="grid gap-12 lg:grid-cols-[55fr_45fr] lg:items-center">
+        <div className="grid gap-12 lg:grid-cols-[40fr_60fr] lg:items-stretch">
           <div>
             <p className="eyebrow text-gold">About</p>
             <h1 className={H1}>The places we live shape how we show up in the world.</h1>
@@ -124,7 +124,20 @@ export default async function AboutPage() {
               matters just as much.
             </p>
 
-            <div className="mt-8 border-t border-sand pt-5">
+            <div className="mt-8 flex items-center gap-4 border-t border-sand pt-5">
+              <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden">
+                {about.headshot_photo_url ? (
+                  <Image
+                    src={about.headshot_photo_url}
+                    alt={about.name}
+                    fill
+                    sizes="88px"
+                    className="object-cover"
+                  />
+                ) : (
+                  <ImagePlaceholder label="Headshot" className="absolute inset-0" />
+                )}
+              </div>
               <div>
                 <p className="eyebrow text-navy">{about.name}</p>
                 <p className="mt-1 text-sm text-navy/80">Encinitas, California</p>
@@ -137,12 +150,13 @@ export default async function AboutPage() {
           </div>
 
           <EditorialPhoto
-            src={about.headshot_photo_url}
-            alt={about.name}
-            focal="50% 30%"
-            placeholderLabel="Headshot"
-            boxClassName="aspect-[4/5] w-full"
-            sizes="(min-width: 1024px) 45vw, 100vw"
+            src="/images/about/surf-morning.jpg"
+            alt="Mark holding his surfboard with a friend on the coast after a morning surf"
+            caption="After a morning surf"
+            focal="50% 58%"
+            placeholderLabel="Opening"
+            boxClassName="aspect-[4/3] w-full lg:aspect-auto lg:h-full"
+            sizes="(min-width: 1024px) 60vw, 100vw"
           />
         </div>
       </section>
@@ -257,22 +271,15 @@ export default async function AboutPage() {
           </div>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <div className="mt-12 lg:ml-auto lg:w-[58%]">
           <EditorialPhoto
             src="/images/about/living-room.jpg"
             alt="Friends hanging out in a living room around a surfboard coffee table"
             caption="A small living room that fits everyone. That's the human scale."
-            focal="50% 55%"
+            focal="50% 45%"
             placeholderLabel="Home"
             boxClassName="aspect-[4/3] w-full"
-          />
-          <EditorialPhoto
-            src="/images/about/surf-morning.jpg"
-            alt="Mark holding his surfboard with a friend on the coast after a morning surf"
-            caption="After a morning surf"
-            focal="50% 55%"
-            placeholderLabel="Surf"
-            boxClassName="aspect-[4/3] w-full"
+            sizes="(min-width: 1024px) 1400px, 100vw"
           />
         </div>
       </section>
