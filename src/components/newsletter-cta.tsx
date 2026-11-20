@@ -30,7 +30,8 @@ export default function NewsletterCta({ className = "" }: { className?: string }
     "w-full border-0 border-b border-navy/25 bg-transparent px-0 py-3 text-[15px] text-navy placeholder:text-[13px] placeholder:uppercase placeholder:tracking-[0.18em] placeholder:text-navy/55 focus:border-navy focus:outline-none";
 
   return (
-    <section className={`bg-white px-6 py-20 text-center sm:px-10 lg:py-24 ${className}`}>
+    <section className={`bg-white px-6 py-16 text-center sm:px-10 lg:py-20 ${className}`}>
+      <div className="mx-auto max-w-5xl border border-ink px-6 py-14 sm:px-12 lg:py-16">
       <h2 className="font-georgia text-[38px] font-normal leading-[1.05] text-navy sm:text-[52px]">
         Know the Market <em className="italic">Before It Moves</em>
       </h2>
@@ -72,6 +73,7 @@ export default function NewsletterCta({ className = "" }: { className?: string }
           No spam, and every email has a one click unsubscribe.
         </p>
       )}
+      </div>
     </section>
   );
 }
