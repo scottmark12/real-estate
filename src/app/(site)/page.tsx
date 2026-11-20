@@ -118,7 +118,7 @@ export default async function HomePage() {
 
           <div className="relative z-20 mt-[68px] w-[42%] max-w-[165px] -rotate-2">
             <Image
-              src="/images/handwriting-curiosity.png"
+              src="/images/handwriting-diligence.png"
               alt="Curiosity is good due diligence! —MS"
               width={816}
               height={211}
@@ -155,7 +155,7 @@ export default async function HomePage() {
 
           <div className="absolute left-[247px] top-[500px] z-10 w-[320px] rotate-[-4deg]">
             <Image
-              src="/images/handwriting-curiosity.png"
+              src="/images/handwriting-diligence.png"
               alt="Curiosity is good due diligence! —MS"
               width={816}
               height={211}
