@@ -36,10 +36,10 @@ export default function Header({ contact }: { contact: ContactSettings }) {
       }`}
     >
       <div
-        className="flex items-center gap-6 px-4 py-4 sm:px-6 lg:px-10"
+        className="flex items-center gap-6 px-4 py-4 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-10"
         style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
       >
-        <Link href="/" className="shrink-0">
+        <Link href="/" className="shrink-0 justify-self-start">
           <Image
             src="/images/logo-v2.png"
             alt="Mark Scott Real Estate"
@@ -50,7 +50,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
           />
         </Link>
 
-        <nav className="ml-auto hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-1 lg:flex">
           {NAV_LINKS.map((link) => {
             const active = pathname.startsWith(link.href);
             return (
@@ -73,7 +73,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
           })}
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 justify-self-end lg:flex">
           <SavedLink light={clear} />
           {contact.phone ? (
             <a
