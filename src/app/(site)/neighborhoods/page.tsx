@@ -31,7 +31,8 @@ export default function NeighborhoodsPage() {
   return (
     <div className="mx-auto max-w-[1500px] px-12 pb-20 max-[600px]:px-6 max-[600px]:pb-12">
       {/* Photo hero with search, Florida Coastal style */}
-      <section className="full-bleed relative flex min-h-[82vh] items-center justify-center overflow-hidden max-[600px]:min-h-[78vh]">
+      <section className="full-bleed relative z-10 flex min-h-[82vh] items-center justify-center max-[600px]:min-h-[78vh]">
+        <div className="absolute inset-0 overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1647670545038-84090e69c79b?auto=format&fit=crop&w=2400&q=75"
           alt="Torrey Pines and the coast north of La Jolla"
@@ -41,6 +42,7 @@ export default function NeighborhoodsPage() {
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/35" />
+        </div>
         <div className="relative w-full px-6 py-24 text-center">
           <p className="eyebrow text-white/85">
             {NEIGHBORHOODS.length} neighborhoods &middot; Oceanside to the border
