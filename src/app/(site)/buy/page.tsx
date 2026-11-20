@@ -1,133 +1,179 @@
-import Image from "next/image";
+import type { Metadata } from "next";
 import Link from "next/link";
-import ImagePlaceholder from "@/components/image-placeholder";
-import ListingCard from "@/components/listing-card";
-import { createClient } from "@/lib/supabase/server";
-import { formatPrice, formatStats } from "@/lib/format";
-import type { Listing } from "@/lib/types";
-import { LISTINGS_PAUSED } from "@/lib/listings-paused";
+import FeedListingCard from "@/components/feed-listing-card";
 import ListingsComingSoon from "@/components/listings-coming-soon";
+import {
+  BROKERAGE_CREDIT,
+  PAGE_SIZE,
+  PROPERTY_TYPES,
+  SORTS,
+  searchListings,
+} from "@/lib/premier-feed";
 
-export const revalidate = 0;
+export const metadata: Metadata = {
+  title: "Homes for Sale in San Diego County",
+  description:
+    "Search homes for sale across San Diego County, updated through the day. Ask Mark about any of them.",
+};
 
-function heroMetadata(listing: Listing) {
-  const city = listing.location.split(",")[0]?.trim();
-  const detail =
-    listing.acres != null
-      ? `${listing.acres} acres`
-      : listing.sqft != null
-        ? `${new Intl.NumberFormat("en-US").format(listing.sqft)} sqft`
-        : null;
-  return [city, detail].filter(Boolean).join(" · ");
+const PRICE_OPTIONS = [
+  500_000, 750_000, 1_000_000, 1_500_000, 2_000_000, 3_000_000, 5_000_000,
+];
+
+function one(v: string | string[] | undefined) {
+  return Array.isArray(v) ? v[0] : v;
 }
 
-export default async function BuyPage() {
-  if (LISTINGS_PAUSED) return <ListingsComingSoon />;
-  const supabase = await createClient();
-  const { data } = await supabase
-    .from("listings")
-    .select("*")
-    .eq("published", true)
-    .eq("status", "for_sale")
-    .order("sort_order", { ascending: true })
-    .order("created_at", { ascending: false });
+function short(n: number) {
+  return n >= 1_000_000 ? `$${n / 1_000_000}M` : `$${n / 1000}K`;
+}
 
-  const listings = (data as Listing[]) ?? [];
-  // If more than one is marked Featured, the first by sort order wins —
-  // predictable rather than rendering more than one hero.
-  const featured = listings.find((l) => l.featured) ?? null;
-  const gridListings = featured
-    ? listings.filter((l) => l.id !== featured.id)
-    : listings;
+const field =
+  "w-full border border-sand bg-white px-3 py-2.5 text-sm text-navy focus:border-blue focus:outline-none";
+
+export default async function BuyPage({ searchParams }: PageProps<"/buy">) {
+  const sp = await searchParams;
+  const q = one(sp.q) ?? "";
+  const min_price = one(sp.min_price) ?? "";
+  const max_price = one(sp.max_price) ?? "";
+  const min_beds = one(sp.min_beds) ?? "";
+  const property_type = one(sp.type) ?? "";
+  const sort = one(sp.sort) ?? "recent";
+  const page = Math.max(1, Math.floor(Number(one(sp.page)) || 1));
+
+  const result = await searchListings({
+    q,
+    min_price,
+    max_price,
+    min_beds,
+    property_type,
+    sort,
+    page,
+  });
+
+  // Feed down: fall back to the coming soon page rather than an error.
+  if (!result) return <ListingsComingSoon />;
+
+  const hasNext = page * PAGE_SIZE < result.total;
+  const pageHref = (p: number) => {
+    const params = new URLSearchParams();
+    if (q) params.set("q", q);
+    if (min_price) params.set("min_price", min_price);
+    if (max_price) params.set("max_price", max_price);
+    if (min_beds) params.set("min_beds", min_beds);
+    if (property_type) params.set("type", property_type);
+    if (sort !== "recent") params.set("sort", sort);
+    if (p > 1) params.set("page", String(p));
+    const s = params.toString();
+    return s ? `/buy?${s}` : "/buy";
+  };
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-20 max-[600px]:py-12 sm:px-10">
       <p className="eyebrow text-gold">Buy</p>
       <h1 className="mt-2 font-display text-4xl font-normal text-navy max-[600px]:[font-family:Georgia,'Times_New_Roman',serif] max-[600px]:text-[40px] max-[600px]:font-bold max-[600px]:leading-[0.98] max-[600px]:tracking-[-0.025em] sm:text-5xl">
-        Homes worth looking at.
+        Homes for sale across San Diego County.
       </h1>
+      <p className="mt-4 max-w-xl text-navy/70">
+        Live from the MLS and updated through the day. See one you like? Ask me
+        about it and I&apos;ll tell you what the listing doesn&apos;t.
+      </p>
 
-      {featured && (
-        <section className="mt-10">
-          <Link
-            href={`/listings/${featured.slug}`}
-            className="group grid gap-8 lg:grid-cols-[65fr_35fr] lg:items-stretch"
-          >
-            <div className="relative aspect-16/9 w-full overflow-hidden lg:aspect-auto">
-              {featured.image_url ? (
-                <Image
-                  src={featured.image_url}
-                  alt={featured.title}
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 65vw, 100vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                  style={{ objectPosition: featured.featured_focal || "50% 50%" }}
-                />
-              ) : (
-                <ImagePlaceholder label="Featured Listing" className="absolute inset-0" />
-              )}
-              <p className="eyebrow absolute bottom-4 left-4 text-cream">
-                {heroMetadata(featured)}
-              </p>
-            </div>
+      <form
+        action="/buy"
+        method="get"
+        className="mt-10 grid gap-3 border border-sand bg-cream-deep p-4 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr_1fr_auto]"
+      >
+        <label className="sr-only" htmlFor="q">City, zip or address</label>
+        <input
+          id="q"
+          name="q"
+          defaultValue={q}
+          placeholder="City, zip or address"
+          className={field}
+        />
+        <label className="sr-only" htmlFor="min_price">Min price</label>
+        <select id="min_price" name="min_price" defaultValue={min_price} className={field}>
+          <option value="">Min price</option>
+          {PRICE_OPTIONS.map((p) => (
+            <option key={p} value={p}>{short(p)}+</option>
+          ))}
+        </select>
+        <label className="sr-only" htmlFor="max_price">Max price</label>
+        <select id="max_price" name="max_price" defaultValue={max_price} className={field}>
+          <option value="">Max price</option>
+          {PRICE_OPTIONS.map((p) => (
+            <option key={p} value={p}>Up to {short(p)}</option>
+          ))}
+        </select>
+        <label className="sr-only" htmlFor="min_beds">Beds</label>
+        <select id="min_beds" name="min_beds" defaultValue={min_beds} className={field}>
+          <option value="">Any beds</option>
+          {[1, 2, 3, 4, 5].map((b) => (
+            <option key={b} value={b}>{b}+ beds</option>
+          ))}
+        </select>
+        <label className="sr-only" htmlFor="type">Home type</label>
+        <select id="type" name="type" defaultValue={property_type} className={field}>
+          {PROPERTY_TYPES.map((t) => (
+            <option key={t.value} value={t.value}>{t.label}</option>
+          ))}
+        </select>
+        <label className="sr-only" htmlFor="sort">Sort</label>
+        <select id="sort" name="sort" defaultValue={sort} className={field}>
+          {SORTS.map((s) => (
+            <option key={s.value} value={s.value}>{s.label}</option>
+          ))}
+        </select>
+        <button
+          type="submit"
+          className="bg-blue px-6 py-2.5 text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
+        >
+          Search
+        </button>
+      </form>
 
-            <div className="flex flex-col justify-center py-2">
-              <p className="eyebrow text-gold">Featured Property</p>
-              <p className="mt-1 text-[10px] font-medium uppercase tracking-wide text-navy/50">
-                {featured.location}
-              </p>
-              <h2 className="mt-6 font-display text-[34px] font-normal leading-[1.03] text-navy max-[600px]:text-[26px] max-[600px]:leading-[1.12] sm:text-[42px]">
-                {featured.featured_headline || featured.title}
-              </h2>
-              {featured.featured_headline && (
-                <p className="mt-2 text-sm text-navy/60">{featured.title}</p>
-              )}
-              <p className="mt-2 text-xs text-navy/60">{formatStats(featured)}</p>
-              <p className="mt-5 text-2xl font-semibold text-navy sm:text-[26px]">
-                {formatPrice(featured)}
-              </p>
-              {featured.featured_excerpt && (
-                <p className="mt-4 max-w-md text-[15px] leading-relaxed text-navy/70">
-                  {featured.featured_excerpt}
-                </p>
-              )}
-              <span className="eyebrow mt-6 inline-block w-fit text-navy underline decoration-gold decoration-2 underline-offset-4">
-                View the Property &rarr;
-              </span>
-            </div>
-          </Link>
-        </section>
-      )}
-
-      <div className={`${featured ? "mt-14" : "mt-10"} border-t border-sand pt-8`}>
+      <div className="mt-10 border-t border-sand pt-8">
         <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <h2 className="font-display text-3xl font-normal text-navy">
-              Available Now
-            </h2>
-            <p className="text-sm text-navy/60">Homes currently on the market.</p>
-          </div>
+          <p className="text-sm text-navy/60">
+            {result.listings.length === 0
+              ? "No homes match that search."
+              : `Showing page ${page}${q ? ` for “${q}”` : ""}`}
+          </p>
           <Link
-            href="/contact"
+            href="/contact?intent=buying"
             className="eyebrow shrink-0 text-navy underline decoration-gold decoration-2 underline-offset-4"
           >
-            Have something specific in mind? &rarr;
+            Want off market homes too? &rarr;
           </Link>
         </div>
 
         <div className="mt-8 grid grid-cols-1 gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-          {gridListings.map((listing) => (
-            <ListingCard key={listing.id} listing={listing} />
+          {result.listings.map((listing) => (
+            <FeedListingCard key={listing.id} listing={listing} />
           ))}
-          {gridListings.length === 0 && (
-            <p className="text-navy/60">
-              {featured
-                ? "No other active for-sale listings right now — check back soon."
-                : "No active for-sale listings right now — check back soon."}
-            </p>
-          )}
         </div>
+
+        {(page > 1 || hasNext) && (
+          <nav className="mt-14 flex items-center justify-between" aria-label="Pages">
+            {page > 1 ? (
+              <Link href={pageHref(page - 1)} className="eyebrow text-navy hover:text-blue">
+                &larr; Previous
+              </Link>
+            ) : (
+              <span />
+            )}
+            {hasNext && (
+              <Link href={pageHref(page + 1)} className="eyebrow text-navy hover:text-blue">
+                Next &rarr;
+              </Link>
+            )}
+          </nav>
+        )}
+
+        <p className="mt-14 max-w-3xl text-xs leading-relaxed text-navy/50">
+          {BROKERAGE_CREDIT}
+        </p>
       </div>
     </div>
   );
