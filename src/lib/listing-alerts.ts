@@ -1,5 +1,6 @@
 import { type FeedListing, formatFeedPrice, formatFeedStats } from "@/lib/premier-feed";
 import { SITE_URL } from "@/lib/site";
+import { COMPLIANCE, INK, MUTED, SANS, SERIF, button, emailShell, esc, eyebrow, signOff } from "@/lib/email-layout";
 
 // A saved search: the Buy filters someone wants to hear about.
 export type AlertParams = {
@@ -69,10 +70,8 @@ export function buyUrl(p: AlertParams, base = SITE_URL) {
   return `${base}/buy${s ? `?${s}` : ""}`;
 }
 
-const esc = (s: string) =>
-  s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
-// Plain table HTML so it renders in every inbox.
+// Designed to match the site: one big lead home, the rest two across
+// (stacked on phones), then a note from Mark.
 export function alertEmailHtml(opts: {
   name?: string | null;
   label: string;
@@ -81,40 +80,72 @@ export function alertEmailHtml(opts: {
   unsubscribeUrl: string;
 }) {
   const base = SITE_URL;
-  const shown = opts.listings.slice(0, 8);
-  const rows = shown
-    .map((l) => {
-      const url = `${base}/buy/${l.id}`;
-      const img = l.primary_image_url
-        ? `<a href="${url}"><img src="${esc(l.primary_image_url)}" width="560" alt="" style="display:block;width:100%;max-width:560px;height:auto;border:0"></a>`
-        : "";
-      return `<tr><td style="padding:0 0 28px 0">
-        ${img}
-        <p style="margin:12px 0 2px;font:20px Georgia,serif;color:#141414"><a href="${url}" style="color:#141414;text-decoration:none">${esc(l.address)}</a></p>
-        <p style="margin:0;font:12px Arial,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#888">${esc(l.city)}, ${esc(l.state)} ${esc(l.zip)}</p>
-        <p style="margin:6px 0 0;font:15px Arial,sans-serif;color:#141414"><strong>${formatFeedPrice(l.price)}</strong> &nbsp;·&nbsp; ${esc(formatFeedStats(l))}</p>
-      </td></tr>`;
-    })
-    .join("");
-  const more = opts.listings.length > shown.length ? ` (and ${opts.listings.length - shown.length} more)` : "";
-  const hi = opts.name ? `Hi ${esc(opts.name.split(" ")[0])},` : "Hi,";
-  return `<!doctype html><html><body style="margin:0;background:#f3f3f3">
-<table width="100%" cellpadding="0" cellspacing="0" style="background:#f3f3f3"><tr><td align="center" style="padding:24px 12px">
-<table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff">
-<tr><td style="padding:28px 20px 8px;font:13px Arial,sans-serif;letter-spacing:2px;color:#3262a6;text-transform:uppercase">New listings &middot; markscott.co</td></tr>
-<tr><td style="padding:0 20px 20px;font:15px/1.5 Arial,sans-serif;color:#333">
-<p style="margin:0 0 6px;font:26px Georgia,serif;color:#141414">${opts.listings.length} new ${opts.listings.length === 1 ? "home" : "homes"} for your search</p>
-<p style="margin:0">${hi} here's what just hit the market for <em>${esc(opts.label)}</em>${more}. Want my honest take on any of them? Just reply.</p>
+  const shown = opts.listings.slice(0, 7);
+  const [lead, ...rest] = shown;
+  const count = opts.listings.length;
+  const first = opts.name?.trim().split(/\s+/)[0];
+
+  const photo = (l: FeedListing, w: number, h: number) =>
+    l.primary_image_url
+      ? `<a href="${base}/buy/${l.id}"><img src="${esc(l.primary_image_url)}" width="${w}" alt="${esc(`${l.address}, ${l.city}`)}" style="display:block;width:100%;max-width:${w}px;height:auto;max-height:${h}px;object-fit:cover;border:0;background:#eee"></a>`
+      : "";
+
+  const leadHtml = lead
+    ? `<tr><td style="padding:0">${photo(lead, 600, 400)}</td></tr>
+<tr><td class="pad" style="padding:22px 36px 30px">
+${eyebrow(`${esc(lead.city)} &middot; New`)}
+<p style="margin:10px 0 4px;font:30px/1.15 ${SERIF};color:${INK}">${formatFeedPrice(lead.price)}</p>
+<p style="margin:0 0 4px;font:17px/1.4 ${SERIF};color:${INK}"><a href="${base}/buy/${lead.id}" style="color:${INK};text-decoration:none">${esc(lead.address)}</a></p>
+<p style="margin:0 0 20px;font:14px ${SANS};color:${MUTED}">${esc(formatFeedStats(lead))} &middot; ${esc(lead.city)}, ${esc(lead.state)} ${esc(lead.zip)}</p>
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+<td style="padding-right:10px">${button(`${base}/buy/${lead.id}`, "See this home")}</td>
+<td>${button(`${base}/buy/${lead.id}#tour`, "Request a tour", false)}</td>
+</tr></table>
+</td></tr>`
+    : "";
+
+  const card = (l: FeedListing) => `<a href="${base}/buy/${l.id}" style="text-decoration:none;color:${INK}">${photo(l, 252, 190)}
+<p style="margin:12px 0 2px;font:20px ${SERIF};color:${INK}">${formatFeedPrice(l.price)}</p>
+<p style="margin:0 0 2px;font:14px/1.4 ${SANS};color:${INK}">${esc(l.address)}</p>
+<p style="margin:0;font:13px ${SANS};color:${MUTED}">${esc(formatFeedStats(l))} &middot; ${esc(l.city)}</p></a>`;
+
+  const pairs: string[] = [];
+  for (let i = 0; i < rest.length; i += 2) {
+    const a = rest[i];
+    const b = rest[i + 1];
+    pairs.push(`<tr>
+<td class="col" width="50%" valign="top" style="padding:0 12px 30px 0">${card(a)}</td>
+<td class="col" width="50%" valign="top" style="padding:0 0 30px 12px">${b ? card(b) : ""}</td>
+</tr>`);
+  }
+  const grid = pairs.length
+    ? `<tr><td class="pad" style="padding:30px 36px 0;border-top:1px solid #e6e6e6">
+${eyebrow("Also new")}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px">${pairs.join("")}</table>
+</td></tr>`
+    : "";
+
+  const more = count > shown.length ? `See all ${count} matches` : "See every match";
+
+  const body = `<tr><td class="pad" style="padding:30px 36px 26px">
+${eyebrow("New listings for your search")}
+<p class="h1" style="margin:12px 0 10px;font:34px/1.12 ${SERIF};color:${INK}">${count} new ${count === 1 ? "home" : "homes"} just hit the market</p>
+<p style="margin:0;font:15px/1.55 ${SANS};color:#3a3a3a">${first ? `${esc(first)}, here's` : "Here's"} what's new for <em>${esc(opts.label)}</em>.</p>
 </td></tr>
-<tr><td style="padding:0 20px">${`<table width="100%" cellpadding="0" cellspacing="0">${rows}</table>`}</td></tr>
-<tr><td style="padding:0 20px 28px"><a href="${esc(opts.seeAllUrl)}" style="display:inline-block;background:#141414;color:#fff;font:600 14px Arial,sans-serif;padding:14px 22px;text-decoration:none">See every match</a></td></tr>
-<tr><td style="padding:20px;border-top:1px solid #eee;font:12px/1.6 Arial,sans-serif;color:#888">
-Mark Scott &middot; (850) 363-6057 &middot; mark@markscott.co<br>
-DRE# 02449646 &middot; Brokered by Premier Agency Real Estate, CalDRE# 02240990<br>
-Premier Agency Real Estate, 900 Lane Ave, Chula Vista, CA 91914<br>
+${leadHtml}
+${grid}
+<tr><td class="pad" style="padding:6px 36px 32px">${button(opts.seeAllUrl, more)}</td></tr>
+<tr><td class="pad" style="padding:26px 36px;background:#f6f6f4">${signOff("Want my honest take on any of these, or the price I'd actually offer? Just reply.")}</td></tr>`;
+
+  const footer = `${COMPLIANCE}<br>
 Listing data from the MLS via Premier Agency. Deemed reliable but not guaranteed.<br>
-You're getting this because you asked for new homes matching this search on markscott.co.
-<a href="${esc(opts.unsubscribeUrl)}" style="color:#888">Stop these emails</a>.
-</td></tr>
-</table></td></tr></table></body></html>`;
+You're getting this because you asked for new homes matching this search on markscott.co. <a href="${esc(opts.unsubscribeUrl)}" style="color:${MUTED}">Stop these emails</a>.`;
+
+  return emailShell({
+    preheader: lead
+      ? `${formatFeedPrice(lead.price)} in ${lead.city}${count > 1 ? ` and ${count - 1} more` : ""}`
+      : "New homes for your search",
+    body,
+    footer,
+  });
 }
