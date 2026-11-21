@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import HeartToggle from "@/components/heart-toggle";
+import TourRequestForm from "@/components/tour-request-form";
 import { notFound } from "next/navigation";
 import {
   BROKERAGE_CREDIT,
@@ -43,7 +44,6 @@ export default async function FeedListingPage({ params }: PageProps<"/buy/[id]">
 
   const photos = listingImages(l).slice(0, MAX_PHOTOS);
   const fullAddress = `${l.address}, ${l.city}, ${l.state} ${l.zip}`;
-  const askHref = `/contact?intent=buying&location=${encodeURIComponent(fullAddress)}`;
   const mapHref =
     l.latitude && l.longitude
       ? `https://www.google.com/maps/search/?api=1&query=${l.latitude},${l.longitude}`
@@ -163,24 +163,15 @@ export default async function FeedListingPage({ params }: PageProps<"/buy/[id]">
             {formatFeedPrice(l.price)}
           </p>
           <p className="mt-1 text-sm text-navy/60">{formatFeedStats(l)}</p>
-          <Link
-            href={askHref}
-            className="mt-6 block bg-blue px-5 py-3 text-center text-sm font-semibold text-cream transition-colors hover:bg-blue-dark"
-          >
-            Ask Mark About This Home
-          </Link>
+          <TourRequestForm address={fullAddress} />
           <a
             href={mapHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 block border border-navy px-5 py-3 text-center text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
+            className="mt-3 block border border-navy/30 px-5 py-3 text-center text-sm font-semibold text-navy transition-colors hover:bg-navy hover:text-cream"
           >
             View on Map
           </a>
-          <p className="mt-5 text-xs leading-relaxed text-navy/55">
-            I represent you, not the seller. Tours, comps and a straight
-            answer on price, no pressure.
-          </p>
         </aside>
       </div>
 

@@ -16,6 +16,12 @@ export async function POST(request: Request) {
   const context =
     typeof body?.context === "string" ? body.context.trim() || null : null;
 
+  // Spam trap: the hidden "website" field is only ever filled by bots.
+  if (typeof body?.website === "string" && body.website.trim()) {
+    return Response.json({ ok: true });
+  }
+  const isTour = body?.kind === "tour";
+
   if (!name || !email || !message) {
     return Response.json(
       { error: "Name, email, and message are required." },
@@ -42,7 +48,7 @@ export async function POST(request: Request) {
   }
 
   notifyLead({
-    source: message.startsWith("Neighborhood quiz") ? "quiz" : "contact",
+    source: isTour ? "tour" : message.startsWith("Neighborhood quiz") ? "quiz" : "contact",
     name,
     email,
     phone: phone || null,

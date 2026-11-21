@@ -25,6 +25,7 @@ export default function MobileActionBar({ phone }: { phone?: string | null }) {
   if (!digits || pathname === "/contact") return null;
 
   const onSell = pathname === "/sell";
+  const onListing = pathname.startsWith("/buy/");
 
   return (
     <div
@@ -48,7 +49,15 @@ export default function MobileActionBar({ phone }: { phone?: string | null }) {
         >
           Text
         </a>
-        {onSell ? (
+        {onListing ? (
+          <a
+            href="#tour"
+            tabIndex={show ? 0 : -1}
+            className="flex min-h-[48px] items-center justify-center bg-ink px-2 text-center text-[15px] font-semibold text-white"
+          >
+            Request a tour
+          </a>
+        ) : onSell ? (
           <button
             type="button"
             tabIndex={show ? 0 : -1}
