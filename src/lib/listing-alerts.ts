@@ -106,10 +106,11 @@ export function alertEmailHtml(opts: {
   const first = opts.name?.trim().split(/\s+/)[0];
   const text = `font:16px/1.6 ${SANS};color:${INK}`;
   const count = opts.listings.length;
+  const wants = esc(opts.label.replace(/^Homes in /, ""));
   const lead =
     count === 1
-      ? `A new one just came up for your search (${esc(opts.label.replace(/^Homes in /, ""))}):`
-      : `${count <= 9 ? ["", "", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"][count] : count} new ones just came up for your search (${esc(opts.label.replace(/^Homes in /, ""))}):`;
+      ? `Based on what you're looking for (${wants}), I had to send this fresh listing your way:`
+      : `Based on what you're looking for (${wants}), I had to send these fresh listings your way:`;
 
   const cards = shown
     .map((l) => {
