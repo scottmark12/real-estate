@@ -134,7 +134,7 @@ export function alertEmailHtml(opts: {
 <p style="margin:0 0 18px;${text}">${lead}</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${cards}</table>
 <p style="margin:4px 0 18px;${text}">${extra > 0 ? `Plus ${extra} more. <a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See all of them</a>.` : `<a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See everything for this search</a>.`}</p>
-<p style="margin:0 0 18px;${text}">Want my take on any of these, or to go see one this week? Just reply.</p>
+<p style="margin:0 0 18px;${text}">Want my take on any of these, or to go see one this week?</p>
 <p style="margin:0;${text}">Mark</p>
 <p style="margin:4px 0 0;font:13px/1.55 ${SANS};color:${MUTED}">Mark Scott &middot; Premier Agency Real Estate<br>(850) 363-6057 &middot; <a href="${base}" style="color:${MUTED}">markscott.co</a></p>`;
 
