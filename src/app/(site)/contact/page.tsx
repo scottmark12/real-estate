@@ -38,6 +38,12 @@ export default async function ContactPage() {
             Buying, selling, investing—or just have a question about the
             market? Send me a note. I read everything myself.
           </p>
+          <a
+            href="/book"
+            className="mt-6 inline-flex min-h-[48px] items-center border border-ink px-6 text-[15px] font-semibold text-ink transition-colors hover:bg-ink hover:text-white"
+          >
+            Or book a 15 minute call
+          </a>
         </div>
 
         <div className="mt-10 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:mt-0">

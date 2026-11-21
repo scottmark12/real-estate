@@ -22,6 +22,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/tools",
     "/tools/cost-calculator",
     "/contact",
+    "/book",
   ].map((path) => ({ url: `${BASE}${path}` }));
 
   const neighborhoods = NEIGHBORHOODS.map((n) => ({

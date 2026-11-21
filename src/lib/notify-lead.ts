@@ -1,7 +1,7 @@
 import { after } from "next/server";
 
 export type LeadAlert = {
-  source: "contact" | "tour" | "valuation" | "quiz" | "newsletter" | "alert" | "saved";
+  source: "contact" | "tour" | "valuation" | "quiz" | "newsletter" | "alert" | "saved" | "booking";
   name?: string | null;
   email: string;
   phone?: string | null;
@@ -9,6 +9,7 @@ export type LeadAlert = {
   context?: string | null;
   message?: string | null;
   timeline?: string | null;
+  booking?: { start: string; end: string; status: "confirmed" | "requested" };
 };
 
 // Sends a new lead to Mark's alert workflow (email + text) after the response
