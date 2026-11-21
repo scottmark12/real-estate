@@ -19,6 +19,7 @@ type Row = {
   params: unknown;
   seen_ids: string[];
   unsubscribe_token: string;
+  sent_count: number | null;
 };
 
 export async function GET(request: Request) {
@@ -71,7 +72,7 @@ export async function GET(request: Request) {
       listings: fresh,
       seeAllUrl: buyUrl(params),
       unsubscribeUrl: `${SITE_URL}/alerts/unsubscribe?token=${row.unsubscribe_token}`,
-      seed: `${row.email}${new Date().toISOString().slice(0, 10)}`,
+      rotation: { key: row.email, sent: row.sent_count ?? 0 },
     });
     const subject = alertSubject(fresh);
 

@@ -123,8 +123,12 @@ export function alertEmailHtml(opts: {
   listings: FeedListing[];
   seeAllUrl: string;
   unsubscribeUrl: string;
-  /** Changes which opening line and greeting they get, e.g. email + date. */
-  seed?: string;
+  /**
+   * Which alert this is for the subscriber (0 for their first). Openers go in
+   * order from a starting point unique to them, so nobody gets the same line
+   * twice in a row and all five get used before any repeats.
+   */
+  rotation?: { key: string; sent: number };
 }) {
   const base = SITE_URL;
   const shown = opts.listings.slice(0, 3);
@@ -133,9 +137,11 @@ export function alertEmailHtml(opts: {
   const text = `font:16px/1.6 ${SANS};color:${INK}`;
   const count = opts.listings.length;
   const wants = esc(opts.label.replace(/^Homes in /, ""));
-  const pick = variant(opts.seed ?? new Date().toISOString().slice(0, 10));
+  const pick = opts.rotation
+    ? (variant(opts.rotation.key) + opts.rotation.sent) % OPENERS.length
+    : variant(new Date().toISOString()) % OPENERS.length;
   const one = count === 1;
-  const lead = OPENERS[pick % OPENERS.length](wants, one);
+  const lead = OPENERS[pick](wants, one);
 
   const cards = shown
     .map((l) => {
@@ -156,7 +162,7 @@ export function alertEmailHtml(opts: {
     .join("");
 
   const body = `
-<p style="margin:0 0 16px;${text}">${pick % 2 ? "Hey" : "Hi"}${first ? ` ${esc(first)}` : ""},</p>
+<p style="margin:0 0 16px;${text}">${(opts.rotation?.sent ?? pick) % 2 ? "Hey" : "Hi"}${first ? ` ${esc(first)}` : ""},</p>
 <p style="margin:0 0 18px;${text}">${lead}</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${cards}</table>
 <p style="margin:4px 0 18px;${text}">${extra > 0 ? `Plus ${extra} more. <a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See all of them</a>.` : `<a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See everything for this search</a>.`}</p>
