@@ -9,7 +9,9 @@ export const INK = "#141414";
 export const BLUE = "#3262a6";
 export const MUTED = "#6b6b6b";
 export const SERIF = "Georgia,'Times New Roman',serif";
-export const SANS = "-apple-system,'Helvetica Neue',Arial,sans-serif";
+// Emails use one traditional serif throughout so they read like a letter,
+// not an app notification.
+export const SANS = "Georgia,'Times New Roman',serif";
 
 export const esc = (s: string | null | undefined) =>
   (s ?? "")
@@ -78,8 +80,8 @@ Brokered by Premier Agency Real Estate, CalDRE# 02240990 &middot; 900 Lane Ave, 
 /** Mark's email signature, identical to the one in his Outlook. */
 export const SIGNATURE_HTML = `<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse">
 <tr><td style="padding:0 0 2px;font:20px Georgia,'Times New Roman',serif;color:#141414">Mark Scott</td></tr>
-<tr><td style="padding:0 0 10px;font:13px -apple-system,'Helvetica Neue',Arial,sans-serif;color:#6b6b6b">Real Estate Agent&nbsp;&middot;&nbsp;Premier Agency Real Estate</td></tr>
+<tr><td style="padding:0 0 10px;font:13px Georgia,'Times New Roman',serif;color:#6b6b6b">Real Estate Agent&nbsp;&middot;&nbsp;Premier Agency Real Estate</td></tr>
 <tr><td style="padding:0 0 10px"><div style="width:36px;border-top:2px solid #3262a6;font-size:0;line-height:0">&nbsp;</div></td></tr>
-<tr><td style="padding:0 0 2px;font:13px -apple-system,'Helvetica Neue',Arial,sans-serif;color:#141414"><a href="tel:+18503636057" style="color:#141414;text-decoration:none">(850) 363-6057</a>&nbsp;&middot;&nbsp;<a href="https://www.markscott.co" style="color:#3262a6;text-decoration:none">markscott.co</a></td></tr>
-<tr><td style="padding:0;font:11px -apple-system,'Helvetica Neue',Arial,sans-serif;color:#9a9a9a">Encinitas, CA&nbsp;&middot;&nbsp;DRE# 02449646</td></tr>
+<tr><td style="padding:0 0 2px;font:13px Georgia,'Times New Roman',serif;color:#141414"><a href="tel:+18503636057" style="color:#141414;text-decoration:none">(850) 363-6057</a>&nbsp;&middot;&nbsp;<a href="https://www.markscott.co" style="color:#3262a6;text-decoration:none">markscott.co</a></td></tr>
+<tr><td style="padding:0;font:11px Georgia,'Times New Roman',serif;color:#9a9a9a">Encinitas, CA&nbsp;&middot;&nbsp;DRE# 02449646</td></tr>
 </table>`;
