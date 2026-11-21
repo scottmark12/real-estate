@@ -93,7 +93,7 @@ export function alertEmailHtml(opts: {
   const leadHtml = lead
     ? `<tr><td style="padding:0">${photo(lead, 600, 400)}</td></tr>
 <tr><td class="pad" style="padding:22px 36px 30px">
-${eyebrow(`${esc(lead.city)} &middot; New`)}
+${eyebrow(`${lead.city} · New`)}
 <p style="margin:10px 0 4px;font:30px/1.15 ${SERIF};color:${INK}">${formatFeedPrice(lead.price)}</p>
 <p style="margin:0 0 4px;font:17px/1.4 ${SERIF};color:${INK}"><a href="${base}/buy/${lead.id}" style="color:${INK};text-decoration:none">${esc(lead.address)}</a></p>
 <p style="margin:0 0 20px;font:14px ${SANS};color:${MUTED}">${esc(formatFeedStats(lead))} &middot; ${esc(lead.city)}, ${esc(lead.state)} ${esc(lead.zip)}</p>
@@ -104,10 +104,13 @@ ${eyebrow(`${esc(lead.city)} &middot; New`)}
 </td></tr>`
     : "";
 
-  const card = (l: FeedListing) => `<a href="${base}/buy/${l.id}" style="text-decoration:none;color:${INK}">${photo(l, 252, 190)}
-<p style="margin:12px 0 2px;font:20px ${SERIF};color:${INK}">${formatFeedPrice(l.price)}</p>
-<p style="margin:0 0 2px;font:14px/1.4 ${SANS};color:${INK}">${esc(l.address)}</p>
-<p style="margin:0;font:13px ${SANS};color:${MUTED}">${esc(formatFeedStats(l))} &middot; ${esc(l.city)}</p></a>`;
+  const card = (l: FeedListing) => {
+    const url = `${base}/buy/${l.id}`;
+    return `${photo(l, 252, 190)}
+<p style="margin:12px 0 2px;font:20px ${SERIF};color:${INK}"><a href="${url}" style="color:${INK};text-decoration:none">${formatFeedPrice(l.price)}</a></p>
+<p style="margin:0 0 2px;font:14px/1.4 ${SANS};color:${INK}"><a href="${url}" style="color:${INK};text-decoration:none">${esc(l.address)}</a></p>
+<p style="margin:0;font:13px ${SANS};color:${MUTED}">${esc(formatFeedStats(l))} &middot; ${esc(l.city)}</p>`;
+  };
 
   const pairs: string[] = [];
   for (let i = 0; i < rest.length; i += 2) {
