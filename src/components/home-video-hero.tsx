@@ -46,7 +46,7 @@ export default function HomeVideoHero() {
           An investor&apos;s math.
         </h1>
         <p className="mt-6 max-w-xl text-lg text-white/85 max-[600px]:text-base">
-          Helping buyers and sellers across San Diego County, from Oceanside to the border.
+          Finding home is a delicate equation. I help buyers and sellers across San Diego County get it right.
         </p>
         <div className="mt-9 flex flex-wrap gap-3">
           <Link
