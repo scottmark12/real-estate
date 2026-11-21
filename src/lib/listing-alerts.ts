@@ -91,6 +91,30 @@ function factsLine(l: FeedListing) {
   return bits.filter(Boolean).join(" · ");
 }
 
+// A handful of openers in Mark's voice so alerts don't read like a template.
+// Each takes the search ("Encinitas, 2+ beds") and whether it's a single home.
+const OPENERS: ((wants: string, one: boolean) => string)[] = [
+  (w, one) =>
+    `Based on what you're looking for (${w}), I had to send ${one ? "this fresh listing" : "these fresh listings"} your way:`,
+  (_w, one) =>
+    `I had you in mind when I saw ${one ? "this new listing" : "these new listings"} and wanted to share:`,
+  (w, one) =>
+    one
+      ? `This one just hit the market and fits what you're after (${w}):`
+      : `These just hit the market and fit what you're after (${w}):`,
+  (_w, one) => `Saw ${one ? "this one" : "these"} come up and thought of you:`,
+  (w, one) =>
+    one
+      ? `A new one worth a look for your search (${w}):`
+      : `Some new ones worth a look for your search (${w}):`,
+];
+
+function variant(seed: string) {
+  let h = 0;
+  for (const c of seed) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return h;
+}
+
 // Reads like a quick personal note from Mark, not a portal alert: a couple of
 // lines, up to three small home cards, an invitation to reply.
 export function alertEmailHtml(opts: {
@@ -99,6 +123,8 @@ export function alertEmailHtml(opts: {
   listings: FeedListing[];
   seeAllUrl: string;
   unsubscribeUrl: string;
+  /** Changes which opening line and greeting they get, e.g. email + date. */
+  seed?: string;
 }) {
   const base = SITE_URL;
   const shown = opts.listings.slice(0, 3);
@@ -107,10 +133,9 @@ export function alertEmailHtml(opts: {
   const text = `font:16px/1.6 ${SANS};color:${INK}`;
   const count = opts.listings.length;
   const wants = esc(opts.label.replace(/^Homes in /, ""));
-  const lead =
-    count === 1
-      ? `Based on what you're looking for (${wants}), I had to send this fresh listing your way:`
-      : `Based on what you're looking for (${wants}), I had to send these fresh listings your way:`;
+  const pick = variant(opts.seed ?? new Date().toISOString().slice(0, 10));
+  const one = count === 1;
+  const lead = OPENERS[pick % OPENERS.length](wants, one);
 
   const cards = shown
     .map((l) => {
@@ -131,7 +156,7 @@ export function alertEmailHtml(opts: {
     .join("");
 
   const body = `
-<p style="margin:0 0 16px;${text}">${first ? `Hi ${esc(first)},` : "Hi,"}</p>
+<p style="margin:0 0 16px;${text}">${pick % 2 ? "Hey" : "Hi"}${first ? ` ${esc(first)}` : ""},</p>
 <p style="margin:0 0 18px;${text}">${lead}</p>
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${cards}</table>
 <p style="margin:4px 0 18px;${text}">${extra > 0 ? `Plus ${extra} more. <a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See all of them</a>.` : `<a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See everything for this search</a>.`}</p>

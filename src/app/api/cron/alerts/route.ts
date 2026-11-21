@@ -71,6 +71,7 @@ export async function GET(request: Request) {
       listings: fresh,
       seeAllUrl: buyUrl(params),
       unsubscribeUrl: `${SITE_URL}/alerts/unsubscribe?token=${row.unsubscribe_token}`,
+      seed: `${row.email}${new Date().toISOString().slice(0, 10)}`,
     });
     const subject = alertSubject(fresh);
 
