@@ -1,6 +1,6 @@
 import { type FeedListing, formatFeedPrice, formatFeedStats } from "@/lib/premier-feed";
 import { SITE_URL } from "@/lib/site";
-import { BLUE, INK, MUTED, SANS, SERIF, esc } from "@/lib/email-layout";
+import { BLUE, INK, MUTED, SANS, SERIF, SIGNATURE_HTML, esc } from "@/lib/email-layout";
 
 // A saved search: the Buy filters someone wants to hear about.
 export type AlertParams = {
@@ -167,10 +167,9 @@ export function alertEmailHtml(opts: {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${cards}</table>
 <p style="margin:4px 0 18px;${text}">${extra > 0 ? `Plus ${extra} more. <a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See all of them</a>.` : `<a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See everything for this search</a>.`}</p>
 <p style="margin:0 0 18px;${text}">Want my take on any of these, or to go see one this week?</p>
-<p style="margin:0;${text}">Mark</p>
-<p style="margin:4px 0 0;font:13px/1.55 ${SANS};color:${MUTED}">Mark Scott &middot; Premier Agency Real Estate<br>(850) 363-6057 &middot; <a href="${base}" style="color:${MUTED}">markscott.co</a></p>`;
+<div style="margin:26px 0 0">${SIGNATURE_HTML}</div>`;
 
-  const footer = `DRE# 02449646 &middot; Brokered by Premier Agency Real Estate, CalDRE# 02240990 &middot; 900 Lane Ave, Chula Vista, CA 91914.
+  const footer = `Brokered by Premier Agency Real Estate, CalDRE# 02240990 &middot; 900 Lane Ave, Chula Vista, CA 91914.
 Listing data from the MLS via Premier Agency. Deemed reliable but not guaranteed.
 You're getting this because you asked for new homes matching this search on markscott.co. <a href="${esc(opts.unsubscribeUrl)}" style="color:#9a9a9a">Stop these emails</a>.`;
 
