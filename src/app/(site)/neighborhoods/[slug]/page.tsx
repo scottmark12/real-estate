@@ -32,6 +32,9 @@ export async function generateMetadata({
     title: { absolute: `${n.name} Homes for Sale & Guide | Mark Scott` },
     description: `${n.tagline} Homes for sale, prices and the honest trade offs from a local agent.`,
     alternates: { canonical: `/neighborhoods/${n.slug}` },
+    openGraph: NEIGHBORHOOD_PHOTOS[n.slug]
+      ? { images: [{ url: photoUrl(NEIGHBORHOOD_PHOTOS[n.slug], 1200), width: 1200 }] }
+      : undefined,
   };
 }
 

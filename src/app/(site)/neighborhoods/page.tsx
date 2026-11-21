@@ -9,7 +9,7 @@ import { NEIGHBORHOODS, REGIONS } from "@/lib/neighborhoods";
 export const metadata: Metadata = {
   title: { absolute: "San Diego Neighborhood Guide | Mark Scott Real Estate" },
   description:
-    "A local's guide to 41 San Diego neighborhoods, from the North County coast to the urban core: what each place is like, what it costs, homes for sale and the honest trade offs.",
+    "A local's guide to 41 San Diego neighborhoods, from the North County coast to downtown: what each is like, what it costs, and the honest trade offs.",
   alternates: { canonical: "/neighborhoods" },
 };
 

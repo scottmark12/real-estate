@@ -10,7 +10,7 @@ import {
   getListing,
   listingImages,
 } from "@/lib/premier-feed";
-import { JsonLd, breadcrumbLd } from "@/lib/site";
+import { JsonLd, SITE_URL, breadcrumbLd } from "@/lib/site";
 
 // Listing pages render on first visit and stay cached for 5 minutes, so
 // price and status changes from the MLS still show up quickly.
@@ -65,6 +65,45 @@ export default async function FeedListingPage({ params }: PageProps<"/buy/[id]">
           { name: "Homes for Sale", path: "/buy" },
           { name: fullAddress, path: `/buy/${l.id}` },
         ])}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "RealEstateListing",
+          name: fullAddress,
+          url: `${SITE_URL}/buy/${l.id}`,
+          image: photos.slice(0, 6),
+          description: l.description?.trim() || undefined,
+          offers: {
+            "@type": "Offer",
+            price: Number(l.price) || undefined,
+            priceCurrency: "USD",
+            availability: "https://schema.org/InStock",
+          },
+          mainEntity: {
+            "@type": /condo|town/i.test(`${l.property_type} ${l.property_sub_type ?? ""}`)
+              ? "Apartment"
+              : "SingleFamilyResidence",
+            address: {
+              "@type": "PostalAddress",
+              streetAddress: l.address,
+              addressLocality: l.city,
+              addressRegion: l.state || "CA",
+              postalCode: l.zip,
+              addressCountry: "US",
+            },
+            numberOfBedrooms: l.bedrooms ?? undefined,
+            numberOfBathroomsTotal: l.bathrooms ? Number(l.bathrooms) : undefined,
+            floorSize: l.sqft
+              ? { "@type": "QuantitativeValue", value: l.sqft, unitCode: "FTK" }
+              : undefined,
+            yearBuilt: l.year_built ?? undefined,
+            geo:
+              l.latitude && l.longitude
+                ? { "@type": "GeoCoordinates", latitude: Number(l.latitude), longitude: Number(l.longitude) }
+                : undefined,
+          },
+        }}
       />
       <Link href="/buy" className="text-sm text-navy/60 hover:text-navy">
         &larr; Back to search

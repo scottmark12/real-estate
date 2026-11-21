@@ -129,6 +129,9 @@ export default function SellPageBody({
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setValuationOpen(true);
     }
+    const open = () => setValuationOpen(true);
+    window.addEventListener("open-valuation", open);
+    return () => window.removeEventListener("open-valuation", open);
   }, []);
 
   return (

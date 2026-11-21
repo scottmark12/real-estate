@@ -27,3 +27,19 @@ export function JsonLd({ data }: { data: object }) {
     />
   );
 }
+
+/** Trim text to a search snippet length, cutting at a word, no trailing comma. */
+export function clip(text: string | null | undefined, max = 155): string | undefined {
+  if (!text) return undefined;
+  const t = text.replace(/\s+/g, " ").trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  return `${cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:.]$/, "")}…`;
+}
+
+/** Page title that fits Google's ~60 character limit, brand added only when it fits. */
+export function seoTitle(title: string): string {
+  if (title.length <= 36) return `${title} | Mark Scott Real Estate`;
+  if (title.length <= 47) return `${title} | Mark Scott`;
+  return title;
+}

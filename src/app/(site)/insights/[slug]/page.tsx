@@ -10,7 +10,7 @@ import { formatDate } from "@/lib/format";
 import { CATEGORY_LABELS } from "@/components/article-card";
 import ArticleBlocks from "@/components/article-blocks";
 import type { Article } from "@/lib/types";
-import { JsonLd, SITE_URL, breadcrumbLd } from "@/lib/site";
+import { JsonLd, SITE_URL, breadcrumbLd, clip, seoTitle } from "@/lib/site";
 
 export const revalidate = 300;
 
@@ -32,9 +32,9 @@ export async function generateMetadata({
     .maybeSingle();
   if (!data) return { title: "Market Research" };
   return {
-    // Long research titles drop the brand suffix so the headline isn't cut off.
-    title: { absolute: data.title.length > 45 ? `${data.title} | Mark Scott` : `${data.title} | Mark Scott Real Estate` },
-    description: data.excerpt ?? undefined,
+    // Long research titles drop the brand suffix so Google doesn't cut them off.
+    title: { absolute: seoTitle(data.title) },
+    description: clip(data.excerpt),
     alternates: { canonical: `/insights/${slug}` },
     openGraph: data.image_url
       ? { type: "article", images: [data.image_url] }

@@ -8,7 +8,7 @@ import type { AboutSettings, ContactSettings } from "@/lib/types";
 export const metadata: Metadata = {
   title: { absolute: "About Mark Scott | Encinitas Real Estate Agent" },
   description:
-    "Mark Scott is an Encinitas based real estate agent with Premier Agency, helping people buy and sell homes across San Diego County with a background in design and multifamily underwriting.",
+    "Mark Scott is an Encinitas real estate agent with Premier Agency, helping people buy and sell across San Diego County with a design and investing background.",
   alternates: { canonical: "/about" },
 };
 

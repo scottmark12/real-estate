@@ -37,7 +37,7 @@ export default function Header({ contact }: { contact: ContactSettings }) {
     >
       <div
         className="flex items-center gap-6 px-4 py-4 sm:px-6 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-10"
-        style={{ paddingTop: "env(safe-area-inset-top, 0px)" }}
+        style={{ paddingTop: "max(1rem, env(safe-area-inset-top))" }}
       >
         <Link href="/" className="shrink-0 justify-self-start">
           <Image

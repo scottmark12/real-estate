@@ -2,6 +2,10 @@ import type { MetadataRoute } from "next";
 import { createPublicClient as createClient } from "@/lib/supabase/public";
 import { NEIGHBORHOODS } from "@/lib/neighborhoods";
 import { SITE_URL } from "@/lib/site";
+import { searchListings } from "@/lib/premier-feed";
+
+// Rebuilt hourly so new listings get found and sold ones drop off.
+export const revalidate = 3600;
 
 const BASE = SITE_URL;
 
@@ -39,5 +43,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Sitemap still works without the articles.
   }
 
-  return [...pages, ...neighborhoods, ...articles];
+  // Every active listing, so people searching an address can find it here.
+  const homes: MetadataRoute.Sitemap = [];
+  const seen = new Set<string>();
+  for (let page = 1; page <= 40; page++) {
+    const res = await searchListings({ limit: 100, page, sort: "recent" });
+    if (!res || res.listings.length === 0) break;
+    for (const l of res.listings) {
+      if (seen.has(l.id)) continue;
+      seen.add(l.id);
+      homes.push({ url: `${BASE}/buy/${l.id}`, changeFrequency: "daily" });
+    }
+    if (page * 100 >= res.total) break;
+  }
+
+  return [...pages, ...neighborhoods, ...articles, ...homes];
 }
