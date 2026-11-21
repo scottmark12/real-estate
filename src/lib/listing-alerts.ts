@@ -1,6 +1,6 @@
 import { type FeedListing, formatFeedPrice, formatFeedStats } from "@/lib/premier-feed";
 import { SITE_URL } from "@/lib/site";
-import { COMPLIANCE, INK, MUTED, SANS, SERIF, button, emailShell, esc, eyebrow, signOff } from "@/lib/email-layout";
+import { BLUE, INK, MUTED, SANS, SERIF, esc } from "@/lib/email-layout";
 
 // A saved search: the Buy filters someone wants to hear about.
 export type AlertParams = {
@@ -70,8 +70,29 @@ export function buyUrl(p: AlertParams, base = SITE_URL) {
   return `${base}/buy${s ? `?${s}` : ""}`;
 }
 
-// Designed to match the site: one big lead home, the rest two across
-// (stacked on phones), then a note from Mark.
+/** "New in Encinitas: 110 Turner Avenue and 4 more" */
+export function alertSubject(listings: FeedListing[]) {
+  const [first] = listings;
+  if (!first) return "New homes for your search";
+  const cities = new Set(listings.map((l) => l.city));
+  const where = cities.size === 1 ? first.city : "your search";
+  const more = listings.length - 1;
+  return `New in ${where}: ${first.address}${more ? ` and ${more} more` : ""}`;
+}
+
+// Short facts line from real listing data: "3 bd · 2 ba · 1,327 sqft · $1,300/sqft · Built 1976"
+function factsLine(l: FeedListing) {
+  const bits = [formatFeedStats(l)];
+  const price = Number(l.price);
+  if (price && l.sqft) bits.push(`$${Math.round(price / l.sqft).toLocaleString("en-US")}/sqft`);
+  const year = new Date().getFullYear();
+  if (l.year_built && l.year_built >= year - 1) bits.push("New construction");
+  else if (l.year_built) bits.push(`Built ${l.year_built}`);
+  return bits.filter(Boolean).join(" · ");
+}
+
+// Reads like a quick personal note from Mark, not a portal alert: a couple of
+// lines, up to three small home cards, an invitation to reply.
 export function alertEmailHtml(opts: {
   name?: string | null;
   label: string;
@@ -80,75 +101,57 @@ export function alertEmailHtml(opts: {
   unsubscribeUrl: string;
 }) {
   const base = SITE_URL;
-  const shown = opts.listings.slice(0, 7);
-  const [lead, ...rest] = shown;
-  const count = opts.listings.length;
+  const shown = opts.listings.slice(0, 3);
+  const extra = opts.listings.length - shown.length;
   const first = opts.name?.trim().split(/\s+/)[0];
+  const text = `font:16px/1.6 ${SANS};color:${INK}`;
+  const count = opts.listings.length;
+  const lead =
+    count === 1
+      ? `A new one just came up for your search (${esc(opts.label.replace(/^Homes in /, ""))}):`
+      : `${count <= 9 ? ["", "", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"][count] : count} new ones just came up for your search (${esc(opts.label.replace(/^Homes in /, ""))}):`;
 
-  const photo = (l: FeedListing, w: number, h: number) =>
-    l.primary_image_url
-      ? `<a href="${base}/buy/${l.id}"><img src="${esc(l.primary_image_url)}" width="${w}" alt="${esc(`${l.address}, ${l.city}`)}" style="display:block;width:100%;max-width:${w}px;height:auto;max-height:${h}px;object-fit:cover;border:0;background:#eee"></a>`
-      : "";
+  const cards = shown
+    .map((l) => {
+      const url = `${base}/buy/${l.id}`;
+      const img = l.primary_image_url
+        ? `<a href="${url}"><img src="${esc(l.primary_image_url)}" width="132" height="99" alt="${esc(l.address)}" style="display:block;width:132px;height:99px;object-fit:cover;border:0;border-radius:6px;background:#eee"></a>`
+        : "";
+      return `<tr><td style="padding:0 0 14px">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #e4e4e4;border-radius:8px"><tr>
+<td width="132" valign="top" style="padding:10px">${img}</td>
+<td valign="middle" style="padding:10px 14px 10px 4px">
+<p style="margin:0 0 2px;font:19px ${SERIF};color:${INK}"><a href="${url}" style="color:${INK};text-decoration:none">${formatFeedPrice(l.price)}</a></p>
+<p style="margin:0 0 3px;font:14px/1.4 ${SANS};color:${INK}"><a href="${url}" style="color:${INK};text-decoration:none">${esc(l.address)}, ${esc(l.city)}</a></p>
+<p style="margin:0;font:12px/1.5 ${SANS};color:${MUTED}">${esc(factsLine(l))}</p>
+</td></tr></table>
+</td></tr>`;
+    })
+    .join("");
 
-  const leadHtml = lead
-    ? `<tr><td style="padding:0">${photo(lead, 600, 400)}</td></tr>
-<tr><td class="pad" style="padding:22px 36px 30px">
-${eyebrow(`${lead.city} · New`)}
-<p style="margin:10px 0 4px;font:30px/1.15 ${SERIF};color:${INK}">${formatFeedPrice(lead.price)}</p>
-<p style="margin:0 0 4px;font:17px/1.4 ${SERIF};color:${INK}"><a href="${base}/buy/${lead.id}" style="color:${INK};text-decoration:none">${esc(lead.address)}</a></p>
-<p style="margin:0 0 20px;font:14px ${SANS};color:${MUTED}">${esc(formatFeedStats(lead))} &middot; ${esc(lead.city)}, ${esc(lead.state)} ${esc(lead.zip)}</p>
-<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
-<td style="padding-right:10px">${button(`${base}/buy/${lead.id}`, "See this home")}</td>
-<td>${button(`${base}/buy/${lead.id}#tour`, "Request a tour", false)}</td>
-</tr></table>
-</td></tr>`
-    : "";
+  const body = `
+<p style="margin:0 0 16px;${text}">${first ? `Hi ${esc(first)},` : "Hi,"}</p>
+<p style="margin:0 0 18px;${text}">${lead}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${cards}</table>
+<p style="margin:4px 0 18px;${text}">${extra > 0 ? `Plus ${extra} more. <a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See all of them</a>.` : `<a href="${esc(opts.seeAllUrl)}" style="color:${BLUE}">See everything for this search</a>.`}</p>
+<p style="margin:0 0 18px;${text}">Want my take on any of these, or to go see one this week? Just reply.</p>
+<p style="margin:0;${text}">Mark</p>
+<p style="margin:4px 0 0;font:13px/1.55 ${SANS};color:${MUTED}">Mark Scott &middot; Premier Agency Real Estate<br>(850) 363-6057 &middot; <a href="${base}" style="color:${MUTED}">markscott.co</a></p>`;
 
-  const card = (l: FeedListing) => {
-    const url = `${base}/buy/${l.id}`;
-    return `${photo(l, 252, 190)}
-<p style="margin:12px 0 2px;font:20px ${SERIF};color:${INK}"><a href="${url}" style="color:${INK};text-decoration:none">${formatFeedPrice(l.price)}</a></p>
-<p style="margin:0 0 2px;font:14px/1.4 ${SANS};color:${INK}"><a href="${url}" style="color:${INK};text-decoration:none">${esc(l.address)}</a></p>
-<p style="margin:0;font:13px ${SANS};color:${MUTED}">${esc(formatFeedStats(l))} &middot; ${esc(l.city)}</p>`;
-  };
+  const footer = `DRE# 02449646 &middot; Brokered by Premier Agency Real Estate, CalDRE# 02240990 &middot; 900 Lane Ave, Chula Vista, CA 91914.
+Listing data from the MLS via Premier Agency. Deemed reliable but not guaranteed.
+You're getting this because you asked for new homes matching this search on markscott.co. <a href="${esc(opts.unsubscribeUrl)}" style="color:#9a9a9a">Stop these emails</a>.`;
 
-  const pairs: string[] = [];
-  for (let i = 0; i < rest.length; i += 2) {
-    const a = rest[i];
-    const b = rest[i + 1];
-    pairs.push(`<tr>
-<td class="col" width="50%" valign="top" style="padding:0 12px 30px 0">${card(a)}</td>
-<td class="col" width="50%" valign="top" style="padding:0 0 30px 12px">${b ? card(b) : ""}</td>
-</tr>`);
-  }
-  const grid = pairs.length
-    ? `<tr><td class="pad" style="padding:30px 36px 0;border-top:1px solid #e6e6e6">
-${eyebrow("Also new")}
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-top:16px">${pairs.join("")}</table>
-</td></tr>`
-    : "";
-
-  const more = count > shown.length ? `See all ${count} matches` : "See every match";
-
-  const body = `<tr><td class="pad" style="padding:30px 36px 26px">
-${eyebrow("New listings for your search")}
-<p class="h1" style="margin:12px 0 10px;font:34px/1.12 ${SERIF};color:${INK}">${count} new ${count === 1 ? "home" : "homes"} just hit the market</p>
-<p style="margin:0;font:15px/1.55 ${SANS};color:#3a3a3a">${first ? `${esc(first)}, here's` : "Here's"} what's new for <em>${esc(opts.label)}</em>.</p>
-</td></tr>
-${leadHtml}
-${grid}
-<tr><td class="pad" style="padding:6px 36px 32px">${button(opts.seeAllUrl, more)}</td></tr>
-<tr><td class="pad" style="padding:26px 36px;background:#f6f6f4">${signOff("Want my honest take on any of these, or the price I'd actually offer? Just reply.")}</td></tr>`;
-
-  const footer = `${COMPLIANCE}<br>
-Listing data from the MLS via Premier Agency. Deemed reliable but not guaranteed.<br>
-You're getting this because you asked for new homes matching this search on markscott.co. <a href="${esc(opts.unsubscribeUrl)}" style="color:${MUTED}">Stop these emails</a>.`;
-
-  return emailShell({
-    preheader: lead
-      ? `${formatFeedPrice(lead.price)} in ${lead.city}${count > 1 ? ` and ${count - 1} more` : ""}`
-      : "New homes for your search",
-    body,
-    footer,
-  });
+  return `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light only"><title>New homes</title></head>
+<body style="margin:0;padding:0;background:#ffffff;-webkit-text-size-adjust:100%">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:#fff">${esc(alertSubject(opts.listings))}&#8199;&#65279;&#847;&#8199;&#65279;&#847;</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding:24px 18px">
+<table role="presentation" width="560" cellpadding="0" cellspacing="0" border="0" style="width:100%;max-width:560px"><tr><td>
+${body}
+<p style="margin:34px 0 0;padding-top:14px;border-top:1px solid #eee;font:11px/1.6 ${SANS};color:#9a9a9a">${footer}</p>
+</td></tr></table>
+</td></tr></table>
+</body></html>`;
 }

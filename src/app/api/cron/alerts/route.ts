@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { alertEmailHtml, buyUrl, cleanParams, describeParams } from "@/lib/listing-alerts";
+import { alertEmailHtml, alertSubject, buyUrl, cleanParams, describeParams } from "@/lib/listing-alerts";
 import { type FeedListing, searchListings } from "@/lib/premier-feed";
 import { SITE_URL } from "@/lib/site";
 
@@ -72,7 +72,7 @@ export async function GET(request: Request) {
       seeAllUrl: buyUrl(params),
       unsubscribeUrl: `${SITE_URL}/alerts/unsubscribe?token=${row.unsubscribe_token}`,
     });
-    const subject = `${fresh.length} new ${fresh.length === 1 ? "home" : "homes"}: ${label}`;
+    const subject = alertSubject(fresh);
 
     if (dryRun) {
       report.push({ id: row.id, fresh: fresh.length, sent: false });
